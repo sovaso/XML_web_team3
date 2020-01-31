@@ -1,1 +1,79 @@
-<p>menu-bar works!</p>
+<div class="menu">
+    <ul class="nav">
+      <li class="nav-item" id="scientificWorks">
+        <a
+          class="nav-link btn"
+          id="scientificWorks"
+          (click)="router.navigate(['/dashboard/scientificWorks'])"
+          >Scientific works</a
+        >
+      </li>
+  
+      <li class="nav-item" id="myWorks">
+        <a
+          class="nav-link btn"
+          id="myWorks"
+          (click)="router.navigate(['/dashboard/myWorks'])"
+          >Locations</a
+        >
+      </li>
+  
+      <li class="nav-item" id="worksToReview">
+        <a
+          class="nav-link btn"
+          id="worksToReview"
+          (click)="router.navigate(['/dashboard/worksToReview'])"
+          >Works to review</a
+        >
+      </li>
+  
+      <li class="nav-item" id="unreviewedWorks">
+        <a
+          class="nav-link btn"
+          id="unreviewedWorks"
+          (click)="router.navigate(['/dashboard/unreviewedWorks'])"
+          >Unreviewed works</a
+        >
+      </li>
+
+      <li class="nav-item" id="reviewedWorks">
+        <a
+          class="nav-link btn"
+          id="reviewedWorks"
+          (click)="router.navigate(['/dashboard/reviewedWorks'])"
+          >Reviewed works</a
+        >
+      </li>
+
+      <li class="nav-item" id="registerEditor">
+        <a
+          class="nav-link btn"
+          id="registerEditor"
+          (click)="router.navigate(['/dashboard/registerEditor'])"
+          >Register editor</a
+        >
+      </li>
+
+      <li class="nav-item" id="registerReviewer">
+        <a
+          class="nav-link btn"
+          id="registerReviewer"
+          (click)="router.navigate(['/dashboard/registerReviewer'])"
+          >Register reviewer</a
+        >
+      </li>
+  
+      <li class="nav-item" id="addNewAdmin">
+        <a
+          class="nav-link btn"
+          id="reportDropdown"
+          (click)="registerNewAdmin()"
+          >Add new admin</a
+        >
+      </li>
+  
+     
+    </ul>
+  </div>
+  
+
