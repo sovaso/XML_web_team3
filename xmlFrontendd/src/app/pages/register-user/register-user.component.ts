@@ -5,40 +5,79 @@ import { map } from "rxjs/operators";
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { UserModel } from 'src/app/model/user.model';
 import { Mail } from 'src/app/model/mail.model';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterUserService } from './register-user.service';
+import { Router } from '@angular/router';
+import { UserModelRegister } from 'src/app/model/user.model.register';
 
 @Injectable({providedIn: 'root'})
-export class RegisterUserService {
+export class RegisterUserComponent {
 
-  apiUrl: string;
+  public user;
+  public success:boolean;
+  public noInput:boolean;
+  message: String = '';
+  type = '';
+  public repeatedPassword : String = '';
+  constructor(public activeModal: NgbActiveModal, private registerUserService: RegisterUserService, private router: Router) { 
+    this.user = {};
+    this.success=false;
+    this.noInput=false;
+  }
 
-  constructor(
-    private http: HttpClient
-  ) {
-    
+  ngOnInit() {
+  }
+
+   validateEmail(email) 
+{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+  register():void{
+    this.user.enabled = false;
+    if (this.user.name != undefined && this.user.surname != undefined && this.user.email != undefined &&
+      this.user.username != undefined && this.user.password!=undefined){
+
+      if (this.user.password==this.repeatedPassword){
+        if (this.validateEmail(this.user.email) == true){
+          console.log('validan je email');
+          this.user.role = "ROLE_AUTHOR";
+          this.registerUserService.register(this.user).subscribe(
+            (registered:boolean) => {
+              console.log("nestooo");
+              if(registered){
+                console.log("is registered in");
+                this.message = "Successful registration, congratulations!",
+                "success";
+                this.type = 'success';
+                var username = this.user.username;
+              }
+            }
+          ,
+            (err:Error) => {
+                this.user.username='';
+                  this.message = 'Username already exist.';
+                  this.type = 'danger';
+                console.log(err);
+            
+            });
+        }else {
+          this.message = 'Invalid email.';
+          this.type = 'danger';
+        }
+        
+      }else {
+        
+        this.message = 'Passwords must match.';
+        this.type = 'danger';
+      }
+      
+  }else {
    
+    this.message = 'Please fill all fields.';
+    this.type = 'danger';
   }
-  register = (data: UserModel): Observable<boolean> => {
-
-    var user = {};
-    var loggedUser = JSON.parse(
-      localStorage.getItem('currentUser'));
-    if (loggedUser !== null) {
-      this.apiUrl = "http://localhost:8080/auth/registerAdmin";
-    }else {
-      this.apiUrl = "http://localhost:8080/auth/registerUser";
-    }
-      return this.http.post<Message>(this.apiUrl, data).pipe(
-        map( (res: any) => {
-            return res;
-        })  );
   }
-
-  
-
-  sendMail = (mail) =>
-  this.http.post("http://localhost:8080/sendEmail", mail);
-
- 
 }
 
 

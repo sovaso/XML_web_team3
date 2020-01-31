@@ -3,6 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterUserComponent } from './pages/register-user/register-user.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ScientificWorksComponent } from './scientific-works/scientific-works.component';
+import { MyWorksComponent } from './my-works/my-works.component';
+import { WorksToReviewComponent } from './works-to-review/works-to-review.component';
+import { UnreviewedWorksComponent } from './unreviewed-works/unreviewed-works.component';
+import { ReviewedWorksComponent } from './reviewed-works/reviewed-works.component';
+import { RegisterEditorComponent } from './register-editor/register-editor.component';
+import { RegisterReviewerComponent } from './register-reviewer/register-reviewer.component';
 
 
 
@@ -13,10 +20,6 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'registerAdmin',
-    component: RegisterUserComponent,
-  },
-  {
     path: 'registerUser',
     component: RegisterUserComponent,
   },
@@ -24,18 +27,19 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
   },
-  // {
-  //   path: 'dashboard',
-  //   component: DashboardComponent,
-  //   children: [
-  //     { path: 'events', component: EventsComponent},
-  //     { path: 'locations', component: LocationsComponent},
-  //     { path: 'myReservations', component: MyReservationsComponent},
-  //     { path : 'reports' , component : ReportsComponent},
-  //     { path : 'addNewAdmin', component : RegisterUserComponent},
-
-  //   ] 
-  // },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    children: [
+      { path: 'scientificWorks', component: ScientificWorksComponent},
+      { path: 'myWorks', component: MyWorksComponent},
+      { path: 'worksToReview', component: WorksToReviewComponent},
+      { path : 'unreviewedWorks' , component : UnreviewedWorksComponent},
+      { path : 'reviewedWorks', component : ReviewedWorksComponent},
+      { path : 'registerEditor', component : RegisterEditorComponent},
+      { path : 'registerReviewer', component : RegisterReviewerComponent},
+    ] 
+  },
 
   {path: '**', redirectTo: 'dashboard'}
 ];
