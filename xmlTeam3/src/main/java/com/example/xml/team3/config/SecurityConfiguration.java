@@ -48,13 +48,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().antMatchers(HttpMethod.POST, "/users/authors").permitAll()
-				.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		
+
+		http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		.authorizeRequests().antMatchers(HttpMethod.POST, "/users/authors").permitAll()
+		.antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+		.antMatchers(HttpMethod.POST, "/user/**").permitAll()
+		.antMatchers(HttpMethod.GET, "/scientificPublication/**").permitAll().anyRequest().authenticated();
+
+		// Custom JWT based authentication
+		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+		/*
+		http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
+				antMatchers(HttpMethod.POST, "/auth").permitAll()
 				.antMatchers(HttpMethod.GET, "/scientificPublication/**").permitAll().anyRequest().authenticated();
 
 		// Custom JWT based authentication
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+		*/
 	}
 
 }

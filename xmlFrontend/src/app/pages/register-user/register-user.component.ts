@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Component} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { map } from "rxjs/operators";
@@ -6,13 +6,19 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { UserModel } from 'src/app/model/user.model';
 import { Mail } from 'src/app/model/mail.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegisterUserService } from './register-user.service';
 import { Router } from '@angular/router';
 import { UserModelRegister } from 'src/app/model/user.model.register';
-import { RegisterUserService } from '../pages/register-user/register-user.service';
+
+@Component({
+  selector: 'app-register-user',
+  templateUrl: './register-user.component.html',
+  styleUrls: ['./register-user.component.css']
+})
 
 
 @Injectable({providedIn: 'root'})
-export class RegisterReviewerComponent {
+export class RegisterUserComponent {
 
   public user;
   public success:boolean;
@@ -35,6 +41,7 @@ export class RegisterReviewerComponent {
     return re.test(email);
 }
   register():void{
+    console.log('register function called');
     this.user.enabled = false;
     if (this.user.name != undefined && this.user.surname != undefined && this.user.email != undefined &&
       this.user.username != undefined && this.user.password!=undefined){
@@ -42,10 +49,10 @@ export class RegisterReviewerComponent {
       if (this.user.password==this.repeatedPassword){
         if (this.validateEmail(this.user.email) == true){
           console.log('validan je email');
-          this.user.role = "ROLE_REVIEWER";
+          this.user.role = "ROLE_AUTHOR";
           this.registerUserService.register(this.user).subscribe(
             (registered:boolean) => {
-              console.log("nestooo");
+              console.log("result of registered");
               if(registered){
                 console.log("is registered in");
                 this.message = "Successful registration, congratulations!",
@@ -80,4 +87,5 @@ export class RegisterReviewerComponent {
   }
   }
 }
+
 

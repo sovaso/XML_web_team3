@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Component} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { map } from "rxjs/operators";
@@ -10,6 +10,11 @@ import { Router } from '@angular/router';
 import { UserModelRegister } from 'src/app/model/user.model.register';
 import { RegisterUserService } from '../pages/register-user/register-user.service';
 
+@Component({
+  selector: 'app-register-editor',
+  templateUrl: './register-editor.component.html',
+  styleUrls: ['./register-editor.component.css']
+})
 
 @Injectable({providedIn: 'root'})
 export class RegisterEditorComponent {
