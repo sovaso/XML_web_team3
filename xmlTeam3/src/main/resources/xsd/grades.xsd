@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://ftn.uns.ac.rs/team3/grades"
+    xmlns="http://ftn.uns.ac.rs/team3/grades">
+    <xs:element name="grades">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="uniqueness">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="keywords">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="abstract">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="conclusions">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="experiments">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="layout">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="formality">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="generalGrade">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="images">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="references">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="grade"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="canBePublished">
+                    <xs:complexType>
+                        <xs:attribute name="grade" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="explanation" type="xs:string"/>
+                <xs:element name="headings">
+                    <xs:complexType>
+                        <xs:attribute name="grade"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="grade">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="5"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://ftn.uns.ac.rs/team3/review" xmlns="http://ftn.uns.ac.rs/team3/review">
+    <xs:element name="review">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comment" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="refId"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="scientificWorkId" type="xs:string"/>
+            <xs:attribute name="authorUsername" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
