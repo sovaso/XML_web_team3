@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,7 @@ import com.example.xml.team3.service.UserService;
 
 @RestController
 @RequestMapping(value = "/user")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class UserController {
 
 	@Autowired
@@ -24,6 +26,8 @@ public class UserController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> registerAuthor(@RequestBody @Valid RegisterDTO registerDTO) {
+		System.out.println("Register author called");
+		
 		UserPub newUser = new UserPub();
 		newUser.setEmail(registerDTO.getEmail());
 		newUser.setPassword(registerDTO.getPassword());
@@ -31,12 +35,12 @@ public class UserController {
 		newUser.setSurname(registerDTO.getSurname());
 		newUser.setUsername(registerDTO.getUsername());
 		UserRole role = null;
-		if (registerDTO.getRole().equalsIgnoreCase("author")) {
-			role = UserRole.AUTHOR;
-		} else if (registerDTO.getRole().equalsIgnoreCase("reviewer")) {
-			role = UserRole.REVIEWER;
+		if (registerDTO.getRole().equalsIgnoreCase("ROLE_AUTHOR")) {
+			role = UserRole.ROLE_AUTHOR;
+		} else if (registerDTO.getRole().equalsIgnoreCase("ROLE_REVIEWER")) {
+			role = UserRole.ROLE_REVIEWER;
 		} else {
-			role = UserRole.EDITOR;
+			role = UserRole.ROLE_EDITOR;
 		}
 		try {
 			String username = userService.registerUser(newUser, role);
@@ -46,6 +50,7 @@ public class UserController {
 			return new ResponseEntity<String>("An error occured during registration. Please try again later.",
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
 	}
 
 }

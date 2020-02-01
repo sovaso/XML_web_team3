@@ -24,7 +24,7 @@ export class RegisterUserService {
     var loggedUser = JSON.parse(
       localStorage.getItem('currentUser'));
   
-      this.apiUrl = "http://localhost:8080/auth/register";
+      this.apiUrl = "http://localhost:8000/user/register";
    
       return this.http.post<Message>(this.apiUrl, data).pipe(
         map( (res: any) => {

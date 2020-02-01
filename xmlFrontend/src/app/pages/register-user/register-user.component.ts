@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Component} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { map } from "rxjs/operators";
@@ -9,6 +9,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterUserService } from './register-user.service';
 import { Router } from '@angular/router';
 import { UserModelRegister } from 'src/app/model/user.model.register';
+
+@Component({
+  selector: 'app-register-user',
+  templateUrl: './register-user.component.html',
+  styleUrls: ['./register-user.component.css']
+})
+
 
 @Injectable({providedIn: 'root'})
 export class RegisterUserComponent {
@@ -34,6 +41,7 @@ export class RegisterUserComponent {
     return re.test(email);
 }
   register():void{
+    console.log('register function called');
     this.user.enabled = false;
     if (this.user.name != undefined && this.user.surname != undefined && this.user.email != undefined &&
       this.user.username != undefined && this.user.password!=undefined){
@@ -44,7 +52,7 @@ export class RegisterUserComponent {
           this.user.role = "ROLE_AUTHOR";
           this.registerUserService.register(this.user).subscribe(
             (registered:boolean) => {
-              console.log("nestooo");
+              console.log("result of registered");
               if(registered){
                 console.log("is registered in");
                 this.message = "Successful registration, congratulations!",

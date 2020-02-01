@@ -29,7 +29,7 @@ export class MenuBarComponent implements OnInit {
     var registerEditor: HTMLElement = document.getElementById('registerEditor');
     var registerReviewer: HTMLElement = document.getElementById('registerReviewer');
     
-    if (this.currentUser !== null) {
+    if (this.currentUser != null) {
       if (this.currentUser.userRoleName === 'ROLE_UNAUTHORIZED') {
         scientificWorks.hidden = false;
         myWorks.hidden = true;
@@ -47,7 +47,7 @@ export class MenuBarComponent implements OnInit {
         reviewedWorks.hidden = true;
         registerEditor.hidden = true;
         registerReviewer.hidden = true;
-      } 
+      
     } else if (this.currentUser.userRoleName === 'ROLE_REVIEWER'){
         scientificWorks.hidden = false;
         myWorks.hidden = false;
@@ -65,6 +65,15 @@ export class MenuBarComponent implements OnInit {
       reviewedWorks.hidden = false;
       registerEditor.hidden = false;
       registerReviewer.hidden = false;
+    }
+  }else {
+      scientificWorks.hidden = false;
+      myWorks.hidden = true;
+      worksToReview.hidden = true;
+      unreviewedWorks.hidden = true;
+      reviewedWorks.hidden = true;
+      registerEditor.hidden = true;
+      registerReviewer.hidden = true;
   }
 
   

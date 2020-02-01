@@ -16,9 +16,9 @@
     
     <xs:simpleType name="UserRole">
         <xs:restriction base="xs:string">
-        	<xs:enumeration value="AUTHOR"/>
-            <xs:enumeration value="EDITOR"/>
-            <xs:enumeration value="REVIEWER"/>
+        	<xs:enumeration value="ROLE_AUTHOR"/>
+            <xs:enumeration value="ROLE_EDITOR"/>
+            <xs:enumeration value="ROLE_REVIEWER"/>
         </xs:restriction>
     </xs:simpleType>
     

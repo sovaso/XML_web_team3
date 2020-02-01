@@ -16,9 +16,15 @@ import { MyWorksComponent } from './my-works/my-works.component';
 import { WorksToReviewComponent } from './works-to-review/works-to-review.component';
 import { UnreviewedWorksComponent } from './unreviewed-works/unreviewed-works.component';
 import { ReviewedWorksComponent } from './reviewed-works/reviewed-works.component';
-import { EditorComponent } from './editor/editor.component';
 import { RegisterEditorComponent } from './register-editor/register-editor.component';
 import { RegisterReviewerComponent } from './register-reviewer/register-reviewer.component';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtUtilsService } from './security/jwt-utils.service';
+import { AuthenticationService } from './security/authentication.service';
+import { TokenInterceptorService } from './security/token-interceptor.service';
+import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
 
 @NgModule({
   declarations: [
@@ -36,15 +42,26 @@ import { RegisterReviewerComponent } from './register-reviewer/register-reviewer
     WorksToReviewComponent,
     UnreviewedWorksComponent,
     ReviewedWorksComponent,
-    EditorComponent,
     RegisterEditorComponent,
     RegisterReviewerComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    NgbModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    CanActivateAuthGuard,
+    JwtUtilsService,
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

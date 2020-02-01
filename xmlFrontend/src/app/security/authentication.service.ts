@@ -8,7 +8,7 @@ import { map } from "rxjs/operators";
 })
 export class AuthenticationService {
 
-  private readonly loginPath = "/auth/login";
+  private readonly loginPath = "http://localhost:8000/auth/login";
 
   constructor(private http: HttpClient, private jwtUtilsService: JwtUtilsService) { }
 
@@ -17,7 +17,7 @@ export class AuthenticationService {
     var headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(this.loginPath, JSON.stringify({ username, password }), { headers }).pipe(
       map( ((res: any) => {
-         
+         console.log('result from login');
           console.log(res['accessToken']);
           console.log(res['userRoleName']);
           console.log("1");
