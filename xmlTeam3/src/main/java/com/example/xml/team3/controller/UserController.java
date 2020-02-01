@@ -32,7 +32,7 @@ public class UserController {
 		newUser.setUsername(registerDTO.getUsername());
 		UserRole role = null;
 		if (registerDTO.getRole().equalsIgnoreCase("author")) {
-			role = UserRole.AUTHOR;
+			role = UserRole.ROLE_AUTHOR;
 		} else if (registerDTO.getRole().equalsIgnoreCase("reviewer")) {
 			role = UserRole.REVIEWER;
 		} else {
