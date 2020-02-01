@@ -56,7 +56,7 @@ public class UserRepository {
 		UserPub user = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection,
-					String.format("//user[email = \"%s\"]", username), XUpdateTemplate.TARGET_NAMESPACE);
+					String.format("//userPub[username = \"%s\"]", username), XUpdateTemplate.TARGET_NAMESPACE);
 			ResourceIterator it = result.getIterator();
 			Resource res = null;
 
