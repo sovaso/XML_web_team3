@@ -8,17 +8,17 @@ style="overflow-x: auto;">
             required autofocus>
           <h4 class="form-signin-heading">Authors</h4>
           <label for="author" class="sr-only">Author name</label>
-          <input type="text" id="author" class="form-control" name="author" [(ngModel)]="authors[numofAuthors-1].name" placeholder="Author name"
+          <input type="text" id="author" class="form-control" name="author" [(ngModel)]="authors[numOfAuthors].name" placeholder="Author name"
             required>
             <label for="authorUniversityName" class="sr-only">Author university name</label>
-            <input type="text" id="authorUniversityName" class="form-control" name="authorUniversityName" [(ngModel)]="authors[numofAuthors-1].universityName" placeholder="Author university name"
+            <input type="text" id="authorUniversityName" class="form-control" name="authorUniversityName" [(ngModel)]="authors[numOfAuthors].universityName" placeholder="Author university name"
             required>
             <label for="authorUniversityAddress" class="sr-only">Author university address</label>
-            <input type="text" id="authorUniversityAddress" class="form-control" name="authorUniversityAddress" [(ngModel)]="authors[numofAuthors-1].universityAddress" placeholder="Author university address"
+            <input type="text" id="authorUniversityAddress" class="form-control" name="authorUniversityAddress" [(ngModel)]="authors[numOfAuthors].universityAddress" placeholder="Author university address"
             required>
             <button class="btn btn-primary btn-block" (click)="addAuthor()">Add author</button>
             <br/>
-            <h4 class="form-signin-heading">Abstract</h4>
+            <!-- <h4 class="form-signin-heading">Abstract</h4>
             <label for="purpose" class="sr-only">Purpose</label>
             <input type="text" id="purpose" class="form-control" name="purpose" [(ngModel)]="abstract.purpose" placeholder="Purpose"
             required>
@@ -44,19 +44,18 @@ style="overflow-x: auto;">
             required>
 
             <label for="keyword" class="sr-only">Keyword</label>
-            <input type="text" id="keyword" class="form-control" name="keyword" [(ngModel)]="abstract.keywords[numOfKeywords-1]" placeholder="Keyword"
+            <input type="text" id="keyword" class="form-control" name="keyword" [(ngModel)]="keywords[numOfKeywords]" placeholder="Keyword"
             required>
-            <button class="btn btn-primary btn-block" (click)="addKeyword()">Add keyword</button>
+            <button class="btn btn-primary btn-block" (click)="addKeyword()">Add keyword</button> -->
             <br/>
 
             <h4 class="form-signin-heading">Paragraphs</h4>
             <label for="paragraph" class="sr-only">Paragraph</label>
-            <textarea id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs-1]" rows="4" cols="50" placeholder="Paragraph"></textarea>
+            <textarea id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs]" rows="4" cols="50" placeholder="Paragraph"></textarea>
             <!-- <input type="text" id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs-1]" placeholder="Paragraph"
             required> -->
             <button class="btn btn-primary btn-block" (click)="addParagraph()">Add paragraph</button>
             <br/>
-
             <h4 class="form-signin-heading">References</h4>
             <label for="reference" class="sr-only">References</label>
             <select name="reference" id="reference" multiple>
@@ -64,7 +63,6 @@ style="overflow-x: auto;">
                 <option value="work.id">work.title</option>
               </div>
             </select>
-
             <button class="btn btn-primary btn-block" (click)="addScientificWord()">Add scientific work</button>
     </div>
     <div class="column right">

@@ -36,6 +36,7 @@ import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
     AlertBoxComponent,
     DashboardComponent,
     LoginComponent,
+    AlertBoxComponent,
     RegisterUserComponent,
     ScientificWorksComponent,
     MyWorksComponent,
@@ -62,6 +63,9 @@ import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
       multi: true
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    AlertBoxComponent
+  ]
 })
 export class AppModule { }
