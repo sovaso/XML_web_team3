@@ -1,0 +1,52 @@
+.foo {
+	width: 12px;
+	height: 12px;
+} 
+
+.foo2 {
+	width: 300px;
+	height: 300px;
+} 
+
+.yellow {
+	background: blueviolet
+}
+
+.x{
+	position: absolute;
+	float: right;
+    background: red;
+    color: white;
+    top: 0px;
+    right: 0px;
+}
+
+.my-full-screen-dialog {
+    height: '100%';
+    width: '100%';
+  }
+
+
+
+  .column {
+    float: left;
+    padding: 10px;
+  }
+
+  .left {
+    width: 50%;
+  }
+  
+  .right {
+    width: 50%;
+    float: left;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+  
+  /* Clear floats after the columns */
+  .row2:after {
+    content: "";
+    display: table;
+    clear: both;
+  }

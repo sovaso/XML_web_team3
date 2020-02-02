@@ -1,1 +1,137 @@
-<p>scientific-works works!</p>
+<div class="row2" ng-controller="testController"
+style="overflow-x: auto;">
+    <div class="column left">
+          <h2 class="form-signin-heading">Add new scientific work</h2>
+          <h3 class="form-signin-heading">Title</h3>
+          <label for="title" class="sr-only">Title</label>
+          <input type="text" id="title" class="form-control" name="title" [(ngModel)]="title" placeholder="Title"
+            required autofocus>
+          <h3 class="form-signin-heading">Authors</h3>
+          <label for="author" class="sr-only">Author name</label>
+          <input type="text" id="author" class="form-control" name="author" [(ngModel)]="authors[numofAuthors-1].name" placeholder="Author name"
+            required>
+            <label for="authorUniversityName" class="sr-only">Author university name</label>
+            <input type="text" id="authorUniversityName" class="form-control" name="authorUniversityName" [(ngModel)]="authors[numofAuthors-1].universityName" placeholder="Author university name"
+            required>
+            <label for="authorUniversityAddress" class="sr-only">Author university address</label>
+            <input type="text" id="authorUniversityAddress" class="form-control" name="authorUniversityAddress" [(ngModel)]="authors[numofAuthors-1].universityAddress" placeholder="Author university address"
+            required>
+            <button class="btn btn-primary btn-block" (click)="addAuthor()">Add author</button>
+            <br/>
+            <h3 class="form-signin-heading">Abstract</h3>
+            <label for="purpose" class="sr-only">Purpose</label>
+            <input type="text" id="purpose" class="form-control" name="purpose" [(ngModel)]="abstract.purpose" placeholder="Purpose"
+            required>
+
+            <label for="design" class="sr-only">Design</label>
+            <input type="text" id="design" class="form-control" name="design" [(ngModel)]="abstract.design" placeholder="Design"
+            required>
+
+            <label for="findings" class="sr-only">Findings</label>
+            <input type="text" id="findings" class="form-control" name="findings" [(ngModel)]="abstract.findings" placeholder="Findings"
+            required>
+
+            <label for="limitations" class="sr-only">Limitations</label>
+            <input type="text" id="limitations" class="form-control" name="limitations" [(ngModel)]="abstract.limitations" placeholder="Limitations"
+            required>
+
+            <label for="originality" class="sr-only">Originality</label>
+            <input type="text" id="originality" class="form-control" name="originality" [(ngModel)]="abstract.originality" placeholder="Originality"
+            required>
+
+            <label for="type" class="sr-only">Type</label>
+            <input type="text" id="type" class="form-control" name="type" [(ngModel)]="abstract.type" placeholder="Type"
+            required>
+
+            <label for="keyword" class="sr-only">Keyword</label>
+            <input type="text" id="keyword" class="form-control" name="keyword" [(ngModel)]="abstract.keywords[numOfKeywords-1]" placeholder="Keyword"
+            required>
+            <button class="btn btn-primary btn-block" (click)="addKeyword()">Add keyword</button>
+            <br/>
+
+            <h3 class="form-signin-heading">Paragraphs</h3>
+            <label for="paragraph" class="sr-only">Paragraph</label>
+            <input type="text" id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs-1]" placeholder="Paragraph"
+            required>
+            <button class="btn btn-primary btn-block" (click)="addParagraph()">Add paragraph</button>
+            <br/>
+
+            <h3 class="form-signin-heading">References</h3>
+            <label for="reference" class="sr-only">References</label>
+            <select name="reference" id="reference" multiple>
+              <div *ngFor="let work of allPublished">
+                <option value="work.id">work.title</option>
+              </div>
+            </select>
+
+            <button class="btn btn-primary btn-block" (click)="addScientificWord()">Add scientific work</button>
+            <br/>
+
+            
+          <!-- <label for="description" class="sr-only">Email</label>
+          <input type="description" id="description" class="form-control" name="description" [(ngModel)]="location.description" placeholder="Description"
+              required autofocus>
+            <button class="btn btn-primary btn-block" (click)="newLocationZone()">Add location zone</button>
+            <br/>
+            
+            <table *ngIf="newZone==true">
+                <tr>
+                    <td><label for="lzname" class="sr-only">Name</label>
+                        <input type="text" id="lzname" class="form-control" name="lzname" [(ngModel)]="locationZones[numOfLocationZones-1].name" placeholder="Name"
+                          required autofocus></td></tr>
+                          <tr>
+                          <td><label for="row" class="sr-only">Row number</label>
+                            <input type="text" id="row" class="form-control" name="row" maxlength="2" inputmode="numeric" pattern="[0-9]*" [(ngModel)]="locationZones[numOfLocationZones-1].row" placeholder="Row number"
+                              required autofocus digitonly></td></tr>
+                              <tr>
+                              <td><label for="col" class="sr-only">Col number</label>
+                                <input type="text" id="col" class="form-control" name="col" maxlength="2" inputmode="numeric" pattern="[0-9]*" [(ngModel)]="locationZones[numOfLocationZones-1].col" placeholder="Col number"
+                                  required autofocus digitonly></td></tr>
+                                <tr>
+                                  <td><label for="matrix">Is matrix?</label></td></tr><tr><td>
+                                    <input type="checkbox" id="matrix" name="matrix" [(ngModel)]="locationZones[numOfLocationZones-1].matrix" placeholder="Matrix" 
+                                      required autofocus></td></tr>
+                                <tr>
+                                    <button class="btn btn-primary btn-block" (click)="addLocationZone()">Add</button>
+                                </tr>
+                                
+
+
+            </table>
+            <button  class="btn btn-danger btn-block" (click)="close()" class="x">X</button>
+          <button class="btn btn-primary btn-block" (click)="createLocation()">Create</button>
+          <br/>
+          </div>
+        <div class="column right" ng-controller="testController"
+        style="overflow-x: auto;">
+        <div *ngFor="let lz of locationZones">
+          Name: {{lz.name}}
+          <button  class="btn btn-danger" (click)="remove(lz.id)">Remove</button> 
+          <div *ngIf="lz.capacity!=0">    
+            <div *ngIf="lz.matrix else elseblock"> 
+                <div id="div-inline">
+                    <div class="outer-seat2"><div class="inner-seat2"></div></div>
+                        <div *ngFor="let other of counter(lz.col)" align="top|center">
+                            <div class="outer-seat2"><div class="inner-seat2"><label class="labelText">{{other}}</label></div></div>
+                        </div>
+                </div> 
+                <div *ngFor="let item of counter(lz.row)">
+                  <div id="div-inline">
+                    <div class="outer-seat2"><div class="inner-seat2"><label class="labelText">{{item}}</label></div></div>
+                        <div *ngFor="let other of counter(lz.col)" >
+                            <div class="outer-seat"><div class="inner-seat"></div></div>
+                        </div>
+                       
+                  </div>
+                </div>
+                </div>
+                <ng-template #elseblock>
+                  <tr><td>Capacity: {{lz.capacity}}</td></tr>
+                  <div class="outer-seat3"><div class="inner-seat3"></div></div>
+                </ng-template>
+            </div> 
+        </div>
+      <br/> -->
+      
+      </div>
+</div>
