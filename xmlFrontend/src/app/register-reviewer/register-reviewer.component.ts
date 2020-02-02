@@ -40,6 +40,7 @@ export class RegisterReviewerComponent {
     return re.test(email);
 }
   register():void{
+    console.log('register reviewer called');
     this.user.enabled = false;
     if (this.user.name != undefined && this.user.surname != undefined && this.user.email != undefined &&
       this.user.username != undefined && this.user.password!=undefined){
