@@ -6,6 +6,7 @@ import {ReferenceDto} from 'src/app/dto/Reference.dto';
 import {ScientificWorkDto} from 'src/app/dto/ScientificWork.dto';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { AlertBoxComponent } from 'src/app/alert-box/alert-box.component';
+import { ScientificWorkService } from '../services/scientific-work.service';
 
 @Component({
   selector: 'app-scientific-works',
@@ -16,69 +17,67 @@ import { AlertBoxComponent } from 'src/app/alert-box/alert-box.component';
 export class ScientificWorksComponent implements OnInit {
 
   title: string='';
+  authorName: string='';
+  authorUniversityName: string='';
+  authorUniversityAddress: string='';
+  authorParagraph: string='';
+
+  purpose: string='';
+  design: string='';
+  findings:string='';
+  limitations:string='';
+  originality: string='';
+  type: string='';
+
+
   authors: AuthorDto[]=[];
   abstract : AbstractDto;
   paragpraphs: string[]=[];
   reference: string[]=[];
-  numOfAuthors: number=0;
-  numOfKeywords: number=0;
-  numOfParagraph: number=0;
-  numOfReferences: number=0;
   allPublished: ScientificWorkDto[]=[];
   coverLetter: string='';
   keywords: string[]=[];
+  keyword: string='';
+  scientificWork: ScientificWorkDto;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal,private scientificWorkService: ScientificWorkService) { }
 
   ngOnInit() {
-    this.abstract ={
-    purpose:'',
-    design:'',
-    findings:'',
-    limitations:'',
-    originality: '',
-    type: '',
-    keywords: []
-    };
-  
-    this.authors[0]={
-      name: '',
-      universityName:'',
-      universityAddress:''
-    };
-    this.paragpraphs[0]='';
-    this.keywords[0]='';
-
 
   }
 
   addParagraph(){
-    if(this.paragpraphs[this.numOfParagraph]==''){
-      const modalRef = this.modalService.open(AlertBoxComponent);
-      modalRef.componentInstance.message="Paragraph cannot be empty!";
-    }
-    this.numOfParagraph+=1;
-    this.paragpraphs[this.numOfParagraph]='';
+    this.paragpraphs.push(this.authorParagraph);
+    this.authorParagraph='';
     
   }
 
   addKeyword(){
-    this.numOfKeywords+=1;
-    this.keywords[this.numOfKeywords]='';
+    this.keywords.push(this.keyword);
+    this.keyword='';
     
   }
 
   addAuthor(){
-    this.numOfAuthors+=1;
-    this.authors[this.numOfAuthors]={
-      name: '',
-      universityName: '',
-      universityAddress: ''
-    };
+    this.authors.push({name: this.authorName,
+    universityName: this.authorUniversityName,
+    universityAddress: this.authorUniversityAddress});
+    this.authorName='';
+    this.authorUniversityAddress='';
+    this.authorUniversityName='';
   }
 
   addScientificWork(){
+    this.scientificWork={
+      headertDTO: null,
+      title: this.title,
+      authorsDTO: this.authors,
+      paragraphs:this.paragpraphs,
+      referenceDTO: null,
+      comments: []
+    };
 
+    this.scientificWorkService.createScientificWork(this.scientificWork);
   }
 
 }

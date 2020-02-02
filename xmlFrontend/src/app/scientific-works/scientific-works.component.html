@@ -8,50 +8,50 @@ style="overflow-x: auto;">
             required autofocus>
           <h4 class="form-signin-heading">Authors</h4>
           <label for="author" class="sr-only">Author name</label>
-          <input type="text" id="author" class="form-control" name="author" [(ngModel)]="authors[numOfAuthors].name" placeholder="Author name"
+          <input type="text" id="author" class="form-control" name="author" [(ngModel)]="authorName" placeholder="Author name"
             required>
             <label for="authorUniversityName" class="sr-only">Author university name</label>
-            <input type="text" id="authorUniversityName" class="form-control" name="authorUniversityName" [(ngModel)]="authors[numOfAuthors].universityName" placeholder="Author university name"
+            <input type="text" id="authorUniversityName" class="form-control" name="authorUniversityName" [(ngModel)]="authorUniversityName" placeholder="Author university name"
             required>
             <label for="authorUniversityAddress" class="sr-only">Author university address</label>
-            <input type="text" id="authorUniversityAddress" class="form-control" name="authorUniversityAddress" [(ngModel)]="authors[numOfAuthors].universityAddress" placeholder="Author university address"
+            <input type="text" id="authorUniversityAddress" class="form-control" name="authorUniversityAddress" [(ngModel)]="authorUniversityAddress" placeholder="Author university address"
             required>
             <button class="btn btn-primary btn-block" (click)="addAuthor()">Add author</button>
             <br/>
-            <!-- <h4 class="form-signin-heading">Abstract</h4>
+            <h4 class="form-signin-heading">Abstract</h4>
             <label for="purpose" class="sr-only">Purpose</label>
-            <input type="text" id="purpose" class="form-control" name="purpose" [(ngModel)]="abstract.purpose" placeholder="Purpose"
+            <input type="text" id="purpose" class="form-control" name="purpose" [(ngModel)]="purpose" placeholder="Purpose"
             required>
 
             <label for="design" class="sr-only">Design</label>
-            <input type="text" id="design" class="form-control" name="design" [(ngModel)]="abstract.design" placeholder="Design"
+            <input type="text" id="design" class="form-control" name="design" [(ngModel)]="design" placeholder="Design"
             required>
 
             <label for="findings" class="sr-only">Findings</label>
-            <input type="text" id="findings" class="form-control" name="findings" [(ngModel)]="abstract.findings" placeholder="Findings"
+            <input type="text" id="findings" class="form-control" name="findings" [(ngModel)]="findings" placeholder="Findings"
             required>
 
             <label for="limitations" class="sr-only">Limitations</label>
-            <input type="text" id="limitations" class="form-control" name="limitations" [(ngModel)]="abstract.limitations" placeholder="Limitations"
+            <input type="text" id="limitations" class="form-control" name="limitations" [(ngModel)]="limitations" placeholder="Limitations"
             required>
 
             <label for="originality" class="sr-only">Originality</label>
-            <input type="text" id="originality" class="form-control" name="originality" [(ngModel)]="abstract.originality" placeholder="Originality"
+            <input type="text" id="originality" class="form-control" name="originality" [(ngModel)]="originality" placeholder="Originality"
             required>
 
             <label for="type" class="sr-only">Type</label>
-            <input type="text" id="type" class="form-control" name="type" [(ngModel)]="abstract.type" placeholder="Type"
+            <input type="text" id="type" class="form-control" name="type" [(ngModel)]="type" placeholder="Type"
             required>
 
             <label for="keyword" class="sr-only">Keyword</label>
-            <input type="text" id="keyword" class="form-control" name="keyword" [(ngModel)]="keywords[numOfKeywords]" placeholder="Keyword"
+            <input type="text" id="keyword" class="form-control" name="keyword" [(ngModel)]="keyword" placeholder="Keyword"
             required>
-            <button class="btn btn-primary btn-block" (click)="addKeyword()">Add keyword</button> -->
+            <button class="btn btn-primary btn-block" (click)="addKeyword()">Add keyword</button> 
             <br/>
 
             <h4 class="form-signin-heading">Paragraphs</h4>
             <label for="paragraph" class="sr-only">Paragraph</label>
-            <textarea id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs]" rows="4" cols="50" placeholder="Paragraph"></textarea>
+            <textarea id="paragraph" class="form-control" name="paragraph" [(ngModel)]="authorParagraph" rows="4" cols="50" placeholder="Paragraph"></textarea>
             <!-- <input type="text" id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs-1]" placeholder="Paragraph"
             required> -->
             <button class="btn btn-primary btn-block" (click)="addParagraph()">Add paragraph</button>
