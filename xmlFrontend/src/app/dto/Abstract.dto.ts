@@ -5,6 +5,6 @@ export interface AbstractDto {
    limitations: string;
    originality: string;
    type: string;
-   keywords: Array<string>;
+   keywords: string[];
 
 }
