@@ -25,6 +25,8 @@ import { JwtUtilsService } from './security/jwt-utils.service';
 import { AuthenticationService } from './security/authentication.service';
 import { TokenInterceptorService } from './security/token-interceptor.service';
 import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
+import { AllScientificWorksComponent } from './all-scientific-works/all-scientific-works.component';
+import { OpenScientificWorkComponent } from './open-scientific-work/open-scientific-work.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
     UnreviewedWorksComponent,
     ReviewedWorksComponent,
     RegisterEditorComponent,
-    RegisterReviewerComponent
+    RegisterReviewerComponent,
+    AllScientificWorksComponent,
+    OpenScientificWorkComponent
   ],
   imports: [
     BrowserModule,

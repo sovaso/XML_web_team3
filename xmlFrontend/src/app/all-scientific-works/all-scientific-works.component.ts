@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SharedService } from '../services/shared.service';
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
 import { CurrentUser } from '../model/currentUser.model';
+import { NgbModalOptions, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SharedService } from '../services/shared.service';
 
 @Component({
-  selector: 'app-my-works',
-  templateUrl: './my-works.component.html',
-  styleUrls: ['./my-works.component.css']
+  selector: 'app-all-scientific-works',
+  templateUrl: './all-scientific-works.component.html',
+  styleUrls: ['./all-scientific-works.component.css']
 })
-export class MyWorksComponent implements OnInit {
+export class AllScientificWorksComponent implements OnInit {
 
   scientificWorks: ScientificWorkDto[] = [];
   
@@ -23,7 +23,7 @@ export class MyWorksComponent implements OnInit {
 
   type = '';
 
-  //modalOption: NgbModalOptions = {};
+  modalOption: NgbModalOptions = {};
 
   modalRef : any;
 

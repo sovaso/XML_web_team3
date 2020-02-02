@@ -10,6 +10,7 @@ import { UnreviewedWorksComponent } from './unreviewed-works/unreviewed-works.co
 import { ReviewedWorksComponent } from './reviewed-works/reviewed-works.component';
 import { RegisterEditorComponent } from './register-editor/register-editor.component';
 import { RegisterReviewerComponent } from './register-reviewer/register-reviewer.component';
+import { AllScientificWorksComponent } from './all-scientific-works/all-scientific-works.component';
 
 
 
@@ -31,6 +32,7 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     children: [
+      { path: 'allScientificWorks', component: AllScientificWorksComponent},
       { path: 'scientificWorks', component: ScientificWorksComponent},
       { path: 'myWorks', component: MyWorksComponent},
       { path: 'worksToReview', component: WorksToReviewComponent},
