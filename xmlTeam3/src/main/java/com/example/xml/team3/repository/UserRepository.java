@@ -47,7 +47,7 @@ public class UserRepository {
 
 	public String saveUser(UserPub user) throws Exception {
 		String userXML = marshallerUtil.marshallUser(user);
-		String userId = user.getPassword();
+		String userId = user.getUsername();
 		ExistStore.store(userCollection, userId, userXML);
 		return userId;
 	}
