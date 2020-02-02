@@ -19,8 +19,10 @@ export class MenuBarComponent implements OnInit {
   constructor(private router: Router, private modalService: NgbModal) { }
 
   ngOnInit() {
+    console.log('ng on init called from menu bar');
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser'));
+    console.log(this.currentUser);
     //uzmemo sa stranice sve elemente koje treba da sakrijemo 
     var scientificWorks: HTMLElement = document.getElementById('scientificWorks');
     var myWorks: HTMLElement = document.getElementById('myWorks');

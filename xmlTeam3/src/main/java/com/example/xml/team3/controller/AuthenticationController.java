@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.xml.team3.dto.LoginRequestDTO;
 import com.example.xml.team3.dto.LoginResponseDTO;
+import com.example.xml.team3.model.user.UserPub;
+import com.example.xml.team3.service.impl.UserServiceImpl;
 import com.example.xml.team3.util.jwt.JwtUtil;
 
 @RestController
@@ -31,6 +33,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private JwtUtil jwtUtils;
+	
+	@Autowired
+	private UserServiceImpl userService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO loginDTO) {
@@ -51,7 +56,18 @@ public class AuthenticationController {
 			String jwt = jwtUtils.generateToken(user);
 
 			// Return token for successful authentication
-			LoginResponseDTO response = new LoginResponseDTO(jwt);
+			String userRoleName = "";
+			UserPub userPub = userService.findByUsername(loginDTO.getUsername());
+
+			if (userPub.getRole().toString().equalsIgnoreCase("ROLE_AUTHOR")) {
+				userRoleName = "ROLE_AUTHOR";
+			} else if (userPub.getRole().toString().equalsIgnoreCase("ROLE_EDITOR")){
+				userRoleName = "ROLE_EDITOR";
+			}
+			 else if (userPub.getRole().toString().equalsIgnoreCase("ROLE_REVIEWER")){
+					userRoleName = "ROLE_REVIEWER";
+				}
+			LoginResponseDTO response = new LoginResponseDTO(jwt, userRoleName);
 			System.out.println("Cetiri");
 			return ResponseEntity.ok(response);
 		} catch (BadCredentialsException e) {
