@@ -54,7 +54,7 @@
                 <xs:element name="references">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="reference">
+                            <xs:element name="reference" maxOccurs="unbounded" minOccurs="0">
                                 <xs:complexType>
                                     <xs:simpleContent>
                                         <xs:extension base="xs:string">
@@ -106,25 +106,7 @@
     <xs:element name="paragraph">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="content">
-                    <xs:complexType>
-                        <xs:choice>
-                            <xs:element name="text" type="xs:string"/>
-                            <xs:element name="image">
-                                <xs:complexType>
-                                    <xs:attribute name="src" type="xs:string"/>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="reference">
-                                <xs:complexType>
-                                    <xs:attribute name="refId" type="xs:string"/>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:choice>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element ref="paragraph" minOccurs="0"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="comment"/>
+                <xs:element name="text" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string"/>
         </xs:complexType>
