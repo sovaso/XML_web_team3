@@ -1,11 +1,13 @@
 package com.example.xml.team3.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.xml.team3.model.review.Review;
 import com.example.xml.team3.repository.ReviewRepository;
 import com.example.xml.team3.service.ReviewService;
 
+@Service
 public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
