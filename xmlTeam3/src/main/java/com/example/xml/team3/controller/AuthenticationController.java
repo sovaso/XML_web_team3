@@ -35,19 +35,27 @@ public class AuthenticationController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO loginDTO) {
 		System.out.println("Uslo u login");
+		System.out.println(loginDTO.getUsername());
+		System.out.println(loginDTO.getPassword());
 		try {
 			final Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+			System.out.println("Jedan");
+			
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-
+			System.out.println("Dva");
+			
 			// Create JSON web token for user
 			User user = (User) authentication.getPrincipal();
+			System.out.println("Tri");
 			String jwt = jwtUtils.generateToken(user);
 
 			// Return token for successful authentication
 			LoginResponseDTO response = new LoginResponseDTO(jwt);
+			System.out.println("Cetiri");
 			return ResponseEntity.ok(response);
 		} catch (BadCredentialsException e) {
+			System.out.println("Pet");
 			return new ResponseEntity<String>("Invalid email or password", HttpStatus.BAD_REQUEST);
 		}
 	}

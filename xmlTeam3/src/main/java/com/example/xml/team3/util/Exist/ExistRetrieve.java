@@ -16,6 +16,7 @@ public class ExistRetrieve {
 
 	public static ResourceSet executeXPathExpression(String collectionId, String xpathExp, String TARGET_NAMESPACE)
 			throws Exception {
+		System.out.println("VASO1111");
 		ResourceSet result = null;
 		ConnectionProperties conn = AuthenticationUtilities.loadProperties();
 		Class<?> cl = Class.forName(conn.driver);
@@ -23,6 +24,7 @@ public class ExistRetrieve {
 		database.setProperty("create-database", "true");
 		DatabaseManager.registerDatabase(database);
 		Collection col = null;
+		System.out.println("VASO2222");
 		try {
 			// get the collection
 			col = DatabaseManager.getCollection(conn.uri + collectionId);
@@ -35,7 +37,10 @@ public class ExistRetrieve {
 			// make the service aware of namespaces, using the default one
 			xpathService.setNamespace("", TARGET_NAMESPACE);
 			// execute xpath expression
+			System.out.println("VASO3333");
+			System.out.println(xpathExp);
 			result = xpathService.query(xpathExp);
+			//System.out.println(result.getSize());
 			// handle the results
 		} finally {
 			// don't forget to cleanup

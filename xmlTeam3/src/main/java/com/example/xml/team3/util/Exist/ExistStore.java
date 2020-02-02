@@ -40,6 +40,7 @@ public class ExistStore {
 			 * if left empty (null)
 			 */
 			res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
+			System.out.println("AAA" + res.getId());
 			res.setContent(xmlEntity);
 			col.storeResource(res);
 		} finally {

@@ -27,6 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 			UserPub user = userRepository.getByUsername(username);
 			if (user == null) {
+				System.out.println("ovde baca izuzetak");
 				throw new UsernameNotFoundException("User does not exist.");
 			}
 			List<GrantedAuthority> userAuthorities = Arrays

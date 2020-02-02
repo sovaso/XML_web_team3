@@ -53,17 +53,22 @@ public class UserRepository {
 	}
 
 	public UserPub getByUsername(String username) {
+		String xQuery = "//userPub[username=\"" + username + "\"" + "]";
+		//String xQuery = "//user/userPub[username[text()='bbb']]";
+		//String xQuery = "collection(\"user\")/userPub";
+		//String xQuery = username;
+		//ResourceSet result = queryService.query("//Users/User[./Roles/Role[text()='ROLE_USER']]");
 		UserPub user = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection,
-					String.format("//userPub[username = \"%s\"]", username), XUpdateTemplate.TARGET_NAMESPACE);
+					xQuery, XUpdateTemplate.TARGET_NAMESPACE + "/user");
 			ResourceIterator it = result.getIterator();
 			Resource res = null;
 
 			while (it.hasMoreResources()) {
 				try {
 					res = it.nextResource();
-					user = unmarshallerUtil.unmarshallUser(((XMLResource) res).toString());
+					user = unmarshallerUtil.unmarshallUser(((XMLResource) res).getContent().toString());
 					break;
 				} finally {
 					try {
