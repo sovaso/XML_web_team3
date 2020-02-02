@@ -87,6 +87,13 @@ export class MenuBarComponent implements OnInit {
 
   
   }
+
+  registerEditor(){
+    const modalRef = this.modalService.open(RegisterEditorComponent);
+  }
   
+  registerReviewer(){
+    const modalRef = this.modalService.open(RegisterReviewerComponent);
+  }
 
 }
