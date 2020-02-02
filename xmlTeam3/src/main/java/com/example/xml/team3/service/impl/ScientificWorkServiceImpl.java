@@ -1,5 +1,7 @@
 package com.example.xml.team3.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,10 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	public boolean deleteScientificWork(String id) throws Exception {
 		return scientificWorkRepository.delete(id);
+	}
+
+	public List<ScientificWork> findAllPublished() {
+		return scientificWorkRepository.findAllPublished();
 	}
 
 }
