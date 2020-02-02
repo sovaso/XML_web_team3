@@ -18,16 +18,19 @@ export class AuthenticationService {
     return this.http.post(this.loginPath, JSON.stringify({ username, password }), { headers }).pipe(
       map( ((res: any) => {
          console.log('result from login');
+         console.log(res);
           console.log(res['accessToken']);
           console.log(res['userRoleName']);
           console.log("1");
-          let token = res && res['accessToken'];
+          let token = res && res['jsonWebToken'];
+          console.log('TOKEN');
+          console.log(token);
           console.log("2");
           if (token) {
             console.log("3");
             localStorage.setItem('currentUser', JSON.stringify({
               userRoleName: res['userRoleName'],
-              token: res['accessToken']
+              token: res['jsonWebToken']
             }));
             console.log("4");
           }
