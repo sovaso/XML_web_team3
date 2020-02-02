@@ -43,7 +43,7 @@ public class UserController {
 			role = UserRole.ROLE_EDITOR;
 		}
 		try {
-			String username = userService.registerUser(newUser, role);
+			userService.registerUser(newUser, role);
 			return new ResponseEntity<Boolean>(true,
 					HttpStatus.CREATED);
 		} catch (Exception e) {
