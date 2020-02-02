@@ -26,7 +26,7 @@ public class UserController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> registerAuthor(@RequestBody @Valid RegisterDTO registerDTO) {
-		System.out.println("Register author called");
+		System.out.println("REGISTRATION CALLED");
 		
 		UserPub newUser = new UserPub();
 		newUser.setEmail(registerDTO.getEmail());
@@ -44,10 +44,11 @@ public class UserController {
 		}
 		try {
 			String username = userService.registerUser(newUser, role);
-			return new ResponseEntity<String>("User with " + username + " has been succesfully registered!",
+			return new ResponseEntity<Boolean>(true,
 					HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("An error occured during registration. Please try again later.",
+			System.out.println("Uhvacen exception, treba da se vrati false");
+			return new ResponseEntity<Boolean>(false,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		

@@ -46,19 +46,29 @@ export class RegisterUserComponent {
     if (this.user.name != undefined && this.user.surname != undefined && this.user.email != undefined &&
       this.user.username != undefined && this.user.password!=undefined){
 
+      console.log("Jedan");
       if (this.user.password==this.repeatedPassword){
+        console.log("Dva");
         if (this.validateEmail(this.user.email) == true){
+          console.log("Tri");
           console.log('validan je email');
           this.user.role = "ROLE_AUTHOR";
           this.registerUserService.register(this.user).subscribe(
             (registered:boolean) => {
               console.log("result of registered");
-              if(registered){
+              console.log(registered);
+              if(registered === true){
                 console.log("is registered in");
+                console.log(registered);
                 this.message = "Successful registration, congratulations!",
                 "success";
                 this.type = 'success';
                 var username = this.user.username;
+              }else {
+                console.log('treba da se upise da username vec postoji');
+                this.user.username='';
+                this.message = 'Username already exist.';
+                this.type = 'danger';
               }
             }
           ,

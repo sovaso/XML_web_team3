@@ -23,6 +23,10 @@ public class UnmarshallerUtil {
 			JAXBContext jaxbContext = JAXBContext.newInstance(UserPub.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			StringReader reader = new StringReader(user);
+			System.out.println("User");
+			System.out.println(user);
+			System.out.println("Reader");
+			System.out.println(reader);
 			UserPub retVal = (UserPub) unmarshaller.unmarshal(reader);
 			return retVal;
 		} catch (JAXBException e) {

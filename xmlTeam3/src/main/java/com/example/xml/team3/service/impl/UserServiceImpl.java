@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 			validateUserData(newUser);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new Exception("Given username already exists.");
 		}
 		newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 		newUser.setRole(userRole);
@@ -43,7 +43,8 @@ public class UserServiceImpl implements UserService {
 		}
 
 		if (userRepository.getByUsername(user.getUsername()) != null) {
-			throw new Exception("Given email already exists.");
+			System.out.println("VALIDATE USER DATA: USERNAME ALREADY EXIST");
+			throw new Exception("Given username already exists.");
 		}
 
 	}

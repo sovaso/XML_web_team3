@@ -6,6 +6,7 @@ import { RegisterUserComponent } from '../pages/register-user/register-user.comp
 import { RegisterEditorComponent } from '../register-editor/register-editor.component';
 import { RegisterReviewerComponent } from '../register-reviewer/register-reviewer.component';
 import { CurrentUser } from '../model/currentUser.model';
+import { CanActivateAuthGuard } from '../security/can-acitvate-auth.guard';
 
 @Component({
   selector: 'app-menu-bar',
@@ -31,6 +32,7 @@ export class MenuBarComponent implements OnInit {
     
     if (this.currentUser != null) {
       if (this.currentUser.userRoleName === 'ROLE_UNAUTHORIZED') {
+        console.log('11111111111111');
         scientificWorks.hidden = false;
         myWorks.hidden = true;
         worksToReview.hidden = true;
@@ -40,6 +42,7 @@ export class MenuBarComponent implements OnInit {
         registerReviewer.hidden = true;
       
       } else if (this.currentUser.userRoleName === 'ROLE_AUTHOR') {
+        console.log('AUTHOR LOGGED IN');
         scientificWorks.hidden = false;
         myWorks.hidden = false;
         worksToReview.hidden = true;
@@ -49,6 +52,7 @@ export class MenuBarComponent implements OnInit {
         registerReviewer.hidden = true;
       
     } else if (this.currentUser.userRoleName === 'ROLE_REVIEWER'){
+        console.log('REVIEWER LOGGED IN');
         scientificWorks.hidden = false;
         myWorks.hidden = false;
         worksToReview.hidden = false;
@@ -58,6 +62,7 @@ export class MenuBarComponent implements OnInit {
         registerReviewer.hidden = true;
     }
     else if (this.currentUser.userRoleName === 'ROLE_EDITOR'){
+      console.log('EDITOR LOGGED IN');
       scientificWorks.hidden = false;
       myWorks.hidden = false;
       worksToReview.hidden = false;
@@ -67,6 +72,8 @@ export class MenuBarComponent implements OnInit {
       registerReviewer.hidden = false;
     }
   }else {
+    
+      console.log('NO ONE LOGGED IN');
       scientificWorks.hidden = false;
       myWorks.hidden = true;
       worksToReview.hidden = true;
