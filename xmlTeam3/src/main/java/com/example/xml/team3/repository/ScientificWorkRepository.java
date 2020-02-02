@@ -1,6 +1,8 @@
 package com.example.xml.team3.repository;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.exist.xmldb.EXistResource;
@@ -77,6 +79,37 @@ public class ScientificWorkRepository {
 				try {
 					res = it.nextResource();
 					retVal = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return retVal;
+	}
+
+	public List<ScientificWork> findAllPublished() {
+		String xQuery = "//scientificWork[type=\"" + "ACCEPTED" + "\"" + "]";
+		List<ScientificWork> retVal = new ArrayList<>();
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/scientificWork");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					ScientificWork sw = new ScientificWork();
+					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
+					retVal.add(sw);
 					break;
 				} finally {
 					try {
