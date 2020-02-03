@@ -1,5 +1,6 @@
 package com.example.xml.team3.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.xml.team3.dto.AbstractDTO;
 import com.example.xml.team3.dto.AuthorDTO;
+import com.example.xml.team3.dto.HeaderDTO;
 import com.example.xml.team3.dto.ReferenceDTO;
 import com.example.xml.team3.dto.ScientificWorkDTO;
 import com.example.xml.team3.model.scientificwork.Author;
@@ -84,10 +87,92 @@ public class ScientificWorkController {
 		}
 	}
 
+	@GetMapping(value = "/getById")
+	public ResponseEntity<ScientificWorkDTO> getById(@RequestBody String scientificWorkId) {
+		ScientificWork scientificWork = new ScientificWork();
+		ScientificWorkDTO retVal = null;
+		try {
+			scientificWork = scientificWorkService.findById(scientificWorkId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (scientificWork == null) {
+			return new ResponseEntity<ScientificWorkDTO>(retVal, HttpStatus.NOT_FOUND);
+		}
+		// paragraf
+		List<String> paragraphsDTO = new ArrayList<String>();
+		for (Paragraph p : scientificWork.getParagraph()) {
+			paragraphsDTO.add(p.getText());
+		}
+		// heder
+		HeaderDTO headerDTO = new HeaderDTO("", "", "");
+		// title
+		String titleDTO = scientificWork.getTitle();
+		// autori
+		List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+		for (Author author : scientificWork.getAuthors().getAuthor()) {
+			authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+					author.getUniversity().getAddress()));
+		}
+		// apstrakt
+		AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+				scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+				scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+				scientificWork.getAbstract().getScientificWorkType(),
+				scientificWork.getAbstract().getKeywords().getKeyword());
+		// reference
+		List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+		for (Reference r : scientificWork.getReferences().getReference()) {
+			referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+		}
+		// komentari
+		List<String> commentsDTO = new ArrayList<String>();
+		commentsDTO.addAll(scientificWork.getComment());
+		// ubacivanje u listu
+		retVal = new ScientificWorkDTO(headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
+				commentsDTO);
+		return new ResponseEntity<ScientificWorkDTO>(retVal, HttpStatus.OK);
+	}
+
 	@GetMapping(value = "/getAllPublished")
-	public ResponseEntity<List<ScientificWork>> findAllPublished() {
-		List<ScientificWork> retVal = scientificWorkService.findAllPublished();
-		return new ResponseEntity<List<ScientificWork>>(retVal, HttpStatus.OK);
+	public ResponseEntity<List<ScientificWorkDTO>> findAllPublished() {
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		List<ScientificWork> allPublished = scientificWorkService.findAllPublished();
+		for (ScientificWork scientificWork : allPublished) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			for (Reference r : scientificWork.getReferences().getReference()) {
+				referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+			}
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+			retVal.add(new ScientificWorkDTO(headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
+					commentsDTO));
+		}
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
 }
