@@ -14,6 +14,7 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.util.Exist.ExistRetrieve;
 import com.example.xml.team3.util.Exist.ExistStore;
@@ -41,6 +42,9 @@ public class ScientificWorkRepository {
 
 	public String save(ScientificWork scientificWork) throws Exception {
 		String Id = generateNewScientificWorkId();
+		for (Paragraph p : scientificWork.getParagraph()) {
+			p.setId(Id + "/paragraph" + UUID.randomUUID().toString());
+		}
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
 		ExistStore.store(scientificWorkCollectionId, Id, scientificWorkXML);
 		return Id;
@@ -110,7 +114,7 @@ public class ScientificWorkRepository {
 					ScientificWork sw = new ScientificWork();
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
 					retVal.add(sw);
-				
+
 				} finally {
 					try {
 						((EXistResource) res).freeResources();
@@ -130,7 +134,7 @@ public class ScientificWorkRepository {
 		List<ScientificWork> retVal = new ArrayList<>();
 
 		// uzmi sve prihvacene
-		//String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
+		// String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
 		String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + " and ./authors/author[@username=\""
 				+ username + "\"]]";
 		try {
@@ -146,7 +150,7 @@ public class ScientificWorkRepository {
 					ScientificWork sw = new ScientificWork();
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
 					retVal.add(sw);
-					//break;
+					// break;
 				} finally {
 					try {
 						((EXistResource) res).freeResources();
@@ -176,7 +180,7 @@ public class ScientificWorkRepository {
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
 					System.out.println("bbb");
 					retVal.add(sw);
-					//break;
+					// break;
 				} finally {
 					try {
 						((EXistResource) res).freeResources();
@@ -188,7 +192,7 @@ public class ScientificWorkRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("Retval size: "+retVal.size());
+		System.out.println("Retval size: " + retVal.size());
 		return retVal;
 	}
 

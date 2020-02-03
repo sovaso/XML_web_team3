@@ -1,117 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
-    targetNamespace="http://ftn.uns.ac.rs/team3/scientificWork" xmlns="http://ftn.uns.ac.rs/team3/scientificWork">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://ftn.uns.ac.rs/team3/scientificWork"
+	xmlns="http://ftn.uns.ac.rs/team3/scientificWork">
 
-    <xs:element name="scientificWork">
-        <xs:complexType>
-            <xs:sequence>
-            
-                <xs:element name="header">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="received" type="xs:date"/>
-                            <xs:element name="revised" type="xs:date"/>
-                            <xs:element name="accepted" type="xs:date"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element name="title" type="xs:string"/>
-                
-                <xs:element name="status" type="StatusType"/>
-                
-                <xs:element name="authors">
-                    <xs:complexType>
-                        <xs:sequence maxOccurs="unbounded">
-                            <xs:element ref="author"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element name="abstract">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="purpose" type="xs:string"/>
-                            <xs:element name="design" type="xs:string"/>
-                            <xs:element name="findings" type="xs:string"/>
-                            <xs:element name="limitations" type="xs:string"/>
-                            <xs:element name="originality" type="xs:string"/>
-                            <xs:element name="keywords">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element maxOccurs="unbounded" name="keyword"
-                                            type="xs:string"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="scientificWorkType" type="xs:string"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element ref="paragraph" maxOccurs="unbounded" minOccurs="0"/>
-                
-                <xs:element name="references">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="reference" maxOccurs="unbounded" minOccurs="0">
-                                <xs:complexType>
-                                    <xs:simpleContent>
-                                        <xs:extension base="xs:string">
-                                            <xs:attribute name="id" type="xs:string"/>
-                                            <xs:attribute name="scientificWorkId" type="xs:string"/>
-                                        </xs:extension>
-                                    </xs:simpleContent>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="comment"/>
-            </xs:sequence>
-            
-            <xs:attribute name="id" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:simpleType name="StatusType">
-        <xs:restriction base="xs:string">
-        	<xs:enumeration value="ACCEPTED"/>
-            <xs:enumeration value="REJECTED"/>
-            <xs:enumeration value="REVIEWING"/>
-            <xs:enumeration value="WITHDRAWN"/>
-            <xs:enumeration value="REVISING"/>
-            <xs:enumeration value="SUBMITTED"/>
-        </xs:restriction>
-    </xs:simpleType>
-    
-    <xs:complexType name="Author">
-        <xs:sequence>
-            <xs:element name="name" type="xs:string"/>
-            <xs:element name="surname" type="xs:string"/>
-            <xs:element name="university">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="name" type="xs:string"/>
-                        <xs:element name="address" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-        <xs:attribute name="username" type="xs:string"/>
-    </xs:complexType>
-    
-    <xs:element name="author" type="Author"/>
-    
-    <xs:element name="paragraph">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="text" type="xs:string"/>
-            </xs:sequence>
-            <xs:attribute name="id" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-    
-    <xs:element name="comment" type="xs:string"/>
+	<xs:element name="scientificWork">
+		<xs:complexType>
+			<xs:sequence>
+
+				<xs:element name="header">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="received" type="xs:date" />
+							<xs:element name="revised" type="xs:date" />
+							<xs:element name="accepted" type="xs:date" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="title" type="xs:string" />
+
+				<xs:element name="status" type="StatusType" />
+
+				<xs:element name="authors">
+					<xs:complexType>
+						<xs:sequence maxOccurs="unbounded">
+							<xs:element ref="author" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="abstract">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="purpose" type="xs:string" />
+							<xs:element name="design" type="xs:string" />
+							<xs:element name="findings" type="xs:string" />
+							<xs:element name="limitations" type="xs:string" />
+							<xs:element name="originality" type="xs:string" />
+							<xs:element name="keywords">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element maxOccurs="unbounded" name="keyword"
+											type="xs:string" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="scientificWorkType" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element ref="paragraph" maxOccurs="unbounded"
+					minOccurs="0" />
+
+				<xs:element name="references" maxOccurs="unbounded"
+					minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="scientificWorkId" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element maxOccurs="unbounded" minOccurs="0"
+					ref="comment" />
+			</xs:sequence>
+
+			<xs:attribute name="id" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="StatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACCEPTED" />
+			<xs:enumeration value="REJECTED" />
+			<xs:enumeration value="REVIEWING" />
+			<xs:enumeration value="WITHDRAWN" />
+			<xs:enumeration value="REVISING" />
+			<xs:enumeration value="SUBMITTED" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="Author">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="surname" type="xs:string" />
+			<xs:element name="university">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="name" type="xs:string" />
+						<xs:element name="address" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="username" type="xs:string" />
+	</xs:complexType>
+
+	<xs:element name="author" type="Author" />
+
+	<xs:element name="paragraph">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="text" type="xs:string" />
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="comment" type="xs:string" />
 </xs:schema>

@@ -43,9 +43,8 @@ public class CoverLetterController {
 		coverLetter.setDate(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
 		coverLetter.setText(coverLetterDTO.getText());
 		coverLetter.setScientificWorkId(coverLetterDTO.getScientificWorkId());
-		String id = "";
 		try {
-			id = coverLetterService.createNewCoverLetter(coverLetter);
+			coverLetterService.createNewCoverLetter(coverLetter);
 			return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 		} catch (Exception e) {
 			System.out.println("Uhvacen exception, treba da se vrati false");

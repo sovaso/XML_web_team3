@@ -24,7 +24,7 @@ import com.example.xml.team3.dto.ScientificWorkDTO;
 import com.example.xml.team3.model.scientificwork.Author;
 import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
-import com.example.xml.team3.model.scientificwork.ScientificWork.References.Reference;
+import com.example.xml.team3.model.scientificwork.ScientificWork.References;
 import com.example.xml.team3.model.scientificwork.StatusType;
 import com.example.xml.team3.service.ScientificWorkService;
 
@@ -54,9 +54,9 @@ public class ScientificWorkController {
 		// reference
 
 		for (ReferenceDTO rfDTO : scientificWorkDTO.getReferenceDTO()) {
-			Reference rf = new Reference();
-			rf.setValue(rfDTO.getValue());
-			retVal.getReferences().getReference().add(rf);
+			References rf = new References();
+			rf.setScientificWorkId(rfDTO.getScientificWorkId());
+			retVal.getReferences().add(rf);
 		}
 
 		// apstrakt
@@ -137,9 +137,9 @@ public class ScientificWorkController {
 		// reference
 
 		for (ReferenceDTO rfDTO : scientificWorkDTO.getReferenceDTO()) {
-			Reference rf = new Reference();
-			rf.setValue(rfDTO.getValue());
-			retVal.getReferences().getReference().add(rf);
+			References rf = new References();
+			rf.setScientificWorkId(rfDTO.getScientificWorkId());
+			retVal.getReferences().add(rf);
 		}
 
 		// apstrakt
@@ -229,8 +229,8 @@ public class ScientificWorkController {
 				scientificWork.getAbstract().getKeywords().getKeyword());
 		// reference
 		List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
-		for (Reference r : scientificWork.getReferences().getReference()) {
-			referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+		for (References r : scientificWork.getReferences()) {
+			referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
 		}
 		// komentari
 		List<String> commentsDTO = new ArrayList<String>();
@@ -275,9 +275,9 @@ public class ScientificWorkController {
 			// reference
 			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
 			ScientificWork.References references = new ScientificWork.References();
-			scientificWork.setReferences(references);
-			for (Reference r : scientificWork.getReferences().getReference()) {
-				referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+			scientificWork.getReferences().add(references);
+			for (References r : scientificWork.getReferences()) {
+				referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
 			}
 			// komentari
 			List<String> commentsDTO = new ArrayList<String>();
@@ -322,8 +322,8 @@ public class ScientificWorkController {
 			// reference
 			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
 			if (scientificWork.getReferences() != null) {
-				for (Reference r : scientificWork.getReferences().getReference()) {
-					referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
 				}
 			}
 
