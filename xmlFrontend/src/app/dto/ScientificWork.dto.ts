@@ -4,6 +4,7 @@ import { ReferenceDto } from './Reference.dto';
 import { AbstractDto } from './Abstract.dto';
 
 export interface ScientificWorkDto {
+   scientificWorkId: string;
    headertDTO : HeaderDto;
    title: string;
    authorsDTO: Array<AuthorDto>;
