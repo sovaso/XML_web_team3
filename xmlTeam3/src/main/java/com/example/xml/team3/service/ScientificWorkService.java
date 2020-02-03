@@ -15,6 +15,8 @@ public interface ScientificWorkService {
 	public boolean deleteScientificWork(String id) throws Exception;
 
 	public List<ScientificWork> findAllPublished();
-	
+
 	public String getUsernameByNameAndSurname(String name, String surname);
+
+	public List<ScientificWork> findAllForConcreteUser(String username);
 }

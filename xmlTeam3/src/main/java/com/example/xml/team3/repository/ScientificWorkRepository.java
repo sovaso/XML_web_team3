@@ -96,7 +96,7 @@ public class ScientificWorkRepository {
 	}
 
 	public List<ScientificWork> findAllPublished() {
-		String xQuery = "//scientificWork[type=\"" + "ACCEPTED" + "\"" + "]";
+		String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
 		List<ScientificWork> retVal = new ArrayList<>();
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
@@ -123,6 +123,64 @@ public class ScientificWorkRepository {
 			e.printStackTrace();
 		}
 
+		return retVal;
+	}
+
+	public List<ScientificWork> findAllForConcreteUser(String username) {
+		List<ScientificWork> retVal = new ArrayList<>();
+		// uzmi sve prihvacene
+		String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/scientificWork");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					ScientificWork sw = new ScientificWork();
+					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
+					retVal.add(sw);
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// uzmi sve koji nisu prihvaceni a pripadaju useru
+		String xQuery2 = "//scientificWork[not(status=\"" + "ACCEPTED" + "\")" + "]/authors/author[@username=\""
+				+ username + "\"]";
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery2,
+					XUpdateTemplate.TARGET_NAMESPACE + "/scientificWork");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					ScientificWork sw = new ScientificWork();
+					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
+					retVal.add(sw);
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return retVal;
 	}
 

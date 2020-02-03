@@ -15,7 +15,7 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	@Autowired
 	private ScientificWorkRepository scientificWorkRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -38,9 +38,13 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 	public List<ScientificWork> findAllPublished() {
 		return scientificWorkRepository.findAllPublished();
 	}
-	
+
 	public String getUsernameByNameAndSurname(String name, String surname) {
 		return userRepository.getUsernameByNameAndSurname(name, surname);
+	}
+
+	public List<ScientificWork> findAllForConcreteUser(String username) {
+		return scientificWorkRepository.findAllForConcreteUser(username);
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,6 +140,48 @@ public class ScientificWorkController {
 		List<ScientificWorkDTO> retVal = new ArrayList<>();
 		List<ScientificWork> allPublished = scientificWorkService.findAllPublished();
 		for (ScientificWork scientificWork : allPublished) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			for (Reference r : scientificWork.getReferences().getReference()) {
+				referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+			}
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+			retVal.add(new ScientificWorkDTO(headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
+					commentsDTO));
+		}
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/findAllForConcreteUser")
+	public ResponseEntity<List<ScientificWorkDTO>> findAllForConcreteUser() {
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<ScientificWork> allForConcrete = scientificWorkService.findAllForConcreteUser(usernameCurrentUser);
+		for (ScientificWork scientificWork : allForConcrete) {
 			// paragraf
 			List<String> paragraphsDTO = new ArrayList<String>();
 			for (Paragraph p : scientificWork.getParagraph()) {
