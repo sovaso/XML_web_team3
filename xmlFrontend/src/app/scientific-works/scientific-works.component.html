@@ -63,8 +63,15 @@ style="overflow-x: auto;">
                 <option value="work.id">work.title</option>
               </div>
             </select>
-            <button class="btn btn-primary btn-block" (click)="addScientificWord()">Add scientific work</button>
-    </div>
+            <button class="btn btn-primary btn-block" (click)="addScientificWork()">Add scientific work</button>
+            <div *ngIf="message!==''">
+              <p style="color: red;">{{message}}</p>
+          </div>
+          <div *ngIf="messageSuccess!==''">
+            <p style="color: green;">{{messageSuccess}}</p>
+        </div>
+    
+          </div>
     <div class="column right">
             <h2 class="form-signin-heading">Cover letter</h2>
               <label for="cover_letter" class="sr-only">Cover letter</label>

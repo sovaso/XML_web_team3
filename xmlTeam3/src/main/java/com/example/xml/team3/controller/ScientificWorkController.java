@@ -37,7 +37,9 @@ public class ScientificWorkController {
 	ScientificWorkService scientificWorkService;
 
 	@PostMapping(value = "/create")
-	public ResponseEntity<?> createScientificWork(@RequestBody @Valid ScientificWorkDTO scientificWorkDTO) {
+	public ResponseEntity<?> createScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
+		System.out.println("Uslo u create scientific work");
+		
 		ScientificWork retVal = new ScientificWork();
 		// title
 		retVal.setTitle(scientificWorkDTO.getTitle());
@@ -50,12 +52,22 @@ public class ScientificWorkController {
 		// komentari
 		retVal.getComment().addAll(scientificWorkDTO.getComments());
 		// reference
+		
 		for (ReferenceDTO rfDTO : scientificWorkDTO.getReferenceDTO()) {
 			Reference rf = new Reference();
 			rf.setValue(rfDTO.getValue());
 			retVal.getReferences().getReference().add(rf);
 		}
+		
 		// apstrakt
+		ScientificWork.Abstract abstracct = new ScientificWork.Abstract();
+		ScientificWork.Abstract.Keywords keywords = new ScientificWork.Abstract.Keywords();
+		
+		retVal.setAbstract(abstracct);
+		retVal.getAbstract().setKeywords(keywords);
+		scientificWorkDTO.getAbstractDTO();
+		System.out.println(scientificWorkDTO.getAbstractDTO().getFindings());
+		System.out.println(scientificWorkDTO.getAbstractDTO().getDesign());
 		retVal.getAbstract().setDesign(scientificWorkDTO.getAbstractDTO().getDesign());
 		retVal.getAbstract().setFindings(scientificWorkDTO.getAbstractDTO().getFindings());
 		retVal.getAbstract().setLimitations(scientificWorkDTO.getAbstractDTO().getLimitations());
@@ -66,16 +78,20 @@ public class ScientificWorkController {
 		// autori
 		for (AuthorDTO autDTO : scientificWorkDTO.getAuthorsDTO()) {
 			Author a = new Author();
+			a.setUniversity(new Author.University());
 			a.setName(autDTO.getName());
 			a.setSurname(autDTO.getSurname());
 			a.getUniversity().setAddress(autDTO.getUniversityAddress());
 			a.getUniversity().setName(autDTO.getUniversityName());
+      ScientificWork.Authors authors = new ScientificWork.Authors();
+			retVal.setAuthors(authors);
 			a.setUsername(scientificWorkService.getUsernameByNameAndSurname(autDTO.getName(), autDTO.getSurname()));
 			retVal.getAuthors().getAuthor().add(a);
 		}
 		// status
 		retVal.setStatus(StatusType.SUBMITTED);
 		// header
+		retVal.setHeader(new ScientificWork.Header());
 		retVal.getHeader().setAccepted(null);
 		retVal.getHeader().setRevised(null);
 		retVal.getHeader().setReceived(null);
