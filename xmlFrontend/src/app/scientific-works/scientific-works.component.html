@@ -23,42 +23,29 @@ style="overflow-x: auto;">
             <br/>
             <h4 class="form-signin-heading">Abstract</h4>
             <label for="purpose" class="sr-only">Purpose</label>
-            <input type="text" id="purpose" class="form-control" name="purpose" [(ngModel)]="purpose" placeholder="Purpose"
-            required>
+            <textarea id="purpose" class="form-control" name="purpose" [(ngModel)]="purpose" rows="4" cols="50" placeholder="Purpose"></textarea>
 
             <label for="design" class="sr-only">Design</label>
-            <input type="text" id="design" class="form-control" name="design" [(ngModel)]="design" placeholder="Design"
-            required>
+            <textarea id="design" class="form-control" name="design" [(ngModel)]="design" rows="4" cols="50" placeholder="Design"></textarea>
 
             <label for="findings" class="sr-only">Findings</label>
-            <input type="text" id="findings" class="form-control" name="findings" [(ngModel)]="findings" placeholder="Findings"
-            required>
+            <textarea id="findings" class="form-control" name="findings" [(ngModel)]="findings" rows="4" cols="50" placeholder="Findings"></textarea>
 
             <label for="limitations" class="sr-only">Limitations</label>
-            <input type="text" id="limitations" class="form-control" name="limitations" [(ngModel)]="limitations" placeholder="Limitations"
-            required>
+            <textarea id="limitations" class="form-control" name="limitations" [(ngModel)]="limitations" rows="4" cols="50" placeholder="Limitations"></textarea>
 
             <label for="originality" class="sr-only">Originality</label>
-            <input type="text" id="originality" class="form-control" name="originality" [(ngModel)]="originality" placeholder="Originality"
-            required>
-
+            <textarea id="originality" class="form-control" name="originality" [(ngModel)]="originality" rows="4" cols="50" placeholder="Originality"></textarea>
             <label for="type" class="sr-only">Type</label>
-            <input type="text" id="type" class="form-control" name="type" [(ngModel)]="type" placeholder="Type"
-            required>
-
+            <textarea id="type" class="form-control" name="type" [(ngModel)]="type" rows="4" cols="50" placeholder="Type"></textarea>
             <label for="keyword" class="sr-only">Keyword</label>
             <input type="text" id="keyword" class="form-control" name="keyword" [(ngModel)]="keyword" placeholder="Keyword"
             required>
             <button class="btn btn-primary btn-block" (click)="addKeyword()">Add keyword</button> 
             <br/>
-
             <h4 class="form-signin-heading">Paragraphs</h4>
             <label for="paragraph" class="sr-only">Paragraph</label>
             <textarea id="paragraph" class="form-control" name="paragraph" [(ngModel)]="authorParagraph" rows="4" cols="50" placeholder="Paragraph"></textarea>
-            <!-- <input type="text" id="paragraph" class="form-control" name="paragraph" [(ngModel)]="paragraphs[numOfParagraphs-1]" placeholder="Paragraph"
-            required> -->
-            <button class="btn btn-primary btn-block" (click)="addParagraph()">Add paragraph</button>
-            <br/>
             <h4 class="form-signin-heading">References</h4>
             <label for="reference" class="sr-only">References</label>
             <select name="reference" id="reference" multiple>
@@ -66,6 +53,12 @@ style="overflow-x: auto;">
                 <option value="work.id">work.title</option>
               </div>
             </select>
+            <button class="btn btn-primary btn-block" (click)="addParagraph()">Add paragraph</button>
+            <br/>
+            
+            <h2 class="form-signin-heading">Cover letter</h2>
+              <label for="cover_letter" class="sr-only">Cover letter</label>
+              <textarea id="paragraph" class="form-control" name="cover_letter" [(ngModel)]="coverLetter" rows="4" cols="50" placeholder="Cover letter"></textarea>
             <button class="btn btn-primary btn-block" (click)="addScientificWork()">Add scientific work</button>
             <div *ngIf="message!==''">
               <p style="color: red;">{{message}}</p>
@@ -76,8 +69,67 @@ style="overflow-x: auto;">
     
           </div>
     <div class="column right">
-            <h2 class="form-signin-heading">Cover letter</h2>
-              <label for="cover_letter" class="sr-only">Cover letter</label>
-              <textarea id="paragraph" class="form-control" name="cover_letter" [(ngModel)]="coverLetter" rows="4" cols="50" placeholder="Cover letter"></textarea>
+      <div *ngIf="title!=''">
+        <h2 class="form-signin-heading">Title</h2>
+        <p>{{title}}</p>
       </div>
+      <br/>
+      <div *ngIf="authors.length>0">
+        <h2 class="form-signin-heading">Authors</h2>
+        <table class="table table-striped">
+            <thead>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>University name</th>
+                <th>University address</th>          
+            </thead>
+            <tbody>
+                <tr *ngFor="let author of authors">
+                    <td>{{author.name}}</td>
+                    <td>{{author.surname}}</td>
+                    <td>{{author.universityName}}</td>
+                    <td>{{author.universityAddress}}</td>
+                    <td><button class="btn btn-primary" (click)="removeAuthor(author)">Remove</button></td>
+                </tr>
+            </tbody>
+          </table>
+      </div>
+      <div *ngIf="purpose!=''">
+          <h2 class="form-signin-heading">Abstract</h2>  
+          <p><b>Purpose: </b><textarea readonly id="purpose" class="form-control" name="purpose" [(ngModel)]="purpose" rows="3" cols="50"></textarea></p>
+          <p><b>Design: </b><textarea readonly id="design" class="form-control" name="design" [(ngModel)]="design" rows="3" cols="50"></textarea></p>
+          <p><b>Findings: </b><textarea readonly id="findings" class="form-control" name="findings" [(ngModel)]="findings" rows="3" cols="50"></textarea></p>
+          <p><b>Limitations: </b><textarea readonly id="limitations" class="form-control" name="limitations" [(ngModel)]="limitations" rows="3" cols="50"></textarea></p>
+          <p><b>Originality: </b><textarea readonly id="originality" class="form-control" name="originality" [(ngModel)]="originality" rows="3" cols="50"></textarea></p>
+          <p><b>Type: </b><textarea readonly id="type" class="form-control" name="type" [(ngModel)]="type" rows="3" cols="50"></textarea></p>
+        </div>
+        <br/>
+        <div *ngIf="keywords.length>0">
+            <h2 class="form-signin-heading">Keywords</h2>
+            <table class="table table-striped">
+                <thead>
+                    <th>Keyword</th>           
+                </thead>
+                <tbody>
+                    <tr *ngFor="let k of keywords">
+                        <td>{{k}}</td>
+                        <td><button class="btn btn-primary" (click)="removeKeyword(k)">Remove</button></td>
+                    </tr>
+                </tbody>
+              </table>
+          </div>
+          <br/>
+          <div *ngIf="paragpraphs.length>0">
+            <h2 class="form-signin-heading">Paragraphs</h2>
+            <div *ngFor="let paragraph of paragpraphs">
+              <textarea readonly id="paragraph" class="form-control" name="paragraph"  rows="3" cols="50">{{paragraph}}</textarea>
+              <button class="btn btn-primary" (click)="removeParagraph(paragraph)">Remove</button>
+          </div>
+        </div>
+        <div *ngIf="coverLetter!=''>0">
+            <h2 class="form-signin-heading">Cover letter</h2>
+              <textarea readonly id="coverLetter" class="form-control" name="coverLetter"  rows="3" cols="50">{{coverLetter}}</textarea>
+        </div>
+      </div>          
 </div>
+

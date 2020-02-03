@@ -50,9 +50,9 @@ export class ScientificWorksComponent implements OnInit {
   constructor(private modalService: NgbModal,private scientificWorkService: ScientificWorkService) { }
 
   ngOnInit() {
-    this.scientificWorkService.getAllPublished().subscribe(
-      data => (this.publishedReferences = data)
-    );
+    // this.scientificWorkService.getAllPublished().subscribe(
+    //   data => (this.publishedReferences = data)
+    // );
 
 
   }
@@ -78,6 +78,33 @@ export class ScientificWorksComponent implements OnInit {
     this.authorSurname='';
     this.authorUniversityAddress='';
     this.authorUniversityName='';
+  }
+
+  removeAuthor(author){
+    for(let i=0;i<this.authors.length;i++){
+      if(author.name==this.authors[i].name && author.surname==this.authors[i].surname && author.universityName==this.authors[i].universityName && author.universityAddress==this.authors[i].universityAddress){
+        this.authors.splice(i,1);
+      }
+    }
+
+  }
+
+  removeParagraph(paragraph){
+    for(let i=0;i<this.paragpraphs.length;i++){
+      if(paragraph==this.paragpraphs[i]){
+        this.paragpraphs.splice(i,1);
+      }
+    }
+
+  }
+
+  removeKeyword(keyword){
+    for(let i=0;i<this.keywords.length;i++){
+      if(keyword==this.keywords[i]){
+        this.keywords.splice(i,1);
+      }
+    }
+
   }
 
   addScientificWork(){
