@@ -9,7 +9,6 @@ import javax.xml.bind.Marshaller;
 import org.springframework.stereotype.Component;
 
 import com.example.xml.team3.model.coverletter.CoverLetter;
-import com.example.xml.team3.model.grades.Grades;
 import com.example.xml.team3.model.review.Review;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.user.UserPub;
@@ -54,20 +53,6 @@ public class MarshallerUtil {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			marshaller.marshal(coverLetter, stream);
-			return new String(stream.toByteArray());
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
-
-	public String marshallGrades(Grades grades) {
-		try {
-			JAXBContext context = JAXBContext.newInstance(Grades.class);
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			marshaller.marshal(grades, stream);
 			return new String(stream.toByteArray());
 		} catch (JAXBException e) {
 			e.printStackTrace();
