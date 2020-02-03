@@ -89,6 +89,7 @@
     <xs:complexType name="Author">
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="surname" type="xs:string"/>
             <xs:element name="university">
                 <xs:complexType>
                     <xs:sequence>
