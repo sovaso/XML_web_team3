@@ -48,12 +48,12 @@ style="overflow-x: auto;">
             <textarea id="paragraph" class="form-control" name="paragraph" [(ngModel)]="authorParagraph" rows="4" cols="50" placeholder="Paragraph"></textarea>
             <h4 class="form-signin-heading">References</h4>
             <label for="reference" class="sr-only">References</label>
-            <select name="reference" id="reference" multiple>
-              <div *ngFor="let work of publishedReferences">
-                <option value="work.id">work.title</option>
-              </div>
+            <select name="reference" id="reference" [(ngModel)] = "addedWorks" multiple>
+              <!-- <div *ngFor="let work of allPublished"> -->
+                <option *ngFor="let work of allPublished" (click)="addWork()" [ngValue]= "work" value="work.id">{{work.title}}</option>
+              <!-- </div> -->
             </select>
-            <button class="btn btn-primary btn-block" (click)="addParagraph()">Add paragraph</button>
+            <button class="btn btn-primary btn-block" (click)="addParagraph()" >Add paragraph</button>
             <br/>
             
             <h2 class="form-signin-heading">Cover letter</h2>

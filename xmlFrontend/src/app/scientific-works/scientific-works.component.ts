@@ -47,12 +47,16 @@ export class ScientificWorksComponent implements OnInit {
   message: String = '';
   messageSuccess: String ='';
 
+  addedWorks : ScientificWorkDto[]=[];
+
   constructor(private modalService: NgbModal,private scientificWorkService: ScientificWorkService) { }
 
   ngOnInit() {
-    // this.scientificWorkService.getAllPublished().subscribe(
-    //   data => (this.publishedReferences = data)
-    // );
+    this.scientificWorkService.getAllPublished().subscribe(
+      data => (this.allPublished = data)
+     
+
+    );
 
 
   }
@@ -107,9 +111,15 @@ export class ScientificWorksComponent implements OnInit {
 
   }
 
+  addWork(){
+    console.log('add work called');
+    console.log(this.addedWorks);
+  }
+
   addScientificWork(){
     console.log('add scientific work in component called');
-
+    console.log("ALL PUBLISHED DATA SIZE");
+    console.log(this.allPublished.length);
 
 
     if (this.title == '' || this.authors[0].name == "" || this.authors[0].surname == ""|| this.authors[0].universityName == ''
