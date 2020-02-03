@@ -59,7 +59,7 @@ style="overflow-x: auto;">
             <h4 class="form-signin-heading">References</h4>
             <label for="reference" class="sr-only">References</label>
             <select name="reference" id="reference" multiple>
-              <div *ngFor="let work of allPublished">
+              <div *ngFor="let work of publishedReferences">
                 <option value="work.id">work.title</option>
               </div>
             </select>

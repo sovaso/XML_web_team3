@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
+import { CoverLetterDto } from '../dto/CoverLetter.dto';
 import {MessageDto} from '../dto/MessageDto.dto'
 import { map } from 'rxjs/operators';
 
@@ -13,15 +14,37 @@ export class ScientificWorkService {
 
   constructor(private http: HttpClient) { }
 
-  createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<Boolean> {
+  
 
-    return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto).pipe(
+  createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<string> {
+
+    return this.http.post<string>(`http://localhost:8000/scientificWork/create`, scientificWorkDto).pipe(
       map( (res: any) => {
           return res;
       })  );
     //console.log('create scientific work service called');
    // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
   }
+
+  getAllPublished(): Observable<ScientificWorkDto[]> {
+    return this.http.get(`http://localhost:8000/scientificWork/getAllPublished`).pipe(
+      map( (res: any) => {
+          return res;
+      })  );
+    //console.log('create scientific work service called');
+   // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
+  }
+
+  createCoverLetter(coverLetterDto: CoverLetterDto): Observable<Boolean> {
+
+    return this.http.post<CoverLetterDto>(`http://localhost:8000/scientificWork/createCoverLetter`, coverLetterDto).pipe(
+      map( (res: any) => {
+          return res;
+      })  );
+    //console.log('create scientific work service called');
+   // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
+  }
+  
 
 
 //   getAll(): Observable<Location[]> {

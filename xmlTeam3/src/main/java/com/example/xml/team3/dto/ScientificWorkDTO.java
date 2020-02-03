@@ -3,6 +3,7 @@ package com.example.xml.team3.dto;
 import java.util.List;
 
 public class ScientificWorkDTO {
+	String scientificWorkId;
 	HeaderDTO headerDTO;
 	String title;
 	List<AuthorDTO> authorsDTO;
@@ -10,6 +11,15 @@ public class ScientificWorkDTO {
 	List<String> paragraphs;
 	List<ReferenceDTO> referenceDTO;
 	List<String> comments;
+	
+
+	public String getScientificWorkId() {
+		return scientificWorkId;
+	}
+
+	public void setScientificWorkId(String scientificWorkId) {
+		this.scientificWorkId = scientificWorkId;
+	}
 
 	public HeaderDTO getHeaderDTO() {
 		return headerDTO;
@@ -67,9 +77,11 @@ public class ScientificWorkDTO {
 		this.comments = comments;
 	}
 
-	public ScientificWorkDTO(HeaderDTO headerDTO, String title, List<AuthorDTO> authorsDTO, AbstractDTO abstractDTO,
-			List<String> paragraphs, List<ReferenceDTO> referenceDTO, List<String> comments) {
+
+	public ScientificWorkDTO(String scientificWorkId, HeaderDTO headerDTO, String title, List<AuthorDTO> authorsDTO,
+			AbstractDTO abstractDTO, List<String> paragraphs, List<ReferenceDTO> referenceDTO, List<String> comments) {
 		super();
+		this.scientificWorkId = scientificWorkId;
 		this.headerDTO = headerDTO;
 		this.title = title;
 		this.authorsDTO = authorsDTO;
