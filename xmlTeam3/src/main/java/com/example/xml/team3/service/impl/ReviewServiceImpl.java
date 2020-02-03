@@ -1,5 +1,7 @@
 package com.example.xml.team3.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,14 @@ public class ReviewServiceImpl implements ReviewService {
 
 	public boolean deleteReview(String id) throws Exception {
 		return reviewRepository.delete(id);
+	}
+
+	public String getWorkflowIdByScientificWorkId(String scientificWorkId) throws Exception {
+		return reviewRepository.getWorkflowIdByScientificWorkId(scientificWorkId);
+	}
+
+	public List<Review> getAllByScientificWorkId(String scientificWorkId) throws Exception {
+		return reviewRepository.getAllByScientificWorkId(scientificWorkId);
 	}
 
 }
