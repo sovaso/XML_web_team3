@@ -110,7 +110,7 @@ public class ScientificWorkRepository {
 					ScientificWork sw = new ScientificWork();
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
 					retVal.add(sw);
-					break;
+				
 				} finally {
 					try {
 						((EXistResource) res).freeResources();

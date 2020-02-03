@@ -19,6 +19,7 @@ export class ScientificWorksComponent implements OnInit {
 
   title: string='';
   authorName: string='';
+  authorSurname: string = '';
   authorUniversityName: string='';
   authorUniversityAddress: string='';
   authorParagraph: string='';
@@ -30,7 +31,6 @@ export class ScientificWorksComponent implements OnInit {
   originality: string='';
   type: string='';
   sWId='';
-
 
   authors: AuthorDto[]=[];
   abstract : AbstractDto;
@@ -71,9 +71,11 @@ export class ScientificWorksComponent implements OnInit {
 
   addAuthor(){
     this.authors.push({name: this.authorName,
+      surname: this.authorSurname,
     universityName: this.authorUniversityName,
     universityAddress: this.authorUniversityAddress});
     this.authorName='';
+    this.authorSurname='';
     this.authorUniversityAddress='';
     this.authorUniversityName='';
   }
@@ -83,7 +85,7 @@ export class ScientificWorksComponent implements OnInit {
 
 
 
-    if (this.title == '' || this.authors[0].name == "" || this.authors[0].universityName == ''
+    if (this.title == '' || this.authors[0].name == "" || this.authors[0].surname == ""|| this.authors[0].universityName == ''
     || this.authors[0].universityAddress == '' || this.paragpraphs[0] == '' ||
     this.purpose == '' || this.design == '' || this.findings == '' || this.limitations == ''
     || this.originality == '' || this.type == '' || this.coverLetter==''
