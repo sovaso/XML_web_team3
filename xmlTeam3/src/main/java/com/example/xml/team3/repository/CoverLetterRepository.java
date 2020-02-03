@@ -93,6 +93,35 @@ public class CoverLetterRepository {
 		return retVal;
 	}
 
+	public CoverLetter findByScientificWorkId(String id) throws Exception {
+		String xQuery = "//coverLetter[scientificWorkId=\"" + id + "\"" + "]";
+		CoverLetter retVal = null;
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(coverLetterCollectionId, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/coverLetter");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					retVal = unmarshallerUtil.unmarshallCoverLetter(((XMLResource) res).getContent().toString());
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return retVal;
+	}
+
 	public void saveMetadata(StringWriter metadata, String id) throws Exception {
 		RDFStore.store(metadata, "/example/coverLetter/" + id);
 	}

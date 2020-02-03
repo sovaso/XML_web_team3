@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://ftn.uns.ac.rs/team3/coverLetter" xmlns="http://ftn.uns.ac.rs/team3/coverLetter">
-    <xs:import namespace="http://ftn.uns.ac.rs/team3/scientificWork" schemaLocation="scientificWork.xsd"/>
     <xs:element name="coverLetter">
         <xs:complexType>
             <xs:sequence>
+            	<xs:element name="scientificWorkId" type="xs:string" />
                 <xs:element name="date" type="xs:date"/>
                 <xs:element name="text" type="xs:string"/>
             </xs:sequence>
+            <xs:attribute name="id" type="xs:string" />
         </xs:complexType>
     </xs:element>
 </xs:schema>
