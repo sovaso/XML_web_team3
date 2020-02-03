@@ -11,7 +11,7 @@ import {ScientificWorkService} from '../services/scientific-work.service';
   styleUrls: ['./unreviewed-works.component.css']
 })
 export class UnreviewedWorksComponent implements OnInit {
-  scientificWorks: ScientificWorkDto[]=[];
+  unreviewedWorks: ScientificWorkDto[]=[];
   activeTab: String;
 
   field: string='';
@@ -26,14 +26,14 @@ export class UnreviewedWorksComponent implements OnInit {
 
   modalRef : any;
 
-  constructor(private modalService: NgbModal, public scientificWorkService: ScientificWorkService/* public scietificWorkService : ScientificWorkService*/) { }
+  constructor(private modalService: NgbModal, public scientificWorkService: ScientificWorkService) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    // this.scientificWorkService.getAllForReview().subscribe(
+    this.scientificWorkService.getUnreviewed().subscribe(
     //   work => (this.scientificWorks = work)
-    // );
+    );
 
   }
 

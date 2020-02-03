@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.xml.team3.dto.AbstractDTO;
 import com.example.xml.team3.dto.AuthorDTO;
 import com.example.xml.team3.dto.HeaderDTO;
+import com.example.xml.team3.dto.IdDTO;
 import com.example.xml.team3.dto.ReferenceDTO;
 import com.example.xml.team3.dto.ScientificWorkDTO;
 import com.example.xml.team3.model.scientificwork.Author;
@@ -37,7 +39,7 @@ public class ScientificWorkController {
 	ScientificWorkService scientificWorkService;
 
 	@PostMapping(value = "/create")
-	public ResponseEntity<String> createScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
+	public ResponseEntity<IdDTO> createScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
 		System.out.println("Uslo u create scientific work");
 		
 		ScientificWork retVal = new ScientificWork();
@@ -96,13 +98,18 @@ public class ScientificWorkController {
 		retVal.getHeader().setAccepted(null);
 		retVal.getHeader().setRevised(null);
 		retVal.getHeader().setReceived(null);
+		IdDTO idDto=new IdDTO();
+		idDto.setResponse("");
 		String id="";
 		try {
 			id=scientificWorkService.createNewScientificWork(retVal);
-			return new ResponseEntity<String>(id, HttpStatus.CREATED);
+			idDto.setResponse(id);
+			//System.out.println("ID ============= "+id);
+			return new ResponseEntity<IdDTO>(idDto, HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println("Uhvacen exception, treba da se vrati false");
-			return new ResponseEntity<String>(id, HttpStatus.INTERNAL_SERVER_ERROR);
+			
+			return new ResponseEntity<IdDTO>(idDto, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -149,7 +156,7 @@ public class ScientificWorkController {
 		commentsDTO.addAll(scientificWork.getComment());
 		// ubacivanje u listu
 		retVal = new ScientificWorkDTO(null,headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
-				commentsDTO);
+				commentsDTO, scientificWork.getStatus().toString().toLowerCase());
 		return new ResponseEntity<ScientificWorkDTO>(retVal, HttpStatus.OK);
 	}
 
@@ -194,13 +201,14 @@ public class ScientificWorkController {
 			commentsDTO.addAll(scientificWork.getComment());
 			// ubacivanje u listu
 			retVal.add(new ScientificWorkDTO(null,headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
-					commentsDTO));
+					commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 		}
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/findAllForConcreteUser")
 	public ResponseEntity<List<ScientificWorkDTO>> findAllForConcreteUser() {
+		System.out.println("Uslo u find all for concrete user");
 		List<ScientificWorkDTO> retVal = new ArrayList<>();
 		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<ScientificWork> allForConcrete = scientificWorkService.findAllForConcreteUser(usernameCurrentUser);
@@ -228,17 +236,20 @@ public class ScientificWorkController {
 					scientificWork.getAbstract().getKeywords().getKeyword());
 			// reference
 			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
-			for (Reference r : scientificWork.getReferences().getReference()) {
-				referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+			if (scientificWork.getReferences()!= null) {
+				for (Reference r : scientificWork.getReferences().getReference()) {
+					referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
+				}
 			}
+			
 			// komentari
 			List<String> commentsDTO = new ArrayList<String>();
 			commentsDTO.addAll(scientificWork.getComment());
 			// ubacivanje u listu
 			retVal.add(new ScientificWorkDTO(null,headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
-					commentsDTO));
+					commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 		}
-		System.out.println("Find all published - dto size: "+ retVal.size());
+		System.out.println("Find my works - dto size: "+ retVal.size());
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 

@@ -128,8 +128,11 @@ public class ScientificWorkRepository {
 
 	public List<ScientificWork> findAllForConcreteUser(String username) {
 		List<ScientificWork> retVal = new ArrayList<>();
+
 		// uzmi sve prihvacene
-		String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
+		//String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
+		String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + " and ./authors/author[@username=\""
+				+ username + "\"]]";
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
 					XUpdateTemplate.TARGET_NAMESPACE + "/scientificWork");
@@ -137,12 +140,13 @@ public class ScientificWorkRepository {
 			Resource res = null;
 
 			while (it.hasMoreResources()) {
+				System.out.println("uslo u while 1");
 				try {
 					res = it.nextResource();
 					ScientificWork sw = new ScientificWork();
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
 					retVal.add(sw);
-					break;
+					//break;
 				} finally {
 					try {
 						((EXistResource) res).freeResources();
@@ -155,8 +159,8 @@ public class ScientificWorkRepository {
 			e.printStackTrace();
 		}
 		// uzmi sve koji nisu prihvaceni a pripadaju useru
-		String xQuery2 = "//scientificWork[not(status=\"" + "ACCEPTED" + "\")" + "]/authors/author[@username=\""
-				+ username + "\"]";
+		String xQuery2 = "//scientificWork[not(status=\"" + "ACCEPTED" + "\")" + " and ./authors/author[@username=\""
+				+ username + "\"]]";
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery2,
 					XUpdateTemplate.TARGET_NAMESPACE + "/scientificWork");
@@ -164,12 +168,15 @@ public class ScientificWorkRepository {
 			Resource res = null;
 
 			while (it.hasMoreResources()) {
+				System.out.println("Uslo u while2");
 				try {
 					res = it.nextResource();
 					ScientificWork sw = new ScientificWork();
+					System.out.println("aaaa");
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
+					System.out.println("bbb");
 					retVal.add(sw);
-					break;
+					//break;
 				} finally {
 					try {
 						((EXistResource) res).freeResources();
@@ -181,6 +188,7 @@ public class ScientificWorkRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("Retval size: "+retVal.size());
 		return retVal;
 	}
 

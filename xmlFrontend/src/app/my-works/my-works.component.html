@@ -10,14 +10,15 @@
      <table class="table table-striped">
          <thead>
              <th>Title</th>
-             <th>Authors</th>
+             <th>Status</th>
          </thead>
          <tbody>
-             <tr *ngFor="let work of myScientificWorks" >
+             <tr *ngFor="let work of myWorks" >
                  <!-- <ngb-tab *ngIf="event.id && event.name && event.type && event.status && event.locationInfo">  -->
                  <td>{{work.title}}</td>
+                 <td>{{work.status}}</td>
                  <td><button id = "button"class="btn btn-primary" (click)="open(work)">Open</button></td>
-                 <td><button id = "button"class="btn btn-primary" (click)="delete(work)">Delete</button></td>
+                 <td *ngIf="work.status != 'accepted'"><button style="background-color: red;" id = "button"class="btn btn-primary" (click)="delete(work)">Delete</button></td>
              <!-- </ngb-tab> -->
              </tr>
          </tbody> 

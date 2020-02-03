@@ -12,7 +12,7 @@ export interface ScientificWorkDto {
    paragraphs : Array<string>;
    referenceDTO : Array<ReferenceDto>;
    comments : Array<String>;
-
+   status: string;
   }
 
  

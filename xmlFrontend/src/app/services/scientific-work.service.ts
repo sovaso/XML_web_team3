@@ -1,10 +1,11 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, BehaviorSubject } from "rxjs";
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
 import { CoverLetterDto } from '../dto/CoverLetter.dto';
 import {MessageDto} from '../dto/MessageDto.dto'
 import { map } from 'rxjs/operators';
+import { IdDTO } from '../dto/IdDTO.dto';
 
 
 @Injectable({
@@ -18,12 +19,10 @@ export class ScientificWorkService {
 
   constructor(private http: HttpClient) { }
 
-  
-
-  createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<string> {
-
-    return this.http.post<string>(`http://localhost:8000/scientificWork/create`, scientificWorkDto).pipe(
-      map( (res: any) => {
+  createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<IdDTO> {
+    return this.http.post<IdDTO>(`http://localhost:8000/scientificWork/create`, scientificWorkDto).pipe(
+      map( (res: IdDTO) => {
+        console.log(res.response);
           return res;
       })  );
     //console.log('create scientific work service called');
@@ -39,6 +38,18 @@ export class ScientificWorkService {
 
   getAccepted(): Observable<ScientificWorkDto[]> {
     return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getAllPublished`);
+  }
+
+  getMyWorks(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/findAllForConcreteUser`);
+  }
+
+  getUnreviewed(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getUnreviewed`);
+  }
+
+  getReviewed(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getReviewed`);
   }
 
   createCoverLetter(coverLetterDto: CoverLetterDto): Observable<Boolean> {

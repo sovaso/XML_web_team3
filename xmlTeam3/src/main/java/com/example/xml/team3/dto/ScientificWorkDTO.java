@@ -11,10 +11,18 @@ public class ScientificWorkDTO {
 	List<String> paragraphs;
 	List<ReferenceDTO> referenceDTO;
 	List<String> comments;
-	
+	String status;
 
 	public String getScientificWorkId() {
 		return scientificWorkId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public void setScientificWorkId(String scientificWorkId) {
@@ -79,7 +87,7 @@ public class ScientificWorkDTO {
 
 
 	public ScientificWorkDTO(String scientificWorkId, HeaderDTO headerDTO, String title, List<AuthorDTO> authorsDTO,
-			AbstractDTO abstractDTO, List<String> paragraphs, List<ReferenceDTO> referenceDTO, List<String> comments) {
+			AbstractDTO abstractDTO, List<String> paragraphs, List<ReferenceDTO> referenceDTO, List<String> comments, String status) {
 		super();
 		this.scientificWorkId = scientificWorkId;
 		this.headerDTO = headerDTO;
@@ -89,6 +97,7 @@ public class ScientificWorkDTO {
 		this.paragraphs = paragraphs;
 		this.referenceDTO = referenceDTO;
 		this.comments = comments;
+		this.status = status;
 	}
 
 	public ScientificWorkDTO() {

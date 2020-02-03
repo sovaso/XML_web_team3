@@ -114,32 +114,33 @@ export class ScientificWorksComponent implements OnInit {
         abstractDTO: this.abstract,
         paragraphs:this.paragpraphs,
         referenceDTO: [],
-        comments: []
+        comments: [],
+        status: ''
       };
 
       this.scientificWorkService.createScientificWork(this.scientificWork).subscribe(
-        (created:string) => {
-          this.sWId=created;
+        created => {
+          this.sWId=created.response;
           console.log('Result of creation');
           console.log(created);
-          
+          if(this.sWId==""){
+            this.messageSuccess='Scientific work cannot be created';
+          }else{
+            this.coverLetterDto={
+              coverLetterId: null,
+              scientificWorkId: this.sWId,
+              text: this.coverLetter
+      
+            };
+            //this.scientificWorkService.createCoverLetter(this.coverLetterDto);
+    
+    
+            this.messageSuccess = 'Scientific work successfully added.';
+          }
         }
       );
       //this.scientificWorkService.createScientificWork(this.scientificWork);
-      if(this.sWId==""){
-          this.messageSuccess='Scientific work cannot be created';
-      }else{
-        this.coverLetterDto={
-          coverLetterId: null,
-          scientificWorkId: this.sWId,
-          text: this.coverLetter
-  
-        }
-        this.scientificWorkService.createCoverLetter(this.coverLetterDto);
-
-
-        this.messageSuccess = 'Scientific work successfully added.';
-      }
+     
     }
     
   }
