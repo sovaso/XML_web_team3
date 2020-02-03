@@ -63,10 +63,10 @@ public class ScientificWorkController {
 		for (AuthorDTO autDTO : scientificWorkDTO.getAuthorsDTO()) {
 			Author a = new Author();
 			a.setName(autDTO.getName());
+			a.setSurname(autDTO.getSurname());
 			a.getUniversity().setAddress(autDTO.getUniversityAddress());
 			a.getUniversity().setName(autDTO.getUniversityName());
-			// username treba srediti!!!
-			a.setUsername("vasa");
+			a.setUsername(scientificWorkService.getUsernameByNameAndSurname(autDTO.getName(), autDTO.getSurname()));
 			retVal.getAuthors().getAuthor().add(a);
 		}
 		// status
