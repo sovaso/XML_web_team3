@@ -52,16 +52,48 @@ public class UserRepository {
 		return userId;
 	}
 
-	public UserPub getByUsername(String username) {
-		String xQuery = "//userPub[username=\"" + username + "\"" + "]";
-		//String xQuery = "//user/userPub[username[text()='bbb']]";
-		//String xQuery = "collection(\"user\")/userPub";
-		//String xQuery = username;
-		//ResourceSet result = queryService.query("//Users/User[./Roles/Role[text()='ROLE_USER']]");
+	public String getUsernameByNameAndSurname(String name, String surname) {
+		String xQuery = "//userPub[name=\"" + name + "\" and surname=\"" + surname + "\"]";
 		UserPub user = null;
 		try {
-			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection,
-					xQuery, XUpdateTemplate.TARGET_NAMESPACE + "/user");
+			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/user");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					user = unmarshallerUtil.unmarshallUser(((XMLResource) res).getContent().toString());
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (user == null) {
+			return "";
+		}
+		return user.getUsername();
+	}
+
+	public UserPub getByUsername(String username) {
+		String xQuery = "//userPub[username=\"" + username + "\"" + "]";
+		// String xQuery = "//user/userPub[username[text()='bbb']]";
+		// String xQuery = "collection(\"user\")/userPub";
+		// String xQuery = username;
+		// ResourceSet result =
+		// queryService.query("//Users/User[./Roles/Role[text()='ROLE_USER']]");
+		UserPub user = null;
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/user");
 			ResourceIterator it = result.getIterator();
 			Resource res = null;
 

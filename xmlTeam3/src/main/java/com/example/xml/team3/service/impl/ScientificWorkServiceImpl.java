@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.repository.ScientificWorkRepository;
+import com.example.xml.team3.repository.UserRepository;
 import com.example.xml.team3.service.ScientificWorkService;
 
 @Service
@@ -14,6 +15,9 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	@Autowired
 	private ScientificWorkRepository scientificWorkRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	public String createNewScientificWork(ScientificWork scientificWork) throws Exception {
 		return scientificWorkRepository.save(scientificWork);
@@ -33,6 +37,10 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	public List<ScientificWork> findAllPublished() {
 		return scientificWorkRepository.findAllPublished();
+	}
+	
+	public String getUsernameByNameAndSurname(String name, String surname) {
+		return userRepository.getUsernameByNameAndSurname(name, surname);
 	}
 
 }
