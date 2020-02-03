@@ -1,6 +1,8 @@
 package com.example.xml.team3.repository;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.exist.xmldb.EXistResource;
@@ -35,6 +37,7 @@ public class ReviewRepository {
 	MarshallerUtil marshallerUtil;
 
 	public static String reviewCollectionId = "/db/team3/review";
+	public static String workflowCollectionId = "/db/team3/workflow";
 	public static String reviewSchemaPath = "src/main/resources/xsd/review.xsd";
 
 	public String save(Review review) throws Exception {
@@ -78,6 +81,67 @@ public class ReviewRepository {
 					res = it.nextResource();
 					retVal = unmarshallerUtil.unmarshallReview(((XMLResource) res).getContent().toString());
 					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return retVal;
+	}
+
+	public String getWorkflowIdByScientificWorkId(String scientificWorkId) throws Exception {
+		String xQuery = "//workflow[scientificWorkId=\"" + scientificWorkId + "\"" + "]";
+		String retVal = "";
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(workflowCollectionId, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/workflow");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					retVal = unmarshallerUtil.unmarshallWorkflow(((XMLResource) res).getContent().toString()).getId();
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return retVal;
+	}
+
+	public List<Review> getAllByScientificWorkId(String scientificWorkId) throws Exception {
+		String workflowId = this.getWorkflowIdByScientificWorkId(scientificWorkId);
+		String xQuery = "//review[workflowId=\"" + workflowId + "\"" + "]";
+		List<Review> retVal = new ArrayList<>();
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(reviewCollectionId, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/review");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					Review r = new Review();
+					r = unmarshallerUtil.unmarshallReview(((XMLResource) res).getContent().toString());
+					retVal.add(r);
+					// break;
 				} finally {
 					try {
 						((EXistResource) res).freeResources();
