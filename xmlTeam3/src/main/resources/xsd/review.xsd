@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://ftn.uns.ac.rs/team3/review" xmlns="http://ftn.uns.ac.rs/team3/review">
-    <xs:element name="review">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="comment" maxOccurs="unbounded">
-                    <xs:complexType>
-                        <xs:simpleContent>
-                            <xs:extension base="xs:string">
-                                <xs:attribute name="refId"/>
-                            </xs:extension>
-                        </xs:simpleContent>
-                    </xs:complexType>
-                </xs:element>
-            </xs:sequence>
-            <xs:attribute name="scientificWorkId" type="xs:string"/>
-            <xs:attribute name="authorUsername" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://ftn.uns.ac.rs/team3/review"
+	xmlns="http://ftn.uns.ac.rs/team3/review">
+	<xs:element name="review">
+		<xs:complexType>
+			<xs:sequence>
+
+				<xs:element name="grades">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="uniqueness" type="grade" />
+							<xs:element name="keywords" type="grade" />
+							<xs:element name="abstract" type="grade" />
+							<xs:element name="conclusions" type="grade" />
+							<xs:element name="experiments" type="grade" />
+							<xs:element name="layout" type="grade" />
+							<xs:element name="formality" type="grade" />
+							<xs:element name="generalGrade" type="grade" />
+							<xs:element name="references" type="grade" />
+							<xs:element name="headings" type="grade" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="comments" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="refId" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+
+				<xs:element name="workflowId" type="xs:string" />
+
+				<xs:element name="summaryComment" type="xs:string" />
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="grade">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="5" />
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

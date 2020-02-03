@@ -9,7 +9,6 @@ import javax.xml.bind.Unmarshaller;
 import org.springframework.stereotype.Component;
 
 import com.example.xml.team3.model.coverletter.CoverLetter;
-import com.example.xml.team3.model.grades.Grades;
 import com.example.xml.team3.model.review.Review;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.user.UserPub;
@@ -54,19 +53,6 @@ public class UnmarshallerUtil {
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			StringReader reader = new StringReader(coverLetter);
 			CoverLetter retVal = (CoverLetter) unmarshaller.unmarshal(reader);
-			return retVal;
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public Grades unmarshallGrades(String grades) {
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Grades.class);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			StringReader reader = new StringReader(grades);
-			Grades retVal = (Grades) unmarshaller.unmarshal(reader);
 			return retVal;
 		} catch (JAXBException e) {
 			e.printStackTrace();
