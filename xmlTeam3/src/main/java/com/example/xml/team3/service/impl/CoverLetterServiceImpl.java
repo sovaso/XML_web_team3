@@ -20,6 +20,10 @@ public class CoverLetterServiceImpl implements CoverLetterService {
 	public CoverLetter findById(String id) throws Exception {
 		return coverLetterRepository.findById(id);
 	}
+	
+	public CoverLetter findByScientificWorkId(String id) throws Exception {
+		return coverLetterRepository.findByScientificWorkId(id);
+	}
 
 	public String updateCoverLetter(String id, CoverLetter coverLetter) throws Exception {
 		return coverLetterRepository.update(id, coverLetter);
