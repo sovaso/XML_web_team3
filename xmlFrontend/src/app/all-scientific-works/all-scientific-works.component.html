@@ -15,10 +15,20 @@
             <th>Authors</th>
         </thead>
         <tbody>
-            <tr *ngFor="let work of scientificWorks" >
+            <tr *ngFor="let work of acceptedWorks" >
                 <!-- <ngb-tab *ngIf="event.id && event.name && event.type && event.status && event.locationInfo">  -->
                 <td>{{work.title}}</td>
-                <td>author name</td>
+
+
+                <td>
+                    <tr *ngFor="let author of work.authorsDTO">
+                         {{author.name}} 
+                         {{" "}}
+                         {{author.surname}}
+                    </tr> 
+                </td>
+
+                
         
                 <td><button id = "button"class="btn btn-primary" (click)="open(work)">Open</button></td>
             <!-- </ngb-tab> -->

@@ -96,7 +96,7 @@ public class ScientificWorkRepository {
 	}
 
 	public List<ScientificWork> findAllPublished() {
-		String xQuery = "//scientificWork[type=\"" + "ACCEPTED" + "\"" + "]";
+		String xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + "]";
 		List<ScientificWork> retVal = new ArrayList<>();
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
@@ -110,7 +110,7 @@ public class ScientificWorkRepository {
 					ScientificWork sw = new ScientificWork();
 					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
 					retVal.add(sw);
-					break;
+				
 				} finally {
 					try {
 						((EXistResource) res).freeResources();

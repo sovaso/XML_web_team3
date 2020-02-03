@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
+import { ScientificWorkService } from './scientific-work.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class SharedService {
   private worksSource = new BehaviorSubject<ScientificWorkDto[]>([]);
   works = this.worksSource.asObservable();
 
-  constructor(/*scientificWorksService : ScientificWorkService*/) { }
+  constructor(scientificWorksService : ScientificWorkService) { }
 
   updateWorks() {
     /*

@@ -152,9 +152,12 @@ public class ScientificWorkController {
 
 	@GetMapping(value = "/getAllPublished")
 	public ResponseEntity<List<ScientificWorkDTO>> findAllPublished() {
+		System.out.println("Uslo u findAllPublished!!! :)");
 		List<ScientificWorkDTO> retVal = new ArrayList<>();
 		List<ScientificWork> allPublished = scientificWorkService.findAllPublished();
+		System.out.println("Velicina od find all published: "+allPublished.size());
 		for (ScientificWork scientificWork : allPublished) {
+			System.out.println(allPublished.get(0).getTitle());
 			// paragraf
 			List<String> paragraphsDTO = new ArrayList<String>();
 			for (Paragraph p : scientificWork.getParagraph()) {
@@ -178,6 +181,8 @@ public class ScientificWorkController {
 					scientificWork.getAbstract().getKeywords().getKeyword());
 			// reference
 			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			ScientificWork.References references = new ScientificWork.References();
+			scientificWork.setReferences(references);
 			for (Reference r : scientificWork.getReferences().getReference()) {
 				referenceDTO.add(new ReferenceDTO(r.getValue(), r.getScientificWorkId(), r.getId()));
 			}
@@ -188,6 +193,7 @@ public class ScientificWorkController {
 			retVal.add(new ScientificWorkDTO(headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO, referenceDTO,
 					commentsDTO));
 		}
+		System.out.println("Find all published - dto size: "+ retVal.size());
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 

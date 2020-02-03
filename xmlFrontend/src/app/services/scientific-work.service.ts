@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
 import {MessageDto} from '../dto/MessageDto.dto'
 import { map } from 'rxjs/operators';
@@ -11,6 +11,10 @@ import { map } from 'rxjs/operators';
 })
 export class ScientificWorkService {
 
+  
+  private publishedWorksSource = new BehaviorSubject<ScientificWorkDto[]>([]);
+  publishedWorks = this.publishedWorksSource.asObservable();
+
   constructor(private http: HttpClient) { }
 
   createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<Boolean> {
@@ -19,8 +23,10 @@ export class ScientificWorkService {
       map( (res: any) => {
           return res;
       })  );
-    //console.log('create scientific work service called');
-   // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
+  }
+
+  getAccepted(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getAllPublished`);
   }
 
 
