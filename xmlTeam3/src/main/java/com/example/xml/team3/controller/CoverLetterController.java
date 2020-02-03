@@ -28,8 +28,9 @@ public class CoverLetterController {
 	CoverLetterService coverLetterService;
 
 	@PostMapping(value = "/create")
-	public ResponseEntity<String> createCoverLetter(@RequestBody CoverLetterDTO coverLetterDTO) {
+	public ResponseEntity<Boolean> createCoverLetter(@RequestBody CoverLetterDTO coverLetterDTO) {
 
+		System.out.println("CREATE COVER LETTER CALLED");
 		CoverLetter coverLetter = new CoverLetter();
 		GregorianCalendar gregorianCalendar = new GregorianCalendar();
 		DatatypeFactory datatypeFactory = null;
@@ -45,10 +46,10 @@ public class CoverLetterController {
 		String id = "";
 		try {
 			id = coverLetterService.createNewCoverLetter(coverLetter);
-			return new ResponseEntity<String>(id, HttpStatus.CREATED);
+			return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 		} catch (Exception e) {
 			System.out.println("Uhvacen exception, treba da se vrati false");
-			return new ResponseEntity<String>(id, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

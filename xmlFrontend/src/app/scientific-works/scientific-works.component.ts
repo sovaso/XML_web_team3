@@ -157,10 +157,15 @@ export class ScientificWorksComponent implements OnInit {
               coverLetterId: null,
               scientificWorkId: this.sWId,
               text: this.coverLetter
+             
       
             };
-            //this.scientificWorkService.createCoverLetter(this.coverLetterDto);
-    
+            console.log('Now creation of cover letter should be called');
+            this.scientificWorkService.createCoverLetter(this.coverLetterDto).subscribe(res => {
+              console.log('Result of creating cover letter');
+              console.log(res);
+            });;
+          
     
             this.messageSuccess = 'Scientific work successfully added.';
           }

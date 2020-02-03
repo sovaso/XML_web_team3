@@ -53,8 +53,8 @@ export class ScientificWorkService {
   }
 
   createCoverLetter(coverLetterDto: CoverLetterDto): Observable<Boolean> {
-
-    return this.http.post<CoverLetterDto>(`http://localhost:8000/scientificWork/createCoverLetter`, coverLetterDto).pipe(
+    console.log('create cover letter in service called');
+    return this.http.post<CoverLetterDto>(`http://localhost:8000/coverLetter/create`, coverLetterDto).pipe(
       map( (res: any) => {
           return res;
       })  );

@@ -10,6 +10,7 @@ import { AuthenticationService } from '../security/authentication.service';
 import { CurrentUser } from '../model/currentUser.model';
 import { RegisterEditorComponent } from '../register-editor/register-editor.component';
 import { RegisterReviewerComponent } from '../register-reviewer/register-reviewer.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -21,9 +22,12 @@ export class HeaderComponent implements OnInit {
   loggedUser: CurrentUser;
   username: string;
 
+  router : Router;
 
   //moze da se user povuce iz storage-a; uloga i username, ne ceo user, jer se cuva token 
-  constructor(private modalService: NgbModal, private AuthenticationService: AuthenticationService) { }
+  constructor(private _router: Router, private modalService: NgbModal, private AuthenticationService: AuthenticationService) { 
+    this.router=_router;
+  }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(
@@ -73,8 +77,11 @@ export class HeaderComponent implements OnInit {
 
 
   logout() {
-    this.AuthenticationService.logout();
+    //this.AuthenticationService.logout();
+    localStorage.removeItem('currentUser');
     location.reload();
+    this.router.navigate(['/dashboard']); 
+    
   }
 
   registerEditor(){
