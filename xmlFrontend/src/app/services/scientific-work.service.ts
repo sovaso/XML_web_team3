@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
 import {MessageDto} from '../dto/MessageDto.dto'
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -12,8 +13,14 @@ export class ScientificWorkService {
 
   constructor(private http: HttpClient) { }
 
-  createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<MessageDto> {
-    return this.http.post<MessageDto>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
+  createScientificWork(scientificWorkDto: ScientificWorkDto): Observable<Boolean> {
+
+    return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto).pipe(
+      map( (res: any) => {
+          return res;
+      })  );
+    //console.log('create scientific work service called');
+   // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
   }
 
 

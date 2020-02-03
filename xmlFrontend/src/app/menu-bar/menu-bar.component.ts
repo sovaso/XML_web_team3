@@ -24,18 +24,19 @@ export class MenuBarComponent implements OnInit {
       localStorage.getItem('currentUser'));
     console.log(this.currentUser);
     //uzmemo sa stranice sve elemente koje treba da sakrijemo 
-    var scientificWorks: HTMLElement = document.getElementById('scientificWorks');
+    var addScientificWork: HTMLElement = document.getElementById('addScientificWork');
     var myWorks: HTMLElement = document.getElementById('myWorks');
     var worksToReview: HTMLElement = document.getElementById('worksToReview');
     var unreviewedWorks: HTMLElement = document.getElementById('unreviewedWorks');
     var reviewedWorks: HTMLElement = document.getElementById('reviewedWorks');
     var registerEditor: HTMLElement = document.getElementById('registerEditor');
     var registerReviewer: HTMLElement = document.getElementById('registerReviewer');
-    
+    var allScientificWorks : HTMLElement = document.getElementById('allScientificWorks');
     if (this.currentUser != null) {
       if (this.currentUser.userRoleName === 'ROLE_UNAUTHORIZED') {
         console.log('11111111111111');
-        scientificWorks.hidden = false;
+        allScientificWorks.hidden = false;
+        addScientificWork.hidden = false;
         myWorks.hidden = true;
         worksToReview.hidden = true;
         unreviewedWorks.hidden = true;
@@ -45,7 +46,8 @@ export class MenuBarComponent implements OnInit {
       
       } else if (this.currentUser.userRoleName === 'ROLE_AUTHOR') {
         console.log('AUTHOR LOGGED IN');
-        scientificWorks.hidden = false;
+        allScientificWorks.hidden = false;
+        addScientificWork.hidden = false;
         myWorks.hidden = false;
         worksToReview.hidden = true;
         unreviewedWorks.hidden = true;
@@ -55,7 +57,8 @@ export class MenuBarComponent implements OnInit {
       
     } else if (this.currentUser.userRoleName === 'ROLE_REVIEWER'){
         console.log('REVIEWER LOGGED IN');
-        scientificWorks.hidden = false;
+        allScientificWorks.hidden = false;
+        addScientificWork.hidden = false;
         myWorks.hidden = false;
         worksToReview.hidden = false;
         unreviewedWorks.hidden = true;
@@ -65,7 +68,8 @@ export class MenuBarComponent implements OnInit {
     }
     else if (this.currentUser.userRoleName === 'ROLE_EDITOR'){
       console.log('EDITOR LOGGED IN');
-      scientificWorks.hidden = false;
+      allScientificWorks.hidden = false;
+      addScientificWork.hidden = false;
       myWorks.hidden = false;
       worksToReview.hidden = false;
       unreviewedWorks.hidden = true;
@@ -76,7 +80,8 @@ export class MenuBarComponent implements OnInit {
   }else {
     
       console.log('NO ONE LOGGED IN');
-      scientificWorks.hidden = false;
+      allScientificWorks.hidden = false;
+      addScientificWork.hidden = true;
       myWorks.hidden = true;
       worksToReview.hidden = true;
       unreviewedWorks.hidden = true;
