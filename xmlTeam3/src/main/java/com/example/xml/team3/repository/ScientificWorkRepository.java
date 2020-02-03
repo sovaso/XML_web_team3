@@ -67,7 +67,7 @@ public class ScientificWorkRepository {
 	}
 
 	public ScientificWork findById(String id) throws Exception {
-		String xQuery = "//scientificWork[@id=\"" + id + "\"" + "]";
+		String xQuery = "//scientificWork[id=\"" + id + "\"" + "]";
 		ScientificWork retVal = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
