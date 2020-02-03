@@ -3,7 +3,8 @@ package com.example.xml.team3.dto;
 public class WorkflowDTO {
 	String authorUsername;
 	String editorUsername;
-	String scientiificWorkId;
+	String reviewerUsername;
+	String scientificWorkId;
 	String id;
 
 	public String getAuthorUsername() {
@@ -22,12 +23,12 @@ public class WorkflowDTO {
 		this.editorUsername = editorUsername;
 	}
 
-	public String getScientiificWorkId() {
-		return scientiificWorkId;
+	public String getScientificWorkId() {
+		return scientificWorkId;
 	}
 
-	public void setScientiificWorkId(String scientiificWorkId) {
-		this.scientiificWorkId = scientiificWorkId;
+	public void setScientificWorkId(String scientificWorkId) {
+		this.scientificWorkId = scientificWorkId;
 	}
 
 	public String getId() {
@@ -38,16 +39,26 @@ public class WorkflowDTO {
 		this.id = id;
 	}
 
-	public WorkflowDTO(String authorUsername, String editorUsername, String scientiificWorkId, String id) {
+	public WorkflowDTO(String authorUsername, String reviewerUsername, String editorUsername, String scientificWorkId,
+			String id) {
 		super();
+		this.reviewerUsername = reviewerUsername;
 		this.authorUsername = authorUsername;
 		this.editorUsername = editorUsername;
-		this.scientiificWorkId = scientiificWorkId;
+		this.scientificWorkId = scientificWorkId;
 		this.id = id;
 	}
 
 	public WorkflowDTO() {
 		super();
+	}
+
+	public String getReviewerUsername() {
+		return reviewerUsername;
+	}
+
+	public void setReviewerUsername(String reviewerUsername) {
+		this.reviewerUsername = reviewerUsername;
 	}
 
 }
