@@ -35,7 +35,6 @@ const routes: Routes = [
       { path: 'allScientificWorks', component: AllScientificWorksComponent},
       { path: 'scientificWorks', component: ScientificWorksComponent},
       { path: 'myWorks', component: MyWorksComponent},
-      { path: 'worksToReview', component: WorksToReviewComponent},
       { path : 'unreviewedWorks' , component : UnreviewedWorksComponent},
       { path : 'reviewedWorks', component : ReviewedWorksComponent},
       { path : 'registerEditor', component : RegisterEditorComponent},

@@ -38,7 +38,6 @@ export class MenuBarComponent implements OnInit {
         allScientificWorks.hidden = false;
         addScientificWork.hidden = false;
         myWorks.hidden = true;
-        worksToReview.hidden = true;
         unreviewedWorks.hidden = true;
         reviewedWorks.hidden = true;
         registerEditor.hidden = true;
@@ -49,7 +48,6 @@ export class MenuBarComponent implements OnInit {
         allScientificWorks.hidden = false;
         addScientificWork.hidden = false;
         myWorks.hidden = false;
-        worksToReview.hidden = true;
         unreviewedWorks.hidden = true;
         reviewedWorks.hidden = true;
         registerEditor.hidden = true;
@@ -60,8 +58,7 @@ export class MenuBarComponent implements OnInit {
         allScientificWorks.hidden = false;
         addScientificWork.hidden = false;
         myWorks.hidden = false;
-        worksToReview.hidden = false;
-        unreviewedWorks.hidden = true;
+        unreviewedWorks.hidden = false;
         reviewedWorks.hidden = true;
         registerEditor.hidden = true;
         registerReviewer.hidden = true;
@@ -71,8 +68,7 @@ export class MenuBarComponent implements OnInit {
       allScientificWorks.hidden = false;
       addScientificWork.hidden = false;
       myWorks.hidden = false;
-      worksToReview.hidden = false;
-      unreviewedWorks.hidden = true;
+      unreviewedWorks.hidden = false;
       reviewedWorks.hidden = false;
       registerEditor.hidden = false;
       registerReviewer.hidden = false;
@@ -83,7 +79,6 @@ export class MenuBarComponent implements OnInit {
       allScientificWorks.hidden = false;
       addScientificWork.hidden = true;
       myWorks.hidden = true;
-      worksToReview.hidden = true;
       unreviewedWorks.hidden = true;
       reviewedWorks.hidden = true;
       registerEditor.hidden = true;

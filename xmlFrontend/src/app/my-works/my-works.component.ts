@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SharedService } from '../services/shared.service';
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
 import { CurrentUser } from '../model/currentUser.model';
+import { ScientificWorkService } from '../services/scientific-work.service';
 
 @Component({
   selector: 'app-my-works',
@@ -11,7 +12,7 @@ import { CurrentUser } from '../model/currentUser.model';
 })
 export class MyWorksComponent implements OnInit {
 
-  scientificWorks: ScientificWorkDto[] = [];
+  myWorks: ScientificWorkDto[] = [];
   
   activeTab: String;
 
@@ -27,23 +28,17 @@ export class MyWorksComponent implements OnInit {
 
   modalRef : any;
 
-  constructor(private modalService: NgbModal, public sharedService: SharedService,/* public scietificWorkService : ScientificWorkService*/) { }
+  constructor(private modalService: NgbModal, public sharedService: SharedService, public scietificWorkService : ScientificWorkService) { }
 
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
-
-    this.sharedService.works.subscribe(
-      work => (this.scientificWorks = work)
-    );
-
-    this.sharedService.works.subscribe(works => (this.scientificWorks = works));
+    this.scietificWorkService.getMyWorks().subscribe(works => (this.myWorks = works)); 
    
-    if (this.scientificWorks.length === 0) {
-      this.sharedService.updateAll();
-    }
   }
 
   search(){
+    console.log('My works size');
+    console.log(this.myWorks.length);
     console.log('search clicked');
   }
 
