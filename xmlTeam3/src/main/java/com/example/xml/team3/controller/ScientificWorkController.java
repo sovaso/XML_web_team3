@@ -3,6 +3,8 @@ package com.example.xml.team3.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -347,10 +350,11 @@ public class ScientificWorkController {
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
-
-	@GetMapping(value = "/getByIdHTML", produces = MediaType.TEXT_HTML_VALUE)
-	public ResponseEntity<String> getHTML(@RequestBody String id) throws Exception {
+	
+	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<String> getHTML(@PathVariable String id) throws Exception {
 		String scientificWorkHTML = scientificWorkService.findByIdHTML(id);
+		System.out.println(scientificWorkHTML);
 		return new ResponseEntity<>(scientificWorkHTML, HttpStatus.OK);
 	}
 
