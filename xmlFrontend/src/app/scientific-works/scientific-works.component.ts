@@ -44,10 +44,12 @@ export class ScientificWorksComponent implements OnInit {
   publishedReferences: ScientificWorkDto[]=[];
   coverLetterDto: CoverLetterDto;
 
-  message: String = '';
-  messageSuccess: String ='';
+  message: string = '';
+  messageSuccess: string ='';
 
-  addedWorks : ScientificWorkDto[]=[];
+  addedWorks : string[]=[];
+
+  references: ReferenceDto[]=[];
 
   constructor(private modalService: NgbModal,private scientificWorkService: ScientificWorkService) { }
 
@@ -113,7 +115,6 @@ export class ScientificWorksComponent implements OnInit {
 
   addWork(){
     console.log('add work called');
-    console.log(this.addedWorks);
   }
 
   addScientificWork(){
@@ -131,6 +132,10 @@ export class ScientificWorksComponent implements OnInit {
       this.message = 'All fields must be filled.';
     }else {
       console.log('service should be called now');
+
+      for(let el of this.addedWorks){
+        this.references.push({scientificWorkId: el});
+      }
       
 
       this.abstract={
@@ -150,7 +155,7 @@ export class ScientificWorksComponent implements OnInit {
         authorsDTO: this.authors,
         abstractDTO: this.abstract,
         paragraphs:this.paragpraphs,
-        referenceDTO: [],
+        referenceDTO: this.references,
         comments: [],
         status: ''
       };
