@@ -44,6 +44,8 @@ export class ScientificWorksComponent implements OnInit {
   publishedReferences: ScientificWorkDto[]=[];
   coverLetterDto: CoverLetterDto;
 
+  htmlEl: String='';
+
   message: string = '';
   messageSuccess: string ='';
 
@@ -183,11 +185,18 @@ export class ScientificWorksComponent implements OnInit {
               console.log(res);
             });;
           
-    
+            this.scientificWorkService.getById(created).subscribe(
+              created => {
+                this.htmlEl=created;
+                console.log('Result of html');
+                console.log(this.htmlEl);
+            });
             this.messageSuccess = 'Scientific work successfully added.';
           }
         }
       );
+
+      
       //this.scientificWorkService.createScientificWork(this.scientificWork);
      
     }
