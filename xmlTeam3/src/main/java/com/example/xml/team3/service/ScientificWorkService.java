@@ -19,4 +19,6 @@ public interface ScientificWorkService {
 	public String getUsernameByNameAndSurname(String name, String surname);
 
 	public List<ScientificWork> findAllForConcreteUser(String username);
+	
+	public String findByIdHTML(String id) throws Exception;
 }
