@@ -2,6 +2,7 @@ package com.example.xml.team3.service;
 
 import java.util.List;
 
+import com.example.xml.team3.dto.SearchDTO;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 
 public interface ScientificWorkService {
@@ -27,4 +28,6 @@ public interface ScientificWorkService {
 	public List<ScientificWork> findAllSubmitted();
 	
 	public List<ScientificWork> findAllForReviewing(String reviewerUsername);
+	
+	public List<ScientificWork> searchScientificWork(SearchDTO searchDTO, String username);
 }

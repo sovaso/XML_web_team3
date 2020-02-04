@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.xml.team3.dto.SearchDTO;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.repository.ScientificWorkRepository;
 import com.example.xml.team3.repository.UserRepository;
@@ -62,7 +63,8 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 			throw new Exception(id);
 		}
 		String scientificWorkString = marshallerUtil.marshallScientificWork(scientificWork);
-		String swHTML = xslfoTransformer.generateHTML(scientificWorkString, "src/main/resources/xsl/scientificWork.xsl");
+		String swHTML = xslfoTransformer.generateHTML(scientificWorkString,
+				"src/main/resources/xsl/scientificWork.xsl");
 		return swHTML;
 	}
 
@@ -87,6 +89,10 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	public List<ScientificWork> findAllForReviewing(String reviewerUsername) {
 		return scientificWorkRepository.findAllForReviewing(reviewerUsername);
+	}
+
+	public List<ScientificWork> searchScientificWork(SearchDTO searchDTO, String username) {
+		return scientificWorkRepository.searchScientificWork(searchDTO, username);
 	}
 
 }

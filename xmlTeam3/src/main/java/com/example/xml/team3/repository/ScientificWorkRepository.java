@@ -15,6 +15,7 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import com.example.xml.team3.dto.SearchDTO;
 import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.scientificwork.StatusType;
@@ -336,6 +337,52 @@ public class ScientificWorkRepository {
 			id = UUID.randomUUID().toString();
 		}
 		retVal += id;
+		return retVal;
+	}
+
+	public List<ScientificWork> searchScientificWork(SearchDTO searchDTO, String username) {
+		String xQuery = "";
+		if (username.equalsIgnoreCase("")) {
+			xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + " and ./abstract[descendant::*[contains(.,\""
+					+ searchDTO.getText() + "\")]] and ./paragraph[text[contains(.,\"" + searchDTO.getText() + "\")]] "
+					+ " and ./title[contains(.,\"" + searchDTO.getTitle() + "\"] and"
+					+ "contains(concat(./authors/author/name,\" \",./authors/author/surname),\"" + searchDTO.getAuthor()
+					+ "\")]";
+		} else {
+			xQuery = "//scientificWork[(status=\"" + "ACCEPTED" + "\" or (not(status=\"" + "ACCEPTED" + "\")"
+					+ " and ./authors/author[@username=\"" + username + "\"]))"
+					+ " and ./abstract[descendant::*[contains(.,\"" + searchDTO.getText()
+					+ "\")]] and ./paragraph[text[contains(.,\"" + searchDTO.getText() + "\")]] "
+					+ " and ./title[contains(.,\"" + searchDTO.getTitle() + "\"] and"
+					+ "contains(concat(./authors/author/name,\" \",./authors/author/surname),\"" + searchDTO.getAuthor()
+					+ "\") and ]";
+		}
+		List<ScientificWork> retVal = new ArrayList<>();
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/scientificWork");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					ScientificWork sw = new ScientificWork();
+					sw = unmarshallerUtil.unmarshallScientificWork(((XMLResource) res).getContent().toString());
+					retVal.add(sw);
+
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return retVal;
 	}
 }

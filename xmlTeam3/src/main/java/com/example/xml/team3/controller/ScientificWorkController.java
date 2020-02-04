@@ -28,6 +28,7 @@ import com.example.xml.team3.dto.IdDTO;
 import com.example.xml.team3.dto.PickedReviewerDTO;
 import com.example.xml.team3.dto.ReferenceDTO;
 import com.example.xml.team3.dto.ScientificWorkDTO;
+import com.example.xml.team3.dto.SearchDTO;
 import com.example.xml.team3.model.scientificwork.Author;
 import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
@@ -572,6 +573,105 @@ public class ScientificWorkController {
 		sw.setStatus(StatusType.REVIEWING);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/searchAuthorized")
+	public ResponseEntity<List<ScientificWorkDTO>> searchAuthorized(@RequestBody SearchDTO searchDTO) {
+		System.out.println("Uslo u pretragu kao registrovan");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<ScientificWork> search = scientificWorkService.searchScientificWork(searchDTO, usernameCurrentUser);
+		for (ScientificWork scientificWork : search) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			if (scientificWork.getReferences() != null) {
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+				}
+			}
+
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+		}
+		System.out.println("Find my works - dto size: " + retVal.size());
+
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/searchUnauthorized")
+	public ResponseEntity<List<ScientificWorkDTO>> searchUnauthorized(@RequestBody SearchDTO searchDTO) {
+		System.out.println("Uslo u pretragu kao neregistrovan");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		// String usernameCurrentUser =
+		// SecurityContextHolder.getContext().getAuthentication().getName();
+		List<ScientificWork> search = scientificWorkService.searchScientificWork(searchDTO, "");
+		for (ScientificWork scientificWork : search) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			if (scientificWork.getReferences() != null) {
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+				}
+			}
+
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+		}
+		System.out.println("Find my works - dto size: " + retVal.size());
+
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
 }
