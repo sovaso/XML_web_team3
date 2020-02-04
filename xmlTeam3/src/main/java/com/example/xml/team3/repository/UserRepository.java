@@ -1,5 +1,8 @@
 package com.example.xml.team3.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.exist.xmldb.EXistResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -115,6 +118,37 @@ public class UserRepository {
 		}
 
 		return user;
+	}
+	
+	public List<UserPub> getAllReviewers(String editorUsername) {
+		String xQuery = "//userPub[not(username=\"" + editorUsername + "\") and type=\"ROLE_REVIEWER\"]";
+		List<UserPub> retVal = new ArrayList<UserPub>();
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/user");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					UserPub user = new UserPub();
+					user = unmarshallerUtil.unmarshallUser(((XMLResource) res).getContent().toString());
+					retVal.add(user);
+					//break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return retVal;
 	}
 
 	public void deleteUser(String username) {

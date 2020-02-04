@@ -1,9 +1,11 @@
 package com.example.xml.team3.controller;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.websocket.server.PathParam;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import com.example.xml.team3.dto.AbstractDTO;
 import com.example.xml.team3.dto.AuthorDTO;
 import com.example.xml.team3.dto.HeaderDTO;
 import com.example.xml.team3.dto.IdDTO;
+import com.example.xml.team3.dto.PickedReviewerDTO;
 import com.example.xml.team3.dto.ReferenceDTO;
 import com.example.xml.team3.dto.ScientificWorkDTO;
 import com.example.xml.team3.model.scientificwork.Author;
@@ -30,7 +33,10 @@ import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.scientificwork.ScientificWork.References;
 import com.example.xml.team3.model.scientificwork.StatusType;
+import com.example.xml.team3.model.workflow.Workflow;
+import com.example.xml.team3.service.ReviewService;
 import com.example.xml.team3.service.ScientificWorkService;
+import com.example.xml.team3.service.WorkflowService;
 
 @RestController
 @RequestMapping(value = "/scientificWork")
@@ -39,6 +45,12 @@ public class ScientificWorkController {
 
 	@Autowired
 	ScientificWorkService scientificWorkService;
+
+	@Autowired
+	ReviewService reviewService;
+
+	@Autowired
+	WorkflowService workflowService;
 
 	@PostMapping(value = "/create")
 	public ResponseEntity<IdDTO> createScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
@@ -119,8 +131,8 @@ public class ScientificWorkController {
 		}
 	}
 
-	@PutMapping(value = "/update")
-	public ResponseEntity<IdDTO> updateScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
+	@PutMapping(value = "/revisingScientificWork")
+	public ResponseEntity<IdDTO> revisingScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
 
 		ScientificWork retVal = null;
 		try {
@@ -180,7 +192,7 @@ public class ScientificWorkController {
 			retVal.getAuthors().getAuthor().add(a);
 		}
 		// status
-		retVal.setStatus(StatusType.SUBMITTED);
+		retVal.setStatus(StatusType.REVIEWING);
 		// retVal.setStatus(StatusType.ACCEPTED);
 		// header
 		retVal.setHeader(new ScientificWork.Header());
@@ -291,12 +303,11 @@ public class ScientificWorkController {
 			List<String> commentsDTO = new ArrayList<String>();
 			commentsDTO.addAll(scientificWork.getComment());
 			// ubacivanje u listu
-			
-			
+
 			System.out.println("SCIENTIFIC WORK ID");
 			System.out.println(scientificWork.getId());
-			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO,
-					referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 
 		}
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
@@ -343,19 +354,224 @@ public class ScientificWorkController {
 			commentsDTO.addAll(scientificWork.getComment());
 			// ubacivanje u listu
 
-			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO,
-					referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 		}
 		System.out.println("Find my works - dto size: " + retVal.size());
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
-	
+
 	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<String> getHTML(@PathVariable String id) throws Exception {
 		String scientificWorkHTML = scientificWorkService.findByIdHTML(id);
 		System.out.println(scientificWorkHTML);
 		return new ResponseEntity<>(scientificWorkHTML, HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/withdrawScientificWork")
+	public ResponseEntity<Boolean> withdrawScientificWork(@RequestBody String scientificWorkId) throws Exception {
+		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
+		if (sw == null) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		sw.setStatus(StatusType.WITHDRAWN);
+		scientificWorkService.updateScientificWork(scientificWorkId, sw);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/rejectScientificWork")
+	public ResponseEntity<Boolean> rejectScientificWork(@RequestBody String scientificWorkId) throws Exception {
+		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
+		if (sw == null) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		sw.setStatus(StatusType.REJECTED);
+		scientificWorkService.updateScientificWork(scientificWorkId, sw);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+
+	@PutMapping(value = "/acceptScientificWork")
+	public ResponseEntity<Boolean> acceptScientificWork(@RequestBody String scientificWorkId) throws Exception {
+		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
+		if (sw == null) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		sw.setStatus(StatusType.ACCEPTED);
+		GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		DatatypeFactory datatypeFactory = null;
+		try {
+			datatypeFactory = DatatypeFactory.newInstance();
+		} catch (DatatypeConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sw.getHeader().setAccepted(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		scientificWorkService.updateScientificWork(scientificWorkId, sw);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/findAllForRevision")
+	public ResponseEntity<List<ScientificWorkDTO>> findAllForRevision() {
+		System.out.println("Uslo u find all for revision");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<ScientificWork> allForRevision = scientificWorkService.findAllForRevision(usernameCurrentUser);
+		for (ScientificWork scientificWork : allForRevision) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			if (scientificWork.getReferences() != null) {
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+				}
+			}
+
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+		}
+		System.out.println("Find my works - dto size: " + retVal.size());
+
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/findAllSubmitted")
+	public ResponseEntity<List<ScientificWorkDTO>> findAllSubmitted() {
+		System.out.println("Uslo u find all submitted");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		List<ScientificWork> allSubmitted = scientificWorkService.findAllSubmitted();
+		for (ScientificWork scientificWork : allSubmitted) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			if (scientificWork.getReferences() != null) {
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+				}
+			}
+
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+		}
+		System.out.println("Find my works - dto size: " + retVal.size());
+
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/findAllForReviewing")
+	public ResponseEntity<List<ScientificWorkDTO>> findAllForReviewing() {
+		System.out.println("Uslo u find all for reviewing");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<ScientificWork> allForReviewing = scientificWorkService.findAllForReviewing(usernameCurrentUser);
+		for (ScientificWork scientificWork : allForReviewing) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			if (scientificWork.getReferences() != null) {
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+				}
+			}
+
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+		}
+		System.out.println("Find my works - dto size: " + retVal.size());
+
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/pickedReviewer")
+	public ResponseEntity<Boolean> pickedReviewer(@RequestBody PickedReviewerDTO pickedReviewerDTO) throws Exception {
+		String workflowId = reviewService.getWorkflowIdByScientificWorkId(pickedReviewerDTO.getScientificWorkId());
+		Workflow w = workflowService.findById(workflowId);
+		w.setEditorUsername(pickedReviewerDTO.getEditorUsername());
+		w.setReviewerUsername(pickedReviewerDTO.getReviewerUsername());
+		workflowService.updateWorkflow(workflowId, w);
+		String scientificWorkId = pickedReviewerDTO.getScientificWorkId();
+		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
+		if (sw == null) {
+			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+		}
+		sw.setStatus(StatusType.REVIEWING);
+		scientificWorkService.updateScientificWork(scientificWorkId, sw);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 
 }

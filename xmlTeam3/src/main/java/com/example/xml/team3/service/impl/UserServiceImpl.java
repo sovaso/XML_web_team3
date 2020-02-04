@@ -1,5 +1,7 @@
 package com.example.xml.team3.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,9 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("Given username already exists.");
 		}
 
+	}
+	
+	public List<UserPub> getAllReviewers(String editorUsername){
+		return userRepository.getAllReviewers(editorUsername);
 	}
 }

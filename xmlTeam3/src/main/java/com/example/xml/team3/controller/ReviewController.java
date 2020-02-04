@@ -19,7 +19,11 @@ import com.example.xml.team3.dto.ReviewDTO;
 import com.example.xml.team3.model.review.Review;
 import com.example.xml.team3.model.review.Review.Comments;
 import com.example.xml.team3.model.review.Review.Grades;
+import com.example.xml.team3.model.scientificwork.ScientificWork;
+import com.example.xml.team3.model.scientificwork.StatusType;
 import com.example.xml.team3.service.ReviewService;
+import com.example.xml.team3.service.ScientificWorkService;
+import com.example.xml.team3.service.WorkflowService;
 
 @RestController
 @RequestMapping(value = "/review")
@@ -29,8 +33,14 @@ public class ReviewController {
 	@Autowired
 	ReviewService reviewService;
 
-	@PostMapping(value = "/create")
-	public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO) {
+	@Autowired
+	ScientificWorkService scientificWorkService;
+
+	@Autowired
+	WorkflowService workflowService;
+
+	@PostMapping(value = "/sendReview")
+	public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
 
 		Review review = new Review();
 		// komentari
@@ -60,6 +70,11 @@ public class ReviewController {
 		// summary komentar
 		review.setSummaryComment(reviewDTO.getSummaryComment());
 		String id = "";
+		// updatovati scientificWOrk
+		String scientificWorkId = workflowService.findById(reviewDTO.getWorkflowId()).getScientificWorkId();
+		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
+		sw.setStatus(StatusType.REVISING);
+		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		try {
 			id = reviewService.createNewReview(review);
 			return new ResponseEntity<String>(id, HttpStatus.CREATED);

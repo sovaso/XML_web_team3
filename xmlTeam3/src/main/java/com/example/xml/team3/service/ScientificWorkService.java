@@ -21,4 +21,10 @@ public interface ScientificWorkService {
 	public List<ScientificWork> findAllForConcreteUser(String username);
 	
 	public String findByIdHTML(String id) throws Exception;
+	
+	public List<ScientificWork> findAllForRevision(String username);
+	
+	public List<ScientificWork> findAllSubmitted();
+	
+	public List<ScientificWork> findAllForReviewing(String reviewerUsername);
 }
