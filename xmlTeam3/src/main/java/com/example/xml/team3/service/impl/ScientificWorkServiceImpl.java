@@ -1,5 +1,6 @@
 package com.example.xml.team3.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.repository.ScientificWorkRepository;
 import com.example.xml.team3.repository.UserRepository;
 import com.example.xml.team3.service.ScientificWorkService;
+import com.example.xml.team3.util.jaxb.MarshallerUtil;
+import com.example.xml.team3.util.Transformer.XSLFOTransformer;
 
 @Service
 public class ScientificWorkServiceImpl implements ScientificWorkService {
@@ -18,6 +21,12 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private MarshallerUtil marshallerUtil;
+	
+	@Autowired
+	private XSLFOTransformer xslfoTransformer;
 
 	public String createNewScientificWork(ScientificWork scientificWork) throws Exception {
 		return scientificWorkRepository.save(scientificWork);
@@ -45,6 +54,27 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 
 	public List<ScientificWork> findAllForConcreteUser(String username) {
 		return scientificWorkRepository.findAllForConcreteUser(username);
+	}
+	
+	public String findByIdHTML(String id) throws Exception {
+		ScientificWork scientificWork = scientificWorkRepository.findById(id);
+		if(scientificWork == null){
+			throw new Exception(id);
+		}
+		String scientificWorkString = marshallerUtil.marshallScientificWork(scientificWork);
+		String swHTML = xslfoTransformer.generateHTML(scientificWorkString, "src/main/resources/xs/scientificWork.xsl");
+		return swHTML;
+	}
+
+	public ByteArrayOutputStream findByIdPDF(String id) throws Exception {
+		ScientificWork scientificWork = scientificWorkRepository.findById(id);
+		if(scientificWork == null){
+			throw new Exception(id);
+		}
+		String scientificWorkString = marshallerUtil.marshallScientificWork(scientificWork);
+		ByteArrayOutputStream swPDF = xslfoTransformer.generatePDF(scientificWorkString,
+				"src/main/resources/data/xsl-fo/scientificArticle_fo.xsl"); //napravi xsl-fo fajl
+		return swPDF;
 	}
 
 }

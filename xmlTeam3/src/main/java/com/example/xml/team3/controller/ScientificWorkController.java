@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -338,6 +339,12 @@ public class ScientificWorkController {
 		System.out.println("Find my works - dto size: " + retVal.size());
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/getByIdHTML", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<String> getHTML(@RequestBody String id) throws Exception {
+		String scientificWorkHTML = scientificWorkService.findByIdHTML(id);
+		return new ResponseEntity<>(scientificWorkHTML, HttpStatus.OK);
 	}
 
 }
