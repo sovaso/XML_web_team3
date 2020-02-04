@@ -6,13 +6,12 @@
 	<xs:element name="workflow">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="id" type="xs:string" />
 				<xs:element name="authorUsername" type="xs:string" />
 				<xs:element name="reviewerUsername" type="xs:string" />
 				<xs:element name="editorUsername" type="xs:string" />
 				<xs:element name="scientificWorkId" type="xs:string" />
 			</xs:sequence>
-
-			<xs:attribute name="id" type="xs:string" />
 
 		</xs:complexType>
 	</xs:element>

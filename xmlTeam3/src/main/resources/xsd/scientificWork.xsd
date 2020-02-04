@@ -8,6 +8,8 @@
 		<xs:complexType>
 			<xs:sequence>
 
+				<xs:element name="id" type="xs:string" />
+
 				<xs:element name="header">
 					<xs:complexType>
 						<xs:sequence>
@@ -67,7 +69,6 @@
 					ref="comment" />
 			</xs:sequence>
 
-			<xs:attribute name="id" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 

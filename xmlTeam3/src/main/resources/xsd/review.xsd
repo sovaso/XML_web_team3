@@ -6,7 +6,7 @@
 	<xs:element name="review">
 		<xs:complexType>
 			<xs:sequence>
-
+				<xs:element name="id" type="xs:string" />
 				<xs:element name="grades">
 					<xs:complexType>
 						<xs:sequence>
@@ -38,7 +38,6 @@
 
 				<xs:element name="summaryComment" type="xs:string" />
 			</xs:sequence>
-			<xs:attribute name="id" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 
