@@ -45,6 +45,7 @@ public class ScientificWorkRepository {
 		for (Paragraph p : scientificWork.getParagraph()) {
 			p.setId(Id + "/paragraph" + UUID.randomUUID().toString());
 		}
+		scientificWork.setId(Id);
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
 		ExistStore.store(scientificWorkCollectionId, Id, scientificWorkXML);
 		return Id;

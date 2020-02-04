@@ -134,6 +134,8 @@ export class ScientificWorksComponent implements OnInit {
       console.log('service should be called now');
 
       for(let el of this.addedWorks){
+        console.log('ELEMENT');
+        console.log(el);
         this.references.push({scientificWorkId: el});
       }
       

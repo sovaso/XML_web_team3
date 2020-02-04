@@ -53,12 +53,16 @@ public class ScientificWorkController {
 		retVal.getComment().addAll(scientificWorkDTO.getComments());
 		// reference
 
+		System.out.println("Broj referenciiiii");
+		System.out.println(scientificWorkDTO.getReferenceDTO().size());
 		for (ReferenceDTO rfDTO : scientificWorkDTO.getReferenceDTO()) {
-			References rf = new References();
+			ScientificWork.References rf = new ScientificWork.References();
 			rf.setScientificWorkId(rfDTO.getScientificWorkId());
 			retVal.getReferences().add(rf);
 		}
 
+		System.out.println("Retval broj referenci");
+		System.out.println(retVal.getReferences().size());
 		// apstrakt
 		ScientificWork.Abstract abstracct = new ScientificWork.Abstract();
 		ScientificWork.Abstract.Keywords keywords = new ScientificWork.Abstract.Keywords();
@@ -283,8 +287,11 @@ public class ScientificWorkController {
 			List<String> commentsDTO = new ArrayList<String>();
 			commentsDTO.addAll(scientificWork.getComment());
 			// ubacivanje u listu
-
-			retVal.add(new ScientificWorkDTO(null, headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO,
+			
+			
+			System.out.println("SCIENTIFIC WORK ID");
+			System.out.println(scientificWork.getId());
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO,
 					referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 
 		}
@@ -332,7 +339,7 @@ public class ScientificWorkController {
 			commentsDTO.addAll(scientificWork.getComment());
 			// ubacivanje u listu
 
-			retVal.add(new ScientificWorkDTO(null, headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO,
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO, paragraphsDTO,
 					referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 		}
 		System.out.println("Find my works - dto size: " + retVal.size());
