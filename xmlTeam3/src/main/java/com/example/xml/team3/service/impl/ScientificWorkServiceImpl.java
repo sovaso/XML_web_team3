@@ -64,4 +64,8 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 		return scientificWorkRepository.searchScientificWork(searchDTO, username);
 	}
 
+	public List<ScientificWork> getAllForEditor() {
+		return scientificWorkRepository.getAllForEditor();
+	}
+
 }

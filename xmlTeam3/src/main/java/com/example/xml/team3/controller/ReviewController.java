@@ -52,8 +52,8 @@ public class ReviewController {
 	@Autowired
 	MailService mailService;
 
-	private final String scientificWorkXsdPath = "src/main/resources/xsd/scientificWork.xsd";
-	private final String scientificWorkXslPath = "src/main/resources/xsl/scientificWork.xsl";
+	private final String reviewXsdPath = "src/main/resources/xsd/review.xsd";
+	private final String reviewXslPath = "src/main/resources/xsl/review.xsl";
 
 	@PostMapping(value = "/sendReview")
 	public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
@@ -99,8 +99,7 @@ public class ReviewController {
 		String subject = "Scientific work need to be revised";
 		String text = "Your scientific work \"" + sw.getTitle()
 				+ "\" needs to be revised so we could decide should we accept it or not!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
-				subject, text);
+		mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, senderMail, receiverMail, subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		try {
 			id = reviewService.createNewReview(review);

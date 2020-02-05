@@ -28,4 +28,6 @@ public interface ScientificWorkService {
 	public List<ScientificWork> findAllForReviewing(String reviewerUsername);
 
 	public List<ScientificWork> searchScientificWork(SearchDTO searchDTO, String username);
+	
+	public List<ScientificWork> getAllForEditor();
 }

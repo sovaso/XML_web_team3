@@ -358,6 +358,56 @@ public class ScientificWorkController {
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/getAllForEditor")
+	public ResponseEntity<List<ScientificWorkDTO>> getAllForEditor() {
+		System.out.println("Uslo u getAllForEditor!!! :)");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		List<ScientificWork> allForEditor = scientificWorkService.getAllForEditor();
+		System.out.println("Velicina od find getAllForEditor: " + allForEditor.size());
+		for (ScientificWork scientificWork : allForEditor) {
+			System.out.println(allForEditor.get(0).getTitle());
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			ScientificWork.References references = new ScientificWork.References();
+			scientificWork.getReferences().add(references);
+			for (References r : scientificWork.getReferences()) {
+				referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+			}
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			System.out.println("SCIENTIFIC WORK ID");
+			System.out.println(scientificWork.getId());
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+
+		}
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+
 	@GetMapping(value = "/findAllForConcreteUser")
 	public ResponseEntity<List<ScientificWorkDTO>> findAllForConcreteUser() {
 		System.out.println("Uslo u find all for concrete user");
