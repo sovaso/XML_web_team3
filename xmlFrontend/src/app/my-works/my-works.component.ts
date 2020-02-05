@@ -128,20 +128,29 @@ export class MyWorksComponent implements OnInit {
     
   }
 
-  reject(work){
+ 
     
-    this.scietificWorkService.reject(work.scientificWorkId).subscribe(
-      created => {
-        if(created==true){
-          alert("SENT EMAIL");
-          
-        }else{
-          alert("SENT EMAIL NOT");
-        }
-        location.reload();
-    });
-
-  }
+    reject(work){
+      console.log('*******************');
+      console.log('*******************');
+      console.log('*******************');
+      console.log('*******************');
+      console.log('Scientific work id');
+      console.log(work.scientificWorkId);
+      this.scietificWorkService.rejectWork(work.scientificWorkId).subscribe(
+        created => {
+          if(created==true){
+            alert("SENT EMAIL");
+            
+          }else{
+            alert("SENT EMAIL NOT");
+          }
+          location.reload();
+      });
+  
+    }
+  
+  
 
   download(work){
     this.workForDownload={

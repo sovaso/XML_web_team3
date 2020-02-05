@@ -57,7 +57,8 @@ public class ReviewController {
 
 	@PostMapping(value = "/sendReview")
 	public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
-
+		System.out.println("*****************************************************************");
+		System.out.println("Uslo u create review");
 		Review review = new Review();
 		// komentari
 		List<Comments> comments = new ArrayList<Comments>();
@@ -94,12 +95,12 @@ public class ReviewController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
-		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		//String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
+		//String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work need to be revised";
 		String text = "Your scientific work \"" + sw.getTitle()
 				+ "\" needs to be revised so we could decide should we accept it or not!";
-		mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, senderMail, receiverMail, subject, text);
+		mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		try {
 			id = reviewService.createNewReview(review);

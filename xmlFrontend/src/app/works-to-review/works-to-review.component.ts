@@ -35,11 +35,10 @@ export class WorksToReviewComponent implements OnInit {
   ngOnInit() {
     this.loggedUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    /*
+    
     this.scientificWorkService.findAllWorksToReview().subscribe(
-    //   work => (this.scientificWorks = work)
+      work => (this.worksToReview = work)
     );
-    */
 
   }
 
@@ -102,15 +101,43 @@ export class WorksToReviewComponent implements OnInit {
   }
 
   reject(work){
+    console.log('*******************');
+    console.log('*******************');
+    console.log('*******************');
+    console.log('*******************');
+    console.log('Scientific work id');
+    console.log(work.scientificWorkId);
     this.scientificWorkService.rejectWork(work.scientificWorkId).subscribe(
-      result => (console.log(result))
-    )
+      created => {
+        if(created==true){
+          alert("SENT EMAIL");
+          
+        }else{
+          alert("SENT EMAIL NOT");
+        }
+        location.reload();
+    });
+
   }
 
   accept(work){
+    console.log('Accept iz works to review comoponente');
+    console.log(work.scientificWorkId);
+    
     this.scientificWorkService.acceptWork(work.scientificWorkId).subscribe(
-      result => (console.log(result))
+      result => {
+        console.log('Rezultat iz accept iz komponente');
+        console.log(result);
+        location.reload();
+      }
     )
+    
+  }
+
+  makeAReview(work){
+    console.log('Make a review called');
+    console.log(work.scientificWorkId);
+    const modalRef = this.modalService.open(ReviewFormComponent);
   }
 
 }

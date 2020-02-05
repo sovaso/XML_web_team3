@@ -152,7 +152,7 @@ public class UserRepository {
 	}
 
 	public List<UserPub> getAllReviewers(String editorUsername) {
-		String xQuery = "//userPub[not(username=\"" + editorUsername + "\") and role=\"ROLE_REVIEWER\"]";
+		String xQuery = "//userPub[not(username=\"" + editorUsername + "\") and (role=\"ROLE_REVIEWER\" or role = \"ROLE_EDITOR\")]";
 		List<UserPub> retVal = new ArrayList<UserPub>();
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection, xQuery,

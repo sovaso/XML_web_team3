@@ -178,7 +178,7 @@ export class UnreviewedWorksComponent implements OnInit {
 
   reject(work){
     
-    this.scietificWorkService.reject(work.scientificWorkId).subscribe(
+    this.scietificWorkService.rejectWork(work.scientificWorkId).subscribe(
       created => {
         if(created==true){
           alert("SENT EMAIL");

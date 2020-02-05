@@ -64,7 +64,7 @@ export class MenuBarComponent implements OnInit {
         allScientificWorks.hidden = false;
         addScientificWork.hidden = false;
         myWorks.hidden = false;
-        unreviewedWorks.hidden = false;
+        unreviewedWorks.hidden = true;
         reviewedWorks.hidden = true;
         registerEditor.hidden = true;
         registerReviewer.hidden = true;
