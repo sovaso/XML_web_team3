@@ -15,7 +15,6 @@
 				</h1>
 
 				<br />
-				<br />
 				<i>
 					Date received
 					<xsl:value-of
