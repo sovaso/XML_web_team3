@@ -62,9 +62,15 @@ export class ScientificWorkService {
    // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
   }
 
-  getById(idDto: IdDTO): Observable<String> {
+
+
+  getById(idDto: IdDTO): Observable<any> {
+    const httpOptions = {
+      'responseType'  : 'arraybuffer' as 'json'
+       //'responseType'  : 'blob' as 'json'        //This also worked
+    };
     console.log('create cover letter in service called');
-    return this.http.get<String>(`http://localhost:8000/scientificWork/getByIdHTML/${idDto.response}`).pipe(
+    return this.http.get<any>(`http://localhost:8000/scientificWork/getByIdHTML/${idDto.response}`,httpOptions).pipe(
       map( (res: any) => {
           return res;
       })  );
