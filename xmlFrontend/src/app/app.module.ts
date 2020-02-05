@@ -27,6 +27,7 @@ import { TokenInterceptorService } from './security/token-interceptor.service';
 import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
 import { AllScientificWorksComponent } from './all-scientific-works/all-scientific-works.component';
 import { OpenScientificWorkComponent } from './open-scientific-work/open-scientific-work.component';
+import { ForRevisionComponent } from './for-revision/for-revision.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { OpenScientificWorkComponent } from './open-scientific-work/open-scienti
     RegisterEditorComponent,
     RegisterReviewerComponent,
     AllScientificWorksComponent,
-    OpenScientificWorkComponent
+    OpenScientificWorkComponent,
+    ForRevisionComponent
   ],
   imports: [
     BrowserModule,

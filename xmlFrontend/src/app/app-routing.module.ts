@@ -11,6 +11,7 @@ import { ReviewedWorksComponent } from './reviewed-works/reviewed-works.componen
 import { RegisterEditorComponent } from './register-editor/register-editor.component';
 import { RegisterReviewerComponent } from './register-reviewer/register-reviewer.component';
 import { AllScientificWorksComponent } from './all-scientific-works/all-scientific-works.component';
+import { ForRevisionComponent } from './for-revision/for-revision.component';
 
 
 
@@ -39,6 +40,7 @@ const routes: Routes = [
       { path : 'reviewedWorks', component : ReviewedWorksComponent},
       { path : 'registerEditor', component : RegisterEditorComponent},
       { path : 'registerReviewer', component : RegisterReviewerComponent},
+      { path : 'forRevision', component : ForRevisionComponent},
     ] 
   },
 
