@@ -134,9 +134,11 @@ export class MyWorksComponent implements OnInit {
       created => {
         if(created==true){
           alert("SENT EMAIL");
+          
         }else{
           alert("SENT EMAIL NOT");
         }
+        location.reload();
     });
 
   }

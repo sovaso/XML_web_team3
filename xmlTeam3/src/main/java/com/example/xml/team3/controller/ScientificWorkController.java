@@ -462,11 +462,11 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		//String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work rejected";
 		String text = "Your scientific work \"" + sw.getTitle() + "\" has been rejected!";
 		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML,
-				"marina.vojnovic1997@gmail.com", receiverMail, subject, text);
+				"marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
