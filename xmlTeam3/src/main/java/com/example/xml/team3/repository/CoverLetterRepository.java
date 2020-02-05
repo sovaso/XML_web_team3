@@ -39,6 +39,7 @@ public class CoverLetterRepository {
 
 	public String save(CoverLetter coverLetter) throws Exception {
 		String Id = generateNewCoverLetterId();
+		coverLetter.setId(Id);
 		String coverLetterXML = marshallerUtil.marshallCoverLetter(coverLetter);
 		ExistStore.store(coverLetterCollectionId, Id, coverLetterXML);
 		return Id;

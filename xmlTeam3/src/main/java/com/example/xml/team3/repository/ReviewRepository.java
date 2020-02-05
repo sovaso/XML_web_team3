@@ -42,6 +42,7 @@ public class ReviewRepository {
 
 	public String save(Review review) throws Exception {
 		String Id = generateNewReviewId();
+		review.setId(Id);
 		String reviewXML = marshallerUtil.marshallReview(review);
 		ExistStore.store(reviewCollectionId, Id, reviewXML);
 		return Id;
@@ -68,7 +69,7 @@ public class ReviewRepository {
 	}
 
 	public Review findById(String id) throws Exception {
-		String xQuery = "//review[@id=\"" + id + "\"" + "]";
+		String xQuery = "//review[id=\"" + id + "\"" + "]";
 		Review retVal = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(reviewCollectionId, xQuery,

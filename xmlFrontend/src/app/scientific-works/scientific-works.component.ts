@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import {AbstractDto} from 'src/app/dto/Abstract.dto';
 import {AuthorDto} from 'src/app/dto/Author.dto';
 import {HeaderDto} from 'src/app/dto/Header.dto';
@@ -8,7 +8,8 @@ import {ScientificWorkDto} from 'src/app/dto/ScientificWork.dto';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { AlertBoxComponent } from 'src/app/alert-box/alert-box.component';
 import { ScientificWorkService } from '../services/scientific-work.service';
-
+import * as jsPDF from 'jspdf';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 @Component({
   selector: 'app-scientific-works',
   templateUrl: './scientific-works.component.html',
@@ -17,6 +18,7 @@ import { ScientificWorkService } from '../services/scientific-work.service';
 
 export class ScientificWorksComponent implements OnInit {
 
+ 
   title: string='';
   authorName: string='';
   authorSurname: string = '';
@@ -64,6 +66,10 @@ export class ScientificWorksComponent implements OnInit {
 
 
   }
+
+  
+
+
 
   addParagraph(){
     this.paragpraphs.push(this.authorParagraph);
@@ -183,14 +189,8 @@ export class ScientificWorksComponent implements OnInit {
             this.scientificWorkService.createCoverLetter(this.coverLetterDto).subscribe(res => {
               console.log('Result of creating cover letter');
               console.log(res);
-            });;
-          
-            this.scientificWorkService.getById(created).subscribe(
-              created => {
-                this.htmlEl=created;
-                console.log('Result of html');
-                console.log(this.htmlEl);
             });
+
             this.messageSuccess = 'Scientific work successfully added.';
           }
         }

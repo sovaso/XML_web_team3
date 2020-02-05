@@ -41,7 +41,7 @@ public class MailServiceImpl implements MailService {
 					IOUtils.toByteArray(XsltUtil.toPdf(xmlValue, xslPath, xsdPath).getInputStream())));
 			mailSender.send(mimeMessage);
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 }

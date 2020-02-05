@@ -1,6 +1,5 @@
 package com.example.xml.team3.controller;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +36,6 @@ import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.scientificwork.ScientificWork.References;
 import com.example.xml.team3.model.scientificwork.StatusType;
-import com.example.xml.team3.model.user.UserPub;
 import com.example.xml.team3.model.workflow.Workflow;
 import com.example.xml.team3.service.MailService;
 import com.example.xml.team3.service.ReviewService;
@@ -46,6 +43,7 @@ import com.example.xml.team3.service.ScientificWorkService;
 import com.example.xml.team3.service.UserService;
 import com.example.xml.team3.service.WorkflowService;
 import com.example.xml.team3.util.XsltUtil;
+import com.example.xml.team3.util.Transformer.XSLFOTransformer;
 import com.example.xml.team3.util.jaxb.MarshallerUtil;
 
 @RestController
@@ -64,6 +62,9 @@ public class ScientificWorkController {
 
 	@Autowired
 	XsltUtil xsltUtil;
+
+	@Autowired
+	XSLFOTransformer xslfoTransformer;
 
 	@Autowired
 	MarshallerUtil marshallerUtil;
@@ -121,6 +122,7 @@ public class ScientificWorkController {
 		retVal.getAbstract().setScientificWorkType(scientificWorkDTO.getAbstractDTO().getType());
 		retVal.getAbstract().getKeywords().getKeyword().addAll(scientificWorkDTO.getAbstractDTO().getKeywords());
 		// autori
+		ScientificWork.Authors authors = new ScientificWork.Authors();
 		for (AuthorDTO autDTO : scientificWorkDTO.getAuthorsDTO()) {
 			Author a = new Author();
 			a.setUniversity(new Author.University());
@@ -128,19 +130,26 @@ public class ScientificWorkController {
 			a.setSurname(autDTO.getSurname());
 			a.getUniversity().setAddress(autDTO.getUniversityAddress());
 			a.getUniversity().setName(autDTO.getUniversityName());
-			ScientificWork.Authors authors = new ScientificWork.Authors();
-			retVal.setAuthors(authors);
 			a.setUsername(scientificWorkService.getUsernameByNameAndSurname(autDTO.getName(), autDTO.getSurname()));
-			retVal.getAuthors().getAuthor().add(a);
+			authors.getAuthor().add(a);
 		}
+		retVal.setAuthors(authors);
 		// status
 		retVal.setStatus(StatusType.SUBMITTED);
 		// retVal.setStatus(StatusType.ACCEPTED);
 		// header
 		retVal.setHeader(new ScientificWork.Header());
-		retVal.getHeader().setAccepted(null);
-		retVal.getHeader().setRevised(null);
-		retVal.getHeader().setReceived(null);
+		GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		DatatypeFactory datatypeFactory = null;
+		try {
+			datatypeFactory = DatatypeFactory.newInstance();
+		} catch (DatatypeConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		retVal.getHeader().setAccepted(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		retVal.getHeader().setReceived(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		retVal.getHeader().setRevised(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
 		IdDTO idDto = new IdDTO();
 		idDto.setResponse("");
 		String id = "";
@@ -398,14 +407,23 @@ public class ScientificWorkController {
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
-	// PDF I HTML =========
+	// PDF I HTML I XML =========
 
-	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
-	public ResponseEntity<ByteArrayResource> getHTML(@PathVariable String id) throws Exception {
+	@GetMapping(value = "/getByIdXML/{id}", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<IdDTO> getXML(@PathVariable String id) throws Exception {
 		ScientificWork scientificWork = scientificWorkService.findById(id);
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
-		return new ResponseEntity<>(new ByteArrayResource(scientificWorkXML.getBytes(StandardCharsets.UTF_8)),
-				HttpStatus.OK);
+		return new ResponseEntity<>(new IdDTO(scientificWorkXML), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/getByIdHTML/{id}")
+	public ResponseEntity<IdDTO> getHTML(@PathVariable String id) throws Exception {
+		ScientificWork scientificWork = scientificWorkService.findById(id);
+		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
+		IdDTO idDto = new IdDTO();
+		String swHtml = xslfoTransformer.generateHTML(scientificWorkXML, scientificWorkXslPath);
+		idDto.setResponse(swHtml);
+		return new ResponseEntity<>(idDto, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getByIdPDF/{id}", produces = MediaType.TEXT_HTML_VALUE)
@@ -444,13 +462,11 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		String senderMail = userService
-				.getEmailByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work rejected";
 		String text = "Your scientific work \"" + sw.getTitle() + "\" has been rejected!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
-				subject, text);
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML,
+				"marina.vojnovic1997@gmail.com", receiverMail, subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
@@ -660,7 +676,7 @@ public class ScientificWorkController {
 	public ResponseEntity<List<ScientificWorkDTO>> searchMyWorks(@RequestBody SearchDTO searchDTO) {
 		System.out.println("Uslo u pretragu search my works");
 		List<ScientificWorkDTO> retVal = new ArrayList<>();
-		
+
 		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<ScientificWork> search = scientificWorkService.searchScientificWork(searchDTO, usernameCurrentUser);
 		for (ScientificWork scientificWork : search) {
@@ -703,59 +719,50 @@ public class ScientificWorkController {
 		}
 		System.out.println("Find my works - dto size: " + retVal.size());
 
-
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
+
 	/*
-	@PostMapping(value = "/searchAuthorized")
-	public ResponseEntity<List<ScientificWorkDTO>> searchAuthorized(@RequestBody SearchDTO searchDTO) {
-		System.out.println("Uslo u pretragu kao registrovan");
-		List<ScientificWorkDTO> retVal = new ArrayList<>();
-		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-		List<ScientificWork> search = scientificWorkService.searchScientificWork(searchDTO, usernameCurrentUser);
-		for (ScientificWork scientificWork : search) {
-			// paragraf
-			List<String> paragraphsDTO = new ArrayList<String>();
-			for (Paragraph p : scientificWork.getParagraph()) {
-				paragraphsDTO.add(p.getText());
-			}
-			// heder
-			HeaderDTO headerDTO = new HeaderDTO("", "", "");
-			// title
-			String titleDTO = scientificWork.getTitle();
-			// autori
-			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
-			for (Author author : scientificWork.getAuthors().getAuthor()) {
-				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
-						author.getUniversity().getAddress()));
-			}
-			// apstrakt
-			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
-					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
-					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
-					scientificWork.getAbstract().getScientificWorkType(),
-					scientificWork.getAbstract().getKeywords().getKeyword());
-			// reference
-			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
-			if (scientificWork.getReferences() != null) {
-				for (References r : scientificWork.getReferences()) {
-					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
-				}
-			}
-
-			// komentari
-			List<String> commentsDTO = new ArrayList<String>();
-			commentsDTO.addAll(scientificWork.getComment());
-			// ubacivanje u listu
-
-			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
-					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
-		}
-		System.out.println("Find my works - dto size: " + retVal.size());
-
-		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
-	}
-*/
+	 * @PostMapping(value = "/searchAuthorized") public
+	 * ResponseEntity<List<ScientificWorkDTO>> searchAuthorized(@RequestBody
+	 * SearchDTO searchDTO) { System.out.println("Uslo u pretragu kao registrovan");
+	 * List<ScientificWorkDTO> retVal = new ArrayList<>(); String
+	 * usernameCurrentUser =
+	 * SecurityContextHolder.getContext().getAuthentication().getName();
+	 * List<ScientificWork> search =
+	 * scientificWorkService.searchScientificWork(searchDTO, usernameCurrentUser);
+	 * for (ScientificWork scientificWork : search) { // paragraf List<String>
+	 * paragraphsDTO = new ArrayList<String>(); for (Paragraph p :
+	 * scientificWork.getParagraph()) { paragraphsDTO.add(p.getText()); } // heder
+	 * HeaderDTO headerDTO = new HeaderDTO("", "", ""); // title String titleDTO =
+	 * scientificWork.getTitle(); // autori List<AuthorDTO> authorsDTO = new
+	 * ArrayList<AuthorDTO>(); for (Author author :
+	 * scientificWork.getAuthors().getAuthor()) { authorsDTO.add(new
+	 * AuthorDTO(author.getName(), author.getSurname(),
+	 * author.getUniversity().getName(), author.getUniversity().getAddress())); } //
+	 * apstrakt AbstractDTO abstractDTO = new
+	 * AbstractDTO(scientificWork.getAbstract().getPurpose(),
+	 * scientificWork.getAbstract().getDesign(),
+	 * scientificWork.getAbstract().getFindings(),
+	 * scientificWork.getAbstract().getLimitations(),
+	 * scientificWork.getAbstract().getOriginality(),
+	 * scientificWork.getAbstract().getScientificWorkType(),
+	 * scientificWork.getAbstract().getKeywords().getKeyword()); // reference
+	 * List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>(); if
+	 * (scientificWork.getReferences() != null) { for (References r :
+	 * scientificWork.getReferences()) { referenceDTO.add(new
+	 * ReferenceDTO(r.getScientificWorkId())); } }
+	 * 
+	 * // komentari List<String> commentsDTO = new ArrayList<String>();
+	 * commentsDTO.addAll(scientificWork.getComment()); // ubacivanje u listu
+	 * 
+	 * retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO,
+	 * authorsDTO, abstractDTO, paragraphsDTO, referenceDTO, commentsDTO,
+	 * scientificWork.getStatus().toString().toLowerCase())); }
+	 * System.out.println("Find my works - dto size: " + retVal.size());
+	 * 
+	 * return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK); }
+	 */
 	@PostMapping(value = "/searchUnauthorized")
 	public ResponseEntity<List<ScientificWorkDTO>> searchUnauthorized(@RequestBody SearchDTO searchDTO) {
 		System.out.println("Uslo u pretragu kao neregistrovan");
@@ -805,8 +812,5 @@ public class ScientificWorkController {
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
-	
-	
-
 
 }

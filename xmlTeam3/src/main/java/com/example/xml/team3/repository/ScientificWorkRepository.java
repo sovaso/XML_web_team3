@@ -86,7 +86,7 @@ public class ScientificWorkRepository {
 		if (mods == 0) {
 			return false;
 		}
-		deleteMetadata(id);
+		//deleteMetadata(id);
 		return true;
 	}
 

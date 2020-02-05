@@ -39,6 +39,7 @@ public class WorkflowRepository {
 
 	public String save(Workflow workflow) throws Exception {
 		String Id = generateNewWorkflowId();
+		workflow.setId(Id);
 		String workflowXML = marshallerUtil.marshallWorkflow(workflow);
 		ExistStore.store(workflowCollectionId, Id, workflowXML);
 		return Id;
@@ -49,7 +50,7 @@ public class WorkflowRepository {
 		if (oldWorkflow == null) {
 			throw new Exception("There is no cover letter with this id");
 		}
-		this.delete(id);
+		// this.delete(id);
 		String workflowXML = marshallerUtil.marshallWorkflow(workflow);
 		ExistStore.store(workflowCollectionId, id, workflowXML);
 		return id;
@@ -65,7 +66,7 @@ public class WorkflowRepository {
 	}
 
 	public Workflow findById(String id) throws Exception {
-		String xQuery = "//workflow[@id=\"" + id + "\"" + "]";
+		String xQuery = "//workflow[id=\"" + id + "\"" + "]";
 		Workflow retVal = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(workflowCollectionId, xQuery,
