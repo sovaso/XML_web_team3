@@ -5,13 +5,14 @@ import { RegisterUserComponent } from './pages/register-user/register-user.compo
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ScientificWorksComponent } from './scientific-works/scientific-works.component';
 import { MyWorksComponent } from './my-works/my-works.component';
-import { WorksToReviewComponent } from './works-to-review/works-to-review.component';
+
 import { UnreviewedWorksComponent } from './unreviewed-works/unreviewed-works.component';
 import { ReviewedWorksComponent } from './reviewed-works/reviewed-works.component';
 import { RegisterEditorComponent } from './register-editor/register-editor.component';
 import { RegisterReviewerComponent } from './register-reviewer/register-reviewer.component';
 import { AllScientificWorksComponent } from './all-scientific-works/all-scientific-works.component';
 import { ForRevisionComponent } from './for-revision/for-revision.component';
+import { WorksToReviewComponent } from './works-to-review/works-to-review.component';
 
 
 
@@ -41,6 +42,7 @@ const routes: Routes = [
       { path : 'registerEditor', component : RegisterEditorComponent},
       { path : 'registerReviewer', component : RegisterReviewerComponent},
       { path : 'forRevision', component : ForRevisionComponent},
+      { path : 'worksToReview', component : WorksToReviewComponent},
     ] 
   },
 

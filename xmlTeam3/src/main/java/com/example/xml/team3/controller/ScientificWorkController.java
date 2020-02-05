@@ -501,8 +501,9 @@ public class ScientificWorkController {
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/rejectScientificWork")
-	public ResponseEntity<Boolean> rejectScientificWork(@RequestBody String scientificWorkId) throws Exception {
+	@GetMapping(value = "/rejectScientificWork/{scientificWorkId}")
+	public ResponseEntity<Boolean> rejectScientificWork(@PathVariable String scientificWorkId) throws Exception {
+		System.out.println("Uslo u reject scientific work");
 		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
 		if (sw == null) {
 			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
@@ -521,8 +522,9 @@ public class ScientificWorkController {
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/acceptScientificWork")
-	public ResponseEntity<Boolean> acceptScientificWork(@RequestBody String scientificWorkId) throws Exception {
+	@GetMapping(value = "/acceptScientificWork/{scientificWorkId}")
+	public ResponseEntity<Boolean> acceptScientificWork(@PathVariable String scientificWorkId) throws Exception {
+		System.out.println("Uslo u accpet scientific work");
 		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
 		if (sw == null) {
 			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
