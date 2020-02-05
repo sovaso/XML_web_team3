@@ -403,11 +403,10 @@ public class ScientificWorkController {
 	// PDF I HTML I XML =========
 
 	@GetMapping(value = "/getByIdXML/{id}", produces = MediaType.TEXT_HTML_VALUE)
-	public ResponseEntity<ByteArrayResource> getXML(@PathVariable String id) throws Exception {
+	public ResponseEntity<IdDTO> getXML(@PathVariable String id) throws Exception {
 		ScientificWork scientificWork = scientificWorkService.findById(id);
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
-		return new ResponseEntity<>(new ByteArrayResource(scientificWorkXML.getBytes(StandardCharsets.UTF_8)),
-				HttpStatus.OK);
+		return new ResponseEntity<>(new IdDTO(scientificWorkXML), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
