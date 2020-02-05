@@ -20,14 +20,12 @@ public interface ScientificWorkService {
 	public String getUsernameByNameAndSurname(String name, String surname);
 
 	public List<ScientificWork> findAllForConcreteUser(String username);
-	
-	public String findByIdHTML(String id) throws Exception;
-	
+
 	public List<ScientificWork> findAllForRevision(String username);
-	
+
 	public List<ScientificWork> findAllSubmitted();
-	
+
 	public List<ScientificWork> findAllForReviewing(String reviewerUsername);
-	
+
 	public List<ScientificWork> searchScientificWork(SearchDTO searchDTO, String username);
 }

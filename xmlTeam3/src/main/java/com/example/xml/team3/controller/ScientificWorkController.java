@@ -1,5 +1,6 @@
 package com.example.xml.team3.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -7,7 +8,9 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +38,13 @@ import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.scientificwork.ScientificWork.References;
 import com.example.xml.team3.model.scientificwork.StatusType;
 import com.example.xml.team3.model.workflow.Workflow;
+import com.example.xml.team3.service.MailService;
 import com.example.xml.team3.service.ReviewService;
 import com.example.xml.team3.service.ScientificWorkService;
+import com.example.xml.team3.service.UserService;
 import com.example.xml.team3.service.WorkflowService;
+import com.example.xml.team3.util.XsltUtil;
+import com.example.xml.team3.util.jaxb.MarshallerUtil;
 
 @RestController
 @RequestMapping(value = "/scientificWork")
@@ -52,6 +59,21 @@ public class ScientificWorkController {
 
 	@Autowired
 	WorkflowService workflowService;
+
+	@Autowired
+	XsltUtil xsltUtil;
+
+	@Autowired
+	MarshallerUtil marshallerUtil;
+
+	@Autowired
+	MailService mailService;
+
+	@Autowired
+	UserService userService;
+
+	private final String scientificWorkXsdPath = "src/main/resources/xsd/scientificWork.xsd";
+	private final String scientificWorkXslPath = "src/main/resources/xsl/scientificWork.xsl";
 
 	@PostMapping(value = "/create")
 	public ResponseEntity<IdDTO> createScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
@@ -133,7 +155,8 @@ public class ScientificWorkController {
 	}
 
 	@PutMapping(value = "/revisingScientificWork")
-	public ResponseEntity<IdDTO> revisingScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO) {
+	public ResponseEntity<IdDTO> revisingScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO)
+			throws Exception {
 
 		ScientificWork retVal = null;
 		try {
@@ -203,6 +226,16 @@ public class ScientificWorkController {
 		IdDTO idDto = new IdDTO();
 		idDto.setResponse("");
 		String id = "";
+		// slanje mejla
+		String workflowId = reviewService.getWorkflowIdByScientificWorkId(retVal.getId());
+		Workflow w = workflowService.findById(workflowId);
+		String swXML = marshallerUtil.marshallScientificWork(retVal);
+		String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String senderMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String subject = "Scientific work has been revised";
+		String text = "My scientific work \"" + retVal.getTitle() + "\" has just been revised!";
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+				subject, text);
 		try {
 			id = scientificWorkService.updateScientificWork(scientificWorkDTO.getScientificWorkId(), retVal);
 			idDto.setResponse(id);
@@ -363,12 +396,27 @@ public class ScientificWorkController {
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
+	// PDF I HTML =========
+
 	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
-	public ResponseEntity<String> getHTML(@PathVariable String id) throws Exception {
-		String scientificWorkHTML = scientificWorkService.findByIdHTML(id);
-		System.out.println(scientificWorkHTML);
-		return new ResponseEntity<>(scientificWorkHTML, HttpStatus.OK);
+	public ResponseEntity<ByteArrayResource> getHTML(@PathVariable String id) throws Exception {
+		ScientificWork scientificWork = scientificWorkService.findById(id);
+		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
+		return new ResponseEntity<>(new ByteArrayResource(scientificWorkXML.getBytes(StandardCharsets.UTF_8)),
+				HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/getByIdPDF/{id}", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<ByteArrayResource> getPDF(@PathVariable String id) throws Exception {
+		ScientificWork scientificWork = scientificWorkService.findById(id);
+		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
+		return new ResponseEntity<>(
+				new ByteArrayResource(IOUtils.toByteArray(XsltUtil
+						.toPdf(scientificWorkXML, scientificWorkXslPath, scientificWorkXsdPath).getInputStream())),
+				HttpStatus.OK);
+	}
+
+	// PDF I HTML =========
 
 	@PutMapping(value = "/withdrawScientificWork")
 	public ResponseEntity<Boolean> withdrawScientificWork(@RequestBody String scientificWorkId) throws Exception {
@@ -388,6 +436,17 @@ public class ScientificWorkController {
 			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 		}
 		sw.setStatus(StatusType.REJECTED);
+		// slanje mejla
+		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
+		Workflow w = workflowService.findById(workflowId);
+		String swXML = marshallerUtil.marshallScientificWork(sw);
+		String senderMail = userService
+				.getEmailByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String subject = "Scientific work rejected";
+		String text = "Your scientific work \"" + sw.getTitle() + "\" has been rejected!";
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
@@ -408,6 +467,16 @@ public class ScientificWorkController {
 			e.printStackTrace();
 		}
 		sw.getHeader().setAccepted(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		// slanje mejla
+		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
+		Workflow w = workflowService.findById(workflowId);
+		String swXML = marshallerUtil.marshallScientificWork(sw);
+		String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String subject = "Scientific work accepted";
+		String text = "Your scientific work \"" + sw.getTitle() + "\" has been accepted and will be published!";
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
@@ -571,6 +640,14 @@ public class ScientificWorkController {
 			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 		}
 		sw.setStatus(StatusType.REVIEWING);
+		// slanje mejla
+		String swXML = marshallerUtil.marshallScientificWork(sw);
+		String senderMail = userService.getEmailByUsername(w.getEditorUsername());
+		String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String subject = "Scientific work reviewing";
+		String text = "Scientific work \"" + sw.getTitle() + "\" has been granted to you to review!";
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}

@@ -86,6 +86,37 @@ public class UserRepository {
 		return user.getUsername();
 	}
 
+	public String getEmailByUsername(String username) {
+		String xQuery = "//userPub[username=\"" + username + "\"]";
+		UserPub user = null;
+		try {
+			ResourceSet result = ExistRetrieve.executeXPathExpression(userCollection, xQuery,
+					XUpdateTemplate.TARGET_NAMESPACE + "/user");
+			ResourceIterator it = result.getIterator();
+			Resource res = null;
+
+			while (it.hasMoreResources()) {
+				try {
+					res = it.nextResource();
+					user = unmarshallerUtil.unmarshallUser(((XMLResource) res).getContent().toString());
+					break;
+				} finally {
+					try {
+						((EXistResource) res).freeResources();
+					} catch (XMLDBException xe) {
+						xe.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (user == null) {
+			return "";
+		}
+		return user.getEmail();
+	}
+
 	public UserPub getByUsername(String username) {
 		String xQuery = "//userPub[username=\"" + username + "\"" + "]";
 		// String xQuery = "//user/userPub[username[text()='bbb']]";
@@ -119,7 +150,7 @@ public class UserRepository {
 
 		return user;
 	}
-	
+
 	public List<UserPub> getAllReviewers(String editorUsername) {
 		String xQuery = "//userPub[not(username=\"" + editorUsername + "\") and type=\"ROLE_REVIEWER\"]";
 		List<UserPub> retVal = new ArrayList<UserPub>();
@@ -135,7 +166,7 @@ public class UserRepository {
 					UserPub user = new UserPub();
 					user = unmarshallerUtil.unmarshallUser(((XMLResource) res).getContent().toString());
 					retVal.add(user);
-					//break;
+					// break;
 				} finally {
 					try {
 						((EXistResource) res).freeResources();

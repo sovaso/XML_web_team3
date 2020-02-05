@@ -50,8 +50,12 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
-	
-	public List<UserPub> getAllReviewers(String editorUsername){
+
+	public List<UserPub> getAllReviewers(String editorUsername) {
 		return userRepository.getAllReviewers(editorUsername);
+	}
+
+	public String getEmailByUsername(String username) {
+		return getEmailByUsername(username);
 	}
 }

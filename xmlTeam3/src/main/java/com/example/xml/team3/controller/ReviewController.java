@@ -21,9 +21,13 @@ import com.example.xml.team3.model.review.Review.Comments;
 import com.example.xml.team3.model.review.Review.Grades;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.scientificwork.StatusType;
+import com.example.xml.team3.model.workflow.Workflow;
+import com.example.xml.team3.service.MailService;
 import com.example.xml.team3.service.ReviewService;
 import com.example.xml.team3.service.ScientificWorkService;
+import com.example.xml.team3.service.UserService;
 import com.example.xml.team3.service.WorkflowService;
+import com.example.xml.team3.util.jaxb.MarshallerUtil;
 
 @RestController
 @RequestMapping(value = "/review")
@@ -38,6 +42,18 @@ public class ReviewController {
 
 	@Autowired
 	WorkflowService workflowService;
+
+	@Autowired
+	MarshallerUtil marshallerUtil;
+
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	MailService mailService;
+
+	private final String scientificWorkXsdPath = "src/main/resources/xsd/scientificWork.xsd";
+	private final String scientificWorkXslPath = "src/main/resources/xsl/scientificWork.xsl";
 
 	@PostMapping(value = "/sendReview")
 	public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
@@ -74,6 +90,17 @@ public class ReviewController {
 		String scientificWorkId = workflowService.findById(reviewDTO.getWorkflowId()).getScientificWorkId();
 		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
 		sw.setStatus(StatusType.REVISING);
+		// slanje mejla
+		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
+		Workflow w = workflowService.findById(workflowId);
+		String swXML = marshallerUtil.marshallScientificWork(sw);
+		String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String subject = "Scientific work need to be revised";
+		String text = "Your scientific work \"" + sw.getTitle()
+				+ "\" needs to be revised so we could decide should we accept it or not!";
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		try {
 			id = reviewService.createNewReview(review);

@@ -11,4 +11,6 @@ public interface UserService {
 	public UserPub findByUsername(String username);
 	
 	public List<UserPub> getAllReviewers(String editorUsername);
+	
+	public String getEmailByUsername(String username);
 }
