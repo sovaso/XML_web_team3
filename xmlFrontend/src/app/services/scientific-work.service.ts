@@ -46,9 +46,8 @@ export class ScientificWorkService {
   }
 
   getUnreviewed(): Observable<ScientificWorkDto[]> {
-    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getUnreviewed`);
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/findAllForReviewing`);
   }
-
   getReviewed(): Observable<ScientificWorkDto[]> {
     return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getReviewed`);
   }
@@ -65,6 +64,16 @@ export class ScientificWorkService {
     return this.http.post<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/searchUnauthorized`, searchDto);
   }
 
+  deleteScientificWork(scientificWorkId : string): Observable<boolean> {
+    let res : Observable<boolean>;
+    try{
+      res = this.http.get<boolean>(`http://localhost:8000/scientificWork/withdrawScientificWork/${scientificWorkId}`);
+  }catch(e){
+    console.log('uslo u catch u servicu');
+    return null;
+  }
+
+    } 
   createCoverLetter(coverLetterDto: CoverLetterDto): Observable<Boolean> {
     console.log('create cover letter in service called');
     return this.http.post<CoverLetterDto>(`http://localhost:8000/coverLetter/create`, coverLetterDto).pipe(

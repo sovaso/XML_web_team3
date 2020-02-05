@@ -83,6 +83,12 @@ export class AllScientificWorksComponent implements OnInit {
 
   reset(){
     console.log('reset clicked');
+    this.author = '';
+    this.title = '';
+    this.someText = '';
+    this.scietificWorkService.getUnreviewed().subscribe(
+      works => (this.acceptedWorks = works)
+    )
   }
 
   open(work){
