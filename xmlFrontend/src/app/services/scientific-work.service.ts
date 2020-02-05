@@ -6,6 +6,7 @@ import { CoverLetterDto } from '../dto/CoverLetter.dto';
 import {MessageDto} from '../dto/MessageDto.dto'
 import { map } from 'rxjs/operators';
 import { IdDTO } from '../dto/IdDTO.dto';
+import { SearchDto } from '../dto/Search.dto';
 
 
 @Injectable({
@@ -50,6 +51,18 @@ export class ScientificWorkService {
 
   getReviewed(): Observable<ScientificWorkDto[]> {
     return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getReviewed`);
+  }
+
+  searchAuthorized(searchDto : SearchDto): Observable<ScientificWorkDto[]> {
+    return this.http.post<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/searchAuthorized`, searchDto);
+  }
+
+  searchMyWorks(searchDto : SearchDto): Observable<ScientificWorkDto[]> {
+    return this.http.post<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/searchMyWorks`, searchDto);
+  }
+
+  searchUnauthorized(searchDto : SearchDto): Observable<ScientificWorkDto[]> {
+    return this.http.post<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/searchUnauthorized`, searchDto);
   }
 
   createCoverLetter(coverLetterDto: CoverLetterDto): Observable<Boolean> {

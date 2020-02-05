@@ -52,6 +52,14 @@ export class MyWorksComponent implements OnInit {
 
   modalRef : any;
 
+  someText: string='';
+
+  author: string='';
+
+  title: string='';
+
+  searchDto : any;
+
   constructor(private modalService: NgbModal, public sharedService: SharedService, public scietificWorkService : ScientificWorkService) { }
 
   ngOnInit() {
@@ -64,6 +72,24 @@ export class MyWorksComponent implements OnInit {
     console.log('My works size');
     console.log(this.myWorks.length);
     console.log('search clicked');
+
+    if (this.title == '' && this.author == '' && this.someText == ''){
+      this.scietificWorkService.getAccepted().subscribe(works => (this.myWorks = works)); //added
+  
+    }else {
+
+      this.searchDto={
+        author: this.author,
+        title: this.title,
+        text: this.someText
+      };
+  
+      this.scietificWorkService.searchMyWorks(this.searchDto).subscribe(
+        works => (this.myWorks = works)
+      );
+     
+    }
+
   }
 
   reset(){

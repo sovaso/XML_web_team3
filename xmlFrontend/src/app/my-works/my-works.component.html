@@ -1,6 +1,10 @@
 <div class="container">
-    <input style="width: 150px;" type="text" id="field"  name="field" [(ngModel)]="field" placeholder="Enter text"
-     required autofocus/>
+    <input style="width: 150px;" type="text" id="author"  name="author" [(ngModel)]="author" placeholder="Author"
+    required autofocus/>
+    <input style="width: 150px; margin: 14px;" type="text" id="title"  name="title" [(ngModel)]="title" placeholder="Title"
+    required autofocus/>
+    <input style="width: 150px; margin: 14px;" type="text" id="someText"  name="someText" [(ngModel)]="someText" placeholder="Text"
+    required autofocus/>
      <button style="margin: 14px;" id = "search"class="btn btn-primary" (click)="search()">Search</button>
      <button id = "reset"class="btn btn-primary" (click)="reset()">Reset</button>
      <div *ngIf="message!==''">
