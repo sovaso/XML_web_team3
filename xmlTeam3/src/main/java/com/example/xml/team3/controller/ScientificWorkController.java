@@ -47,6 +47,15 @@ import com.example.xml.team3.util.XsltUtil;
 import com.example.xml.team3.util.Transformer.XSLFOTransformer;
 import com.example.xml.team3.util.jaxb.MarshallerUtil;
 
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 @RestController
 @RequestMapping(value = "/scientificWork")
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
@@ -75,6 +84,8 @@ public class ScientificWorkController {
 
 	@Autowired
 	UserService userService;
+	
+
 
 	private final String scientificWorkXsdPath = "src/main/resources/xsd/scientificWork.xsd";
 	private final String scientificWorkXslPath = "src/main/resources/xsl/scientificWork.xsl";
@@ -140,9 +151,17 @@ public class ScientificWorkController {
 		// retVal.setStatus(StatusType.ACCEPTED);
 		// header
 		retVal.setHeader(new ScientificWork.Header());
-		retVal.getHeader().setAccepted(null);
-		retVal.getHeader().setRevised(null);
-		retVal.getHeader().setReceived(null);
+		GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		DatatypeFactory datatypeFactory = null;
+		try {
+			datatypeFactory = DatatypeFactory.newInstance();
+		} catch (DatatypeConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		retVal.getHeader().setAccepted(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		retVal.getHeader().setReceived(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		retVal.getHeader().setRevised(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
 		IdDTO idDto = new IdDTO();
 		idDto.setResponse("");
 		String id = "";
@@ -410,12 +429,14 @@ public class ScientificWorkController {
 				HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
-	public ResponseEntity<ByteArrayResource> getHTML(@PathVariable String id) throws Exception {
+	@GetMapping(value = "/getByIdHTML/{id}")
+	public ResponseEntity<IdDTO> getHTML(@PathVariable String id) throws Exception {
 		ScientificWork scientificWork = scientificWorkService.findById(id);
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
-		xslfoTransformer.generateHTML(scientificWorkXML, scientificWorkXslPath);
-		return new ResponseEntity<>(new ByteArrayResource(scientificWorkXML.getBytes(StandardCharsets.UTF_8)),
+		IdDTO idDto=new IdDTO();
+		String swHtml=xslfoTransformer.generateHTML(scientificWorkXML, scientificWorkXslPath);
+		idDto.setResponse(swHtml);
+		return new ResponseEntity<>(idDto,
 				HttpStatus.OK);
 	}
 
@@ -453,12 +474,12 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		String senderMail = userService
-				.getEmailByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+//		String senderMail = userService
+//				.getEmailByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		String receiverMail = "vpantic10@gmail.com";
 		String subject = "Scientific work rejected";
 		String text = "Your scientific work \"" + sw.getTitle() + "\" has been rejected!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, "marina.vojnovic1997@gmail.com", receiverMail,
 				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);

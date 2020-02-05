@@ -65,7 +65,7 @@ public class WorkflowRepository {
 	}
 
 	public Workflow findById(String id) throws Exception {
-		String xQuery = "//workflow[@id=\"" + id + "\"" + "]";
+		String xQuery = "//workflow[id=\"" + id + "\"" + "]";
 		Workflow retVal = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(workflowCollectionId, xQuery,

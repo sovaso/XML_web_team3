@@ -68,7 +68,7 @@ public class ReviewRepository {
 	}
 
 	public Review findById(String id) throws Exception {
-		String xQuery = "//review[@id=\"" + id + "\"" + "]";
+		String xQuery = "//review[id=\"" + id + "\"" + "]";
 		Review retVal = null;
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(reviewCollectionId, xQuery,
