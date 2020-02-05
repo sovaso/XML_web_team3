@@ -7,6 +7,8 @@ import {MessageDto} from '../dto/MessageDto.dto'
 import { map } from 'rxjs/operators';
 import { IdDTO } from '../dto/IdDTO.dto';
 import { SearchDto } from '../dto/Search.dto';
+import {UserModelRegister} from '../model/user.model.register'
+import {PickedReviewerDTO} from '../dto/PickedReviewer.dto'
 
 
 @Injectable({
@@ -93,6 +95,25 @@ export class ScientificWorkService {
           return res;
       })  );
   }
+
+  getAllForEditor(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getAllForEditor`);
+  }
+
+  getAllReviewers(): Observable<UserModelRegister[]> {
+    return this.http.get<UserModelRegister[]>(`http://localhost:8000/user/getAllReviewers`);
+  }
+
+  pickedReviewer(pickedReviewerDTO: PickedReviewerDTO): Observable<Boolean> {
+    console.log('create cover letter in service called');
+    return this.http.post<CoverLetterDto>(`http://localhost:8000/scientificWork/pickedReviewer`, pickedReviewerDTO).pipe(
+      map( (res: any) => {
+          return res;
+      })  );
+    //console.log('create scientific work service called');
+   // return this.http.post<Boolean>(`http://localhost:8000/scientificWork/create`, scientificWorkDto);
+  }
+
   
 
   getById(idDto: IdDTO): Observable<IdDTO> {
@@ -101,6 +122,8 @@ export class ScientificWorkService {
       map( (res: any) => {
           return res;
       })  );
+
+
   }
   
 

@@ -24,7 +24,7 @@ export class MyWorksComponent implements OnInit {
     };
 
     //let content=this.content.nativeElement;
-    doc.fromHTML(this.htmlEl,15,15,{
+    doc.fromHTML(this.htmlEl.replace("text-align: center; font-weight: bold;","text-align: left; font-weight: bold;"),15,15,{
       'width':190,
       'elementHandlers': specialEventHandlers
     });
