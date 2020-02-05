@@ -33,7 +33,7 @@ export class MenuBarComponent implements OnInit {
     var registerReviewer: HTMLElement = document.getElementById('registerReviewer');
     var allScientificWorks : HTMLElement = document.getElementById('allScientificWorks');
     var forRevision : HTMLElement = document.getElementById('forRevision');
-
+    var worksToReview : HTMLElement = document.getElementById('worksToReview');
 
     if (this.currentUser != null) {
       if (this.currentUser.userRoleName === 'ROLE_UNAUTHORIZED') {
@@ -45,6 +45,7 @@ export class MenuBarComponent implements OnInit {
         reviewedWorks.hidden = true;
         registerEditor.hidden = true;
         registerReviewer.hidden = true;
+        worksToReview.hidden=true;
       
       } else if (this.currentUser.userRoleName === 'ROLE_AUTHOR') {
         console.log('AUTHOR LOGGED IN');
@@ -56,6 +57,7 @@ export class MenuBarComponent implements OnInit {
         registerEditor.hidden = true;
         registerReviewer.hidden = true;
         forRevision.hidden = false;
+        worksToReview.hidden=true;
       
     } else if (this.currentUser.userRoleName === 'ROLE_REVIEWER'){
         console.log('REVIEWER LOGGED IN');
@@ -67,6 +69,7 @@ export class MenuBarComponent implements OnInit {
         registerEditor.hidden = true;
         registerReviewer.hidden = true;
         forRevision.hidden = true;
+        worksToReview.hidden=false;
     }
     else if (this.currentUser.userRoleName === 'ROLE_EDITOR'){
       console.log('EDITOR LOGGED IN');
@@ -78,6 +81,7 @@ export class MenuBarComponent implements OnInit {
       registerEditor.hidden = false;
       registerReviewer.hidden = false;
       forRevision.hidden = true;
+      worksToReview.hidden=false;
     }
   }else {
     
@@ -89,6 +93,7 @@ export class MenuBarComponent implements OnInit {
       reviewedWorks.hidden = true;
       registerEditor.hidden = true;
       forRevision.hidden = true;
+      worksToReview.hidden=true;
   }
 
   

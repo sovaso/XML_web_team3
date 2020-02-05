@@ -43,8 +43,20 @@ export class ScientificWorkService {
     return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getAllPublished`);
   }
 
+  findAllWorksToReview(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/findAllForReviewing`);
+  }
+
   getMyWorks(): Observable<ScientificWorkDto[]> {
     return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/findAllForConcreteUser`);
+  }
+
+  acceptWork(scientificWorkId : string): Observable<boolean> {
+    return this.http.get<boolean>(`http://localhost:8000/scientificWork/acceptScientificWork/${scientificWorkId}`);
+  }
+
+  rejectWork(scientificWorkId : string): Observable<boolean> {
+    return this.http.get<boolean>(`http://localhost:8000/scientificWork/rejectScientificWork/${scientificWorkId}`);
   }
 
   getUnreviewed(): Observable<ScientificWorkDto[]> {

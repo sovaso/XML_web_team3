@@ -28,6 +28,7 @@ import { CanActivateAuthGuard } from './security/can-acitvate-auth.guard';
 import { AllScientificWorksComponent } from './all-scientific-works/all-scientific-works.component';
 import { OpenScientificWorkComponent } from './open-scientific-work/open-scientific-work.component';
 import { ForRevisionComponent } from './for-revision/for-revision.component';
+import { ReviewFormComponent } from './review-form/review-form.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ForRevisionComponent } from './for-revision/for-revision.component';
     RegisterReviewerComponent,
     AllScientificWorksComponent,
     OpenScientificWorkComponent,
-    ForRevisionComponent
+    ForRevisionComponent,
+    ReviewFormComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +73,8 @@ import { ForRevisionComponent } from './for-revision/for-revision.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    AlertBoxComponent
+    AlertBoxComponent,
+    ReviewFormComponent
   ]
 })
 export class AppModule { }
