@@ -70,6 +70,9 @@ export class MyWorksComponent implements OnInit {
 
   reset(){
     console.log('reset clicked');
+    this.author = '';
+    this.someText = '';
+    this.title = '';
   }
 
   open(work){
@@ -80,6 +83,24 @@ export class MyWorksComponent implements OnInit {
       //this.modalRef.componentInstance.event = data;
     });
     */
+  }
+
+  delete (work){
+    console.log('delete called');
+    console.log(work.scientificWorkId);
+
+    try{
+      this.scietificWorkService.deleteScientificWork(work.scientificWorkId).subscribe(
+        res => {
+          (console.log(res));
+          location.reload();
+        }
+      );
+    }catch(e){
+      console.log('uslo u catch blok u my works componentu');
+      location.reload();
+    }
+    
   }
 
 

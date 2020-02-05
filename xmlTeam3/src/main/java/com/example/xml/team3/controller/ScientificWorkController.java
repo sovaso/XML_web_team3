@@ -420,10 +420,12 @@ public class ScientificWorkController {
 
 	// PDF I HTML =========
 
-	@PutMapping(value = "/withdrawScientificWork")
-	public ResponseEntity<Boolean> withdrawScientificWork(@RequestBody String scientificWorkId) throws Exception {
+	@GetMapping(value = "/withdrawScientificWork/{scientificWorkId}")
+	public ResponseEntity<Boolean> withdrawScientificWork(@PathVariable String scientificWorkId) throws Exception {
+		System.out.println("Uslo u withdraw scientific work");
 		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
 		if (sw == null) {
+			System.out.println("Scientific work nije nadjen.");
 			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 		}
 		sw.setStatus(StatusType.WITHDRAWN);
