@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SharedService } from '../services/shared.service';
 import { ScientificWorkDto } from '../dto/ScientificWork.dto';
 import { CurrentUser } from '../model/currentUser.model';
 import { ScientificWorkService } from '../services/scientific-work.service';
+import * as jsPDF from 'jspdf';
+import { IdDTO } from '../dto/IdDTO.dto';
 
 @Component({
   selector: 'app-my-works',
@@ -11,6 +13,28 @@ import { ScientificWorkService } from '../services/scientific-work.service';
   styleUrls: ['./my-works.component.css']
 })
 export class MyWorksComponent implements OnInit {
+
+  //@ViewChild('content', {static: false}) content: ElementRef;
+  public getPdf(){
+    let doc=new jsPDF();
+    let specialEventHandlers={
+      '#editor': function(element,renderer){
+        return true;
+      }
+    };
+
+    //let content=this.content.nativeElement;
+    doc.fromHTML(this.htmlEl,15,15,{
+      'width':190,
+      'elementHandlers': specialEventHandlers
+    });
+    doc.save('test.pdf');
+
+
+  }
+
+  htmlEl: string='';
+  workForDownload: IdDTO;
 
   myWorks: ScientificWorkDto[] = [];
   
@@ -56,5 +80,32 @@ export class MyWorksComponent implements OnInit {
     */
   }
 
+  reject(work){
+    
+    this.scietificWorkService.reject(work.scientificWorkId).subscribe(
+      created => {
+        if(created==true){
+          alert("SENT EMAIL");
+        }else{
+          alert("SENT EMAIL NOT");
+        }
+    });
 
+  }
+
+  download(work){
+    this.workForDownload={
+      response: work.scientificWorkId
+    };
+    
+    this.scietificWorkService.getById(this.workForDownload).subscribe(
+      created => {
+        this.htmlEl=created.response;
+        alert(this.htmlEl);
+        this.getPdf();
+    });
+
+  }
+
+  
 }

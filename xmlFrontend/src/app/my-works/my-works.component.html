@@ -17,11 +17,15 @@
                  <!-- <ngb-tab *ngIf="event.id && event.name && event.type && event.status && event.locationInfo">  -->
                  <td>{{work.title}}</td>
                  <td>{{work.status}}</td>
-                 <td><button id = "button"class="btn btn-primary" (click)="open(work)">Open</button></td>
+                 <td><button id = "button"class="btn btn-primary" (click)="download(work)">Download</button></td>
+                 <td><button id = "reject"class="btn btn-primary" (click)="reject(work)">Reject</button></td>
                  <td *ngIf="work.status != 'accepted'"><button style="background-color: red;" id = "button"class="btn btn-primary" (click)="delete(work)">Delete</button></td>
              <!-- </ngb-tab> -->
              </tr>
          </tbody> 
      </table>
+     <!-- <div [innerHtml]="htmlEl" id="content" #content style = "visibility:hidden">
+
+     </div> -->
  <div>
  </div>
