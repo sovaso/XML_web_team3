@@ -18,7 +18,11 @@ export class AllScientificWorksComponent implements OnInit {
 
   activeTab: String;
 
-  field: string='';
+  someText: string='';
+
+  author: string='';
+
+  title: string='';
 
   loggedUser: CurrentUser;
 
@@ -29,6 +33,8 @@ export class AllScientificWorksComponent implements OnInit {
   modalOption: NgbModalOptions = {};
 
   modalRef : any;
+
+  searchDto : any;
 
   constructor(private modalService: NgbModal, public sharedService: SharedService, public scietificWorkService : ScientificWorkService) { }
 
@@ -50,9 +56,29 @@ export class AllScientificWorksComponent implements OnInit {
   }
 
   search(){
-    console.log('BROJ PRIHVACENIH RADOVA');
-    console.log(this.acceptedWorks.length);
-    console.log('search clicked');
+    console.log('SEARCH JE KLIKNUT');
+    console.log(this.title);
+    console.log(this.author);
+    console.log(this.someText);
+
+    if (this.title == '' && this.author == '' && this.someText == ''){
+      this.scietificWorkService.getAccepted().subscribe(works => (this.acceptedWorks = works)); //added
+  
+    }else {
+
+      this.searchDto={
+        author: this.author,
+        title: this.title,
+        text: this.someText
+      };
+  
+      this.scietificWorkService.searchUnauthorized(this.searchDto).subscribe(
+        works => (this.acceptedWorks = works)
+      );
+     
+    }
+
+    
   }
 
   reset(){

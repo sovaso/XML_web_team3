@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ import com.example.xml.team3.model.scientificwork.Paragraph;
 import com.example.xml.team3.model.scientificwork.ScientificWork;
 import com.example.xml.team3.model.scientificwork.ScientificWork.References;
 import com.example.xml.team3.model.scientificwork.StatusType;
+import com.example.xml.team3.model.user.UserPub;
 import com.example.xml.team3.model.workflow.Workflow;
 import com.example.xml.team3.service.MailService;
 import com.example.xml.team3.service.ReviewService;
@@ -652,7 +654,58 @@ public class ScientificWorkController {
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/searchAuthorized")
+	@PostMapping(value = "/searchMyWorks")
+	public ResponseEntity<List<ScientificWorkDTO>> searchMyWorks(@RequestBody SearchDTO searchDTO) {
+		System.out.println("Uslo u pretragu search my works");
+		List<ScientificWorkDTO> retVal = new ArrayList<>();
+		
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<ScientificWork> search = scientificWorkService.searchScientificWork(searchDTO, usernameCurrentUser);
+		for (ScientificWork scientificWork : search) {
+			// paragraf
+			List<String> paragraphsDTO = new ArrayList<String>();
+			for (Paragraph p : scientificWork.getParagraph()) {
+				paragraphsDTO.add(p.getText());
+			}
+			// heder
+			HeaderDTO headerDTO = new HeaderDTO("", "", "");
+			// title
+			String titleDTO = scientificWork.getTitle();
+			// autori
+			List<AuthorDTO> authorsDTO = new ArrayList<AuthorDTO>();
+			for (Author author : scientificWork.getAuthors().getAuthor()) {
+				authorsDTO.add(new AuthorDTO(author.getName(), author.getSurname(), author.getUniversity().getName(),
+						author.getUniversity().getAddress()));
+			}
+			// apstrakt
+			AbstractDTO abstractDTO = new AbstractDTO(scientificWork.getAbstract().getPurpose(),
+					scientificWork.getAbstract().getDesign(), scientificWork.getAbstract().getFindings(),
+					scientificWork.getAbstract().getLimitations(), scientificWork.getAbstract().getOriginality(),
+					scientificWork.getAbstract().getScientificWorkType(),
+					scientificWork.getAbstract().getKeywords().getKeyword());
+			// reference
+			List<ReferenceDTO> referenceDTO = new ArrayList<ReferenceDTO>();
+			if (scientificWork.getReferences() != null) {
+				for (References r : scientificWork.getReferences()) {
+					referenceDTO.add(new ReferenceDTO(r.getScientificWorkId()));
+				}
+			}
+
+			// komentari
+			List<String> commentsDTO = new ArrayList<String>();
+			commentsDTO.addAll(scientificWork.getComment());
+			// ubacivanje u listu
+
+			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
+					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
+		}
+		System.out.println("Find my works - dto size: " + retVal.size());
+
+
+		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
+	}
+	/*
+	@PostMapping(value = "/searchAuthorized")
 	public ResponseEntity<List<ScientificWorkDTO>> searchAuthorized(@RequestBody SearchDTO searchDTO) {
 		System.out.println("Uslo u pretragu kao registrovan");
 		List<ScientificWorkDTO> retVal = new ArrayList<>();
@@ -700,8 +753,8 @@ public class ScientificWorkController {
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
-
-	@GetMapping(value = "/searchUnauthorized")
+*/
+	@PostMapping(value = "/searchUnauthorized")
 	public ResponseEntity<List<ScientificWorkDTO>> searchUnauthorized(@RequestBody SearchDTO searchDTO) {
 		System.out.println("Uslo u pretragu kao neregistrovan");
 		List<ScientificWorkDTO> retVal = new ArrayList<>();
@@ -746,9 +799,12 @@ public class ScientificWorkController {
 			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
 					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 		}
-		System.out.println("Find my works - dto size: " + retVal.size());
+		System.out.println("Search result size: " + retVal.size());
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
+	
+	
+
 
 }

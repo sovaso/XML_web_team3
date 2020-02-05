@@ -343,20 +343,47 @@ public class ScientificWorkRepository {
 	public List<ScientificWork> searchScientificWork(SearchDTO searchDTO, String username) {
 		String xQuery = "";
 		if (username.equalsIgnoreCase("")) {
-			xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + " and ./abstract[descendant::*[contains(.,\""
-					+ searchDTO.getText() + "\")]] and ./paragraph[text[contains(.,\"" + searchDTO.getText() + "\")]] "
-					+ " and ./title[contains(.,\"" + searchDTO.getTitle() + "\"] and"
-					+ "contains(concat(./authors/author/name,\" \",./authors/author/surname),\"" + searchDTO.getAuthor()
+			xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + " and (./abstract[descendant::*[contains(text(),\""
+					+ searchDTO.getText() + "\")]] or ./paragraph[text[contains(text(),\"" + searchDTO.getText() + "\")]] "
+					+ ") and ./title[contains(text(),\"" + searchDTO.getTitle() + "\")] and"
+					+ " concat(./authors/author/name,\" \",./authors/author/surname)[contains(., \"" + searchDTO.getAuthor()
+					+ "\")]]";
+			
+			/*
+			 		xQuery = "//scientificWork[status=\"" + "ACCEPTED" + "\"" + " and (./abstract[descendant::*[contains(.,\""
+					+ searchDTO.getText() + "\")]] or ./paragraph[text[contains(.,\"" + searchDTO.getText() + "\")]] "
+					+ ") and ./title[contains(.,\"" + searchDTO.getTitle() + "\")] and"
+					+ " contains(concat(./authors/author/name,\" \",./authors/author/surname),\"" + searchDTO.getAuthor()
 					+ "\")]";
+			 */
 		} else {
+			
+			xQuery = "//scientificWork[./authors/author[@username=\"" + username + "\"]"
+					+ " and (./abstract[descendant::*[contains(text(),\""
+					+ searchDTO.getText() + "\")]] or ./paragraph[text[contains(text(),\"" + searchDTO.getText() + "\")]] "
+					+ ") and ./title[contains(text(),\"" + searchDTO.getTitle() + "\")] and"
+					+ " concat(./authors/author/name,\" \",./authors/author/surname)[contains(., \"" + searchDTO.getAuthor()
+					+ "\")]]";
+			
+			/*
+			
 			xQuery = "//scientificWork[(status=\"" + "ACCEPTED" + "\" or (not(status=\"" + "ACCEPTED" + "\")"
 					+ " and ./authors/author[@username=\"" + username + "\"]))"
 					+ " and ./abstract[descendant::*[contains(.,\"" + searchDTO.getText()
 					+ "\")]] and ./paragraph[text[contains(.,\"" + searchDTO.getText() + "\")]] "
-					+ " and ./title[contains(.,\"" + searchDTO.getTitle() + "\"] and"
+					+ " and ./title[contains(.,\"" + searchDTO.getTitle() + "\"] and "
 					+ "contains(concat(./authors/author/name,\" \",./authors/author/surname),\"" + searchDTO.getAuthor()
 					+ "\") and ]";
+		
+		*/
+		
+		
+		
 		}
+		
+		
+		
+		
 		List<ScientificWork> retVal = new ArrayList<>();
 		try {
 			ResourceSet result = ExistRetrieve.executeXPathExpression(scientificWorkCollectionId, xQuery,
