@@ -184,12 +184,23 @@ export class ScientificWorksComponent implements OnInit {
               console.log('Result of creating cover letter');
               console.log(res);
             });;
+
+            
           
             this.scientificWorkService.getById(created).subscribe(
               created => {
+
                 this.htmlEl=created;
+                const blob = new Blob([created], { type: 'text/html' }); 
+                var reader = new FileReader();
+                reader.onload = function() {
+                    alert(reader.result);
+                    console.log(reader.result);
+                }
+                reader.readAsText(blob);
+                
+                // Start reading the blob as text.  
                 console.log('Result of html');
-                console.log(this.htmlEl);
             });
             this.messageSuccess = 'Scientific work successfully added.';
           }
