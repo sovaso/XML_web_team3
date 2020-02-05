@@ -44,6 +44,7 @@ import com.example.xml.team3.service.ScientificWorkService;
 import com.example.xml.team3.service.UserService;
 import com.example.xml.team3.service.WorkflowService;
 import com.example.xml.team3.util.XsltUtil;
+import com.example.xml.team3.util.Transformer.XSLFOTransformer;
 import com.example.xml.team3.util.jaxb.MarshallerUtil;
 
 @RestController
@@ -62,6 +63,9 @@ public class ScientificWorkController {
 
 	@Autowired
 	XsltUtil xsltUtil;
+
+	@Autowired
+	XSLFOTransformer xslfoTransformer;
 
 	@Autowired
 	MarshallerUtil marshallerUtil;
@@ -396,12 +400,21 @@ public class ScientificWorkController {
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}
 
-	// PDF I HTML =========
+	// PDF I HTML I XML =========
+
+	@GetMapping(value = "/getByIdXML/{id}", produces = MediaType.TEXT_HTML_VALUE)
+	public ResponseEntity<ByteArrayResource> getXML(@PathVariable String id) throws Exception {
+		ScientificWork scientificWork = scientificWorkService.findById(id);
+		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
+		return new ResponseEntity<>(new ByteArrayResource(scientificWorkXML.getBytes(StandardCharsets.UTF_8)),
+				HttpStatus.OK);
+	}
 
 	@GetMapping(value = "/getByIdHTML/{id}", produces = MediaType.TEXT_HTML_VALUE)
 	public ResponseEntity<ByteArrayResource> getHTML(@PathVariable String id) throws Exception {
 		ScientificWork scientificWork = scientificWorkService.findById(id);
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
+		xslfoTransformer.generateHTML(scientificWorkXML, scientificWorkXslPath);
 		return new ResponseEntity<>(new ByteArrayResource(scientificWorkXML.getBytes(StandardCharsets.UTF_8)),
 				HttpStatus.OK);
 	}
