@@ -42,6 +42,7 @@ public class ReviewRepository {
 
 	public String save(Review review) throws Exception {
 		String Id = generateNewReviewId();
+		review.setId(Id);
 		String reviewXML = marshallerUtil.marshallReview(review);
 		ExistStore.store(reviewCollectionId, Id, reviewXML);
 		return Id;

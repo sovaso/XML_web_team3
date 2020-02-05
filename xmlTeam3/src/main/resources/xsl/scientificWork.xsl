@@ -35,7 +35,8 @@
 				</i>
 
 				<p style="text-align: center; font-weight: normal;">
-					<xsl:for-each select="sw:scientificWork/sw:authors/sw:author">
+					<xsl:for-each
+						select="sw:scientificWork/sw:authors/sw:author">
 						<i>
 							<xsl:value-of select="sw:name" />
 							&#xA0;
@@ -57,41 +58,41 @@
 				<p>
 					<b>Purpose&#xA0;&#xA0;</b>
 					<xsl:value-of
-						select="sw:university/sw:abstract/sw:purpose" />
+						select="sw:scientificWork/sw:abstract/sw:purpose" />
 					<br />
-					<b>Design/Methodology/Approach&#xA0;&#xA0;</b>
+					<b>Design&#xA0;&#xA0;</b>
 					<xsl:value-of
-						select="sw:university/sw:abstract/sw:design" />
+						select="sw:scientificWork/sw:abstract/sw:design" />
 					<br />
 					<b>Findings&#xA0;&#xA0;</b>
 					<xsl:value-of
-						select="sw:university/sw:abstract/sw:findings" />
+						select="sw:scientificWork/sw:abstract/sw:findings" />
 					<br />
-					<b>Research Limitations Implications&#xA0;&#xA0;</b>
+					<b>Limitations&#xA0;&#xA0;</b>
 					<xsl:value-of
-						select="sw:university/sw:abstract/sw:limitations" />
+						select="sw:scientificWork/sw:abstract/sw:limitations" />
 					<br />
-					<b>Originality Value&#xA0;&#xA0;</b>
+					<b>Originality&#xA0;&#xA0;</b>
 					<xsl:value-of
-						select="sw:university/sw:abstract/sw:originality" />
+						select="sw:scientificWork/sw:abstract/sw:originality" />
 					<br />
 					<b>Keywords&#xA0;&#xA0;</b>
 					<xsl:for-each
-						select="sw:university/sw:abstract/sw:keywords/sw:keyword">
+						select="sw:scientificWork/sw:abstract/sw:keywords/sw:keyword">
 						<xsl:if test="position()>1">
 							,
 						</xsl:if>
 						<xsl:value-of select="." />
 					</xsl:for-each>
 					<br />
-					<b>Paper Type&#xA0;&#xA0;</b>
+					<b>Scientific Work Type&#xA0;&#xA0;</b>
 					<xsl:value-of
-						select="sw:university/sw:abstract/sw:scientificWorkType" />
+						select="sw:scientificWork/sw:abstract/sw:scientificWorkType" />
 					<br />
 				</p>
 
 				<p style="text-align: center; font-weight: normal;">
-					<xsl:for-each select="sw:university/sw:paragraph">
+					<xsl:for-each select="sw:scientificWork/sw:paragraph">
 						<i>
 							<xsl:value-of select="sw:text" />
 						</i>
@@ -102,7 +103,7 @@
 
 				<b style="font-size: 30px;">References</b>
 				<ul style="list-style: none; padding: 0; margin: 0;">
-					<xsl:for-each select="sw:university/sw:references">
+					<xsl:for-each select="sw:scientificWork/sw:references">
 						<li>
 							<xsl:value-of select="sw:scientificWorkId" />
 						</li>
