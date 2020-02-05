@@ -72,6 +72,10 @@ export class UnreviewedWorksComponent implements OnInit {
 
   pickedReviewerDTO: PickedReviewerDTO;
 
+  scientificWorkId : string = '';
+
+  selectedReviewer : any;
+
   constructor(private modalService: NgbModal, public sharedService: SharedService, public scietificWorkService : ScientificWorkService) { }
 
   ngOnInit() {
@@ -81,8 +85,32 @@ export class UnreviewedWorksComponent implements OnInit {
    
   }
 
-  printaj(){
-    console.log("PRINTAJ "+this.parametar);
+  submitReviewer(work){
+    console.log("PRINTAJ "+work.scientificWorkId);
+    this.scientificWorkId = work.scientificWorkId;
+    console.log('parametar');
+    console.log(this.parametar);
+    console.log('Reviewers size');
+    console.log(this.allReviewers.length)
+    console.log('Selected reviewer size');
+    console.log(this.selectedReviewer.username);
+
+    let pickedReviewer : PickedReviewerDTO = {
+      editorUsername: '',
+      reviewerUsername: this.selectedReviewer.username,
+      scientificWorkId: this.scientificWorkId,
+
+    }
+
+    this.scietificWorkService.pickedReviewer(pickedReviewer).subscribe(
+      res => {
+        console.log('Result from submit user in component');
+       console.log(res);
+       location.reload();
+      }
+      
+    )
+   
   }
 
   reset(){

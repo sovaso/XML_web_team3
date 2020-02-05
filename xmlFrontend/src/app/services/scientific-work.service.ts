@@ -117,7 +117,7 @@ export class ScientificWorkService {
   }
 
   pickedReviewer(pickedReviewerDTO: PickedReviewerDTO): Observable<Boolean> {
-    console.log('create cover letter in service called');
+    console.log('picking reviewer in service called');
     return this.http.post<CoverLetterDto>(`http://localhost:8000/scientificWork/pickedReviewer`, pickedReviewerDTO).pipe(
       map( (res: any) => {
           return res;

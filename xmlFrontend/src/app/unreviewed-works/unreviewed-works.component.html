@@ -23,14 +23,33 @@
                  <td *ngIf="work.status != 'rejected'">{{work.status}}</td>
                  <td *ngIf="work.status != 'rejected'"><button id = "button"class="btn btn-primary" (click)="download(work)">Download</button></td>
                  <td *ngIf="work.status != 'accepted' && work.status != 'rejected'"><button style="background-color: red;" id = "reject"class="btn btn-primary" (click)="reject(work)">Reject</button></td>
+                <td *ngIf="work.status != 'accepted' && work.status != 'reviewing'">
+                  <select  [(ngModel)] = "selectedReviewer">
+                    <option [ngValue]="reviewer" *ngFor="let reviewer of allReviewers">{{reviewer.name}}</option>
+                  </select>
+                   
+                  
+                    <!--      <select  id="reviewers">
+                            <div *ngFor="let reviewer of allReviewers" >
+                            <option [ngValue]=" review.username">{{work.status}} {{review.surname}} 
+                                *ngIf="work.status=='submitted'
+                                </option>
+                                <option>opcija</option>
+                            </div>
+                        </select>  
+                     -->
+                   
 
-                 <div>
-                    <select name={{work.scientificWorkId}} id="reviewers" [(ngModel)]="parametar" *ngIf="work.status=='submitted'">
-                            <option [ngValue]={{work.scientificWorkId}} +" review.username">{{work.status}} {{review.surname}}
-                            </option>
-                    </select> 
-                    <button id = "printa"class="btn btn-primary" (click)="printaj()">Printaj</button>
-                 </div>
+                    <!-- <td>
+                        <tr *ngFor="let author of work.authorsDTO">
+                             {{author.name}} 
+                             {{" "}}
+                             {{author.surname}}
+                        </tr> 
+                    </td> -->
+                </td>
+                <td *ngIf="selectedReviewer != undefined"><button id = "printa" class="btn btn-primary" (click)="submitReviewer(work)">Submit reviewer</button></td>
+                
                  
              <!-- </ngb-tab> -->
              </tr>

@@ -701,9 +701,12 @@ public class ScientificWorkController {
 
 	@PostMapping(value = "/pickedReviewer")
 	public ResponseEntity<Boolean> pickedReviewer(@RequestBody PickedReviewerDTO pickedReviewerDTO) throws Exception {
+		
+		System.out.println("PICKED REVIEWER CALLED");
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(pickedReviewerDTO.getScientificWorkId());
 		Workflow w = workflowService.findById(workflowId);
-		w.setEditorUsername(pickedReviewerDTO.getEditorUsername());
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		w.setEditorUsername(usernameCurrentUser);
 		w.setReviewerUsername(pickedReviewerDTO.getReviewerUsername());
 		workflowService.updateWorkflow(workflowId, w);
 		String scientificWorkId = pickedReviewerDTO.getScientificWorkId();
@@ -714,11 +717,11 @@ public class ScientificWorkController {
 		sw.setStatus(StatusType.REVIEWING);
 		// slanje mejla
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		String senderMail = userService.getEmailByUsername(w.getEditorUsername());
-		String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		//String senderMail = userService.getEmailByUsername(w.getEditorUsername());
+		//String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
 		String subject = "Scientific work reviewing";
 		String text = "Scientific work \"" + sw.getTitle() + "\" has been granted to you to review!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com",
 				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);

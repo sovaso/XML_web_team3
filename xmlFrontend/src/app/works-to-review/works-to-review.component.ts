@@ -54,6 +54,7 @@ export class WorksToReviewComponent implements OnInit {
   }
 
   openModal(){
+    /*
     const modalRef = this.modalService.open(ReviewFormComponent);
     let workDto : ScientificWorkDto;
     let keywordss: string[]=[];
@@ -93,6 +94,7 @@ export class WorksToReviewComponent implements OnInit {
       status: 'submitted'
     };
     modalRef.componentInstance.scientificWork = workDto;
+    */
   }
 
   addReviewer(work){

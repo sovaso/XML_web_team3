@@ -59,6 +59,8 @@ public class UserController {
 
 	@GetMapping(value = "/getAllReviewers")
 	public ResponseEntity<List<RegisterDTO>> getAllReviewers() {
+		System.out.println("========Uslo u get all reviewers=========");
+	
 		List<RegisterDTO> retVal = new ArrayList<>();
 		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<UserPub> allForReviewing = userService.getAllReviewers(usernameCurrentUser);
@@ -71,6 +73,7 @@ public class UserController {
 			r.setRole("ROLE_REVIEWER");
 			retVal.add(r);
 		}
+		System.out.println("====== "+retVal.size());
 		return new ResponseEntity<List<RegisterDTO>>(retVal, HttpStatus.OK);
 	}
 }
