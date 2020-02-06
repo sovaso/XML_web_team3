@@ -1,11 +1,19 @@
 package com.example.xml.team3.util.Template;
 
 import org.exist.xupdate.XUpdateProcessor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class XUpdateTemplate {
 
+	public String getUpdateTemplate(String model) {
+		return "<xu:modifications version=\"1.0\" xmlns:xu=\"" + XUpdateProcessor.XUPDATE_NS + "\" xmlns=\""
+				+ TARGET_NAMESPACE + "/" + model + "\">" + "<xu:update select=\"%1$s\">%2$s</xu:update>"
+				+ "</xu:modifications>";
+	}
+
 	public static final String TARGET_NAMESPACE = "http://ftn.uns.ac.rs/team3";
-	
+
 	/*
 	 * There are two instructions in XUpdate that support insertion of nodes:
 	 * xupdate:insert-before and xupdate:insert-after. Both elements have a required

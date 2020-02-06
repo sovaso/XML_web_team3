@@ -47,6 +47,9 @@ public class ScientificWorkRepository {
 	@Autowired
 	ReviewRepository reviewRepository;
 
+	@Autowired
+	XUpdateTemplate xUpdateTemplate;
+
 	public static String scientificWorkCollectionId = "/db/team3/scientificWork";
 	public static String workflowCollectionId = "/db/team3/workflow";
 	public static String scientificWorkSchemaPath = "src/main/resources/xsd/scientificWork.xsd";
@@ -72,19 +75,20 @@ public class ScientificWorkRepository {
 
 	public String update(String id, ScientificWork scientificWork) throws Exception {
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		System.out.println("Id in scientific work repository: "+id);
-		System.out.println("Title in scentific work: "+scientificWork.getTitle());
+		System.out.println("Id in scientific work repository: " + id);
+		System.out.println("Title in scentific work: " + scientificWork.getTitle());
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		ScientificWork oldScientificWork = this.findById(id);
-		if (oldScientificWork == null) {
-			System.out.println("Scientific work je null");
-			throw new Exception("There is no scientific work with this id");
-		}
+		/*
+		 * ScientificWork oldScientificWork = this.findById(id); if (oldScientificWork
+		 * == null) { System.out.println("Scientific work je null"); throw new
+		 * Exception("There is no scientific work with this id"); }
+		 */
 		System.out.println("Pre delete in repository");
-		this.delete(id);
+		// this.delete(id);
 		System.out.println("Posle delete in repository");
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
-		ExistStore.store(scientificWorkCollectionId, id, scientificWorkXML);
+		ExistUpdate.update(scientificWorkCollectionId, id, "/scientificWork", scientificWorkXML,
+				xUpdateTemplate.getUpdateTemplate("scientificWork"));
 		return id;
 	}
 
