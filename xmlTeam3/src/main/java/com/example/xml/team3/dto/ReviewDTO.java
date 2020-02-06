@@ -5,7 +5,7 @@ import java.util.List;
 public class ReviewDTO {
 	List<CommentDTO> comments;
 	GradeDTO grades;
-	String workflowId;
+	String scientificWorkId;
 	String summaryComment;
 	String reviewId;
 
@@ -25,12 +25,12 @@ public class ReviewDTO {
 		this.grades = grades;
 	}
 
-	public String getWorkflowId() {
-		return workflowId;
+	public String getScientificWorkId() {
+		return scientificWorkId;
 	}
 
-	public void setWorkflowId(String workflowId) {
-		this.workflowId = workflowId;
+	public void setScientificWorkId(String workflowId) {
+		this.scientificWorkId = workflowId;
 	}
 
 	public String getSummaryComment() {
@@ -49,12 +49,12 @@ public class ReviewDTO {
 		this.reviewId = reviewId;
 	}
 
-	public ReviewDTO(List<CommentDTO> comments, GradeDTO grades, String workflowId, String summaryComment,
+	public ReviewDTO(List<CommentDTO> comments, GradeDTO grades, String scientificWorkId, String summaryComment,
 			String reviewId) {
 		super();
 		this.comments = comments;
 		this.grades = grades;
-		this.workflowId = workflowId;
+		this.scientificWorkId = scientificWorkId;
 		this.summaryComment = summaryComment;
 		this.reviewId = reviewId;
 	}

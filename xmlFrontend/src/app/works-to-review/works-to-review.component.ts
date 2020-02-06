@@ -138,6 +138,7 @@ export class WorksToReviewComponent implements OnInit {
     console.log('Make a review called');
     console.log(work.scientificWorkId);
     const modalRef = this.modalService.open(ReviewFormComponent);
+    modalRef.componentInstance.scientificWork = work;
   }
 
 }

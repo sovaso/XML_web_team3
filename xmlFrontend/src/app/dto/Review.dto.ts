@@ -5,7 +5,7 @@ export interface ReviewDTO{
 
     comments : Array<CommentDTO>;
     grades : GradeDTO;
-    workflowId : string;
+    scientificWorkId : string;
     summaryComment : string;
     reviewedId : string;
 }

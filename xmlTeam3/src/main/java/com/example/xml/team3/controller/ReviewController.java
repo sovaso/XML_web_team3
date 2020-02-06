@@ -83,12 +83,12 @@ public class ReviewController {
 		grades.setUniqueness(reviewDTO.getGrades().getUniqueness());
 		review.setGrades(grades);
 		// workflowID
-		review.setWorkflowId(reviewDTO.getWorkflowId());
+		review.setWorkflowId(reviewService.getWorkflowIdByScientificWorkId(reviewDTO.getScientificWorkId()));
 		// summary komentar
 		review.setSummaryComment(reviewDTO.getSummaryComment());
 		String id = "";
 		// updatovati scientificWOrk
-		String scientificWorkId = workflowService.findById(reviewDTO.getWorkflowId()).getScientificWorkId();
+		String scientificWorkId = reviewDTO.getScientificWorkId();
 		ScientificWork sw = scientificWorkService.findById(scientificWorkId);
 		sw.setStatus(StatusType.REVISING);
 		// slanje mejla
@@ -100,7 +100,13 @@ public class ReviewController {
 		String subject = "Scientific work need to be revised";
 		String text = "Your scientific work \"" + sw.getTitle()
 				+ "\" needs to be revised so we could decide should we accept it or not!";
-		mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
+		//mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
+		
+		System.out.println("********************************************************");
+		System.out.println("Scientific work id in review controller");
+		System.out.println(scientificWorkId);
+		System.out.println("Scientific work title from scientific work");
+		System.out.println("********************************************************");
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		try {
 			id = reviewService.createNewReview(review);

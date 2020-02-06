@@ -28,7 +28,7 @@ public class ScientificWorkServiceImpl implements ScientificWorkService {
 		return scientificWorkRepository.findById(id);
 	}
 
-	public String updateScientificWork(String id, ScientificWork scientificWork) throws Exception {
+	public String updateScientificWork(String id, ScientificWork scientificWork) throws Exception{
 		return scientificWorkRepository.update(id, scientificWork);
 	}
 

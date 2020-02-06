@@ -1,7 +1,7 @@
 export interface GradeDTO{
     uniqueness : number;
 	keywords : number;
-	absract : number;
+	abstract : number;
 	conclusions : number;
 	experiments : number;
 	layout : number;
