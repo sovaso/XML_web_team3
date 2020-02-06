@@ -79,8 +79,8 @@ export class HeaderComponent implements OnInit {
   logout() {
     //this.AuthenticationService.logout();
     localStorage.removeItem('currentUser');
-    location.reload();
-    this.router.navigate(['/dashboard']); 
+    //location.reload(); 
+    this.router.navigate(['/'])
     
   }
 

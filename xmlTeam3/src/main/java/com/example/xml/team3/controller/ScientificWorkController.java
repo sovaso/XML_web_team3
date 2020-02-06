@@ -256,14 +256,14 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(retVal.getId());
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(retVal);
-		//String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
-		//String senderMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String senderMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work has been revised";
 		String text = "My scientific work \"" + retVal.getTitle() + "\" has just been revised!";
 		
 		try {
 			
-			mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com",
+			mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
 					subject, text);
 		}catch(Exception e) {
 			System.out.println("Neki sasvim validan izuzetak");
@@ -535,11 +535,13 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		//String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String usernameCurrentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+		String senderMail = userService.getEmailByUsername(usernameCurrentUser);
 		String subject = "Scientific work rejected";
 		String text = "Your scientific work \"" + sw.getTitle() + "\" has been rejected!";
 		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML,
-				"marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
+				senderMail, receiverMail, subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
@@ -565,11 +567,11 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		//String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
-		//String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work accepted";
 		String text = "Your scientific work \"" + sw.getTitle() + "\" has been accepted and will be published!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com",
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
 				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
@@ -740,11 +742,14 @@ public class ScientificWorkController {
 		sw.setStatus(StatusType.REVIEWING);
 		// slanje mejla
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		//String senderMail = userService.getEmailByUsername(w.getEditorUsername());
-		//String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String senderMail = userService.getEmailByUsername(w.getEditorUsername());
+		String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		System.out.println("Sender and receiver mail");
+		System.out.println(senderMail);
+		System.out.println(receiverMail);
 		String subject = "Scientific work reviewing";
 		String text = "Scientific work \"" + sw.getTitle() + "\" has been granted to you to review!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com",
+		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
 				subject, text);
 		scientificWorkService.updateScientificWork(scientificWorkId, sw);
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);

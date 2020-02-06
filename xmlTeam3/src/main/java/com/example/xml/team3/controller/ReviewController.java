@@ -96,13 +96,13 @@ public class ReviewController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(scientificWorkId);
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(sw);
-		//String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
-		//String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
+		String senderMail = userService.getEmailByUsername(w.getReviewerUsername());
+		String receiverMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work need to be revised";
 		String text = "Your scientific work \"" + sw.getTitle()
 				+ "\" needs to be revised so we could decide should we accept it or not!";
 		try {
-			mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
+			mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, senderMail, receiverMail, subject, text);
 			
 		}catch(Exception e) {
 			System.out.println("Neki sasvim validan izuzetak");
