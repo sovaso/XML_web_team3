@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,7 +101,12 @@ public class ReviewController {
 		String subject = "Scientific work need to be revised";
 		String text = "Your scientific work \"" + sw.getTitle()
 				+ "\" needs to be revised so we could decide should we accept it or not!";
-		//mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
+		try {
+			mailService.sendMailNotification(reviewXsdPath, reviewXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com", subject, text);
+			
+		}catch(Exception e) {
+			System.out.println("Neki sasvim validan izuzetak");
+		}
 		
 		System.out.println("********************************************************");
 		System.out.println("Scientific work id in review controller");
@@ -154,8 +160,9 @@ public class ReviewController {
 		return new ResponseEntity<ReviewDTO>(retVal, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/getAllByScientificWorkId")
-	public ResponseEntity<List<ReviewDTO>> getAllByScientificWorkId(@RequestBody String scientificWorkId) {
+	@GetMapping(value = "/getAllByScientificWorkId/{scientificWorkId}")
+	public ResponseEntity<List<ReviewDTO>> getAllByScientificWorkId(@PathVariable String scientificWorkId) {
+		System.out.println("Uslo u get all by scientific work id");
 		List<Review> reviewList = new ArrayList<Review>();
 		List<ReviewDTO> retValList = new ArrayList<ReviewDTO>();
 		try {

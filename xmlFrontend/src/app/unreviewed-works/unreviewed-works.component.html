@@ -19,11 +19,11 @@
          <tbody>
              <tr *ngFor="let work of forReviewing;let index;" >
                  <!-- <ngb-tab *ngIf="event.id && event.name && event.type && event.status && event.locationInfo">  -->
-                 <td *ngIf="work.status != 'rejected' && work.status != 'revising'">{{work.title}}</td>
-                 <td *ngIf="work.status != 'rejected' && work.status != 'revising'">{{work.status}}</td>
-                 <td *ngIf="work.status != 'rejected' && work.status != 'revising'"><button id = "button"class="btn btn-primary" (click)="download(work)">Download</button></td>
-                 <td *ngIf="work.status != 'accepted' && work.status != 'rejected' && work.status != 'revising'"><button style="background-color: red;" id = "reject"class="btn btn-primary" (click)="reject(work)">Reject</button></td>
-                <td *ngIf="work.status != 'accepted' && work.status != 'reviewing' && work.status != 'revising'">
+                 <td *ngIf="work.status != 'rejected'">{{work.title}}</td>
+                 <td *ngIf="work.status != 'rejected'">{{work.status}}</td>
+                 <td *ngIf="work.status != 'rejected'"><button id = "button"class="btn btn-primary" (click)="download(work)">Download</button></td>
+                 <td *ngIf="work.status != 'accepted' && work.status != 'rejected'"><button style="background-color: red;" id = "reject"class="btn btn-primary" (click)="reject(work)">Reject</button></td>
+                <td *ngIf="work.status != 'accepted' && work.status != 'reviewing'">
                   <select  [(ngModel)] = "selectedReviewer">
                     <option [ngValue]="reviewer" *ngFor="let reviewer of allReviewers">{{reviewer.name}}</option>
                   </select>

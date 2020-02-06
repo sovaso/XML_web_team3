@@ -1,0 +1,55 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <form class="form-signin">
+          <h1 class="form-signin-heading">Review</h1>
+          <h2>{{scientificWork.title}}</h2>
+          <h2 *ngFor="let author of scientificWork.authorsDTO">
+            {{author.name}} {{" "}} {{author.surname}}
+          </h2>
+
+        
+          <span><b>Purpose: </b><textarea id="purpose" class="form-control" name="purpose" [(ngModel)]="scientificWork.abstractDTO.purpose" rows="1" cols="50" placeholder="Enter purpose"></textarea></span> 
+          <span><b>Design: </b><textarea id="design" class="form-control" name="design" [(ngModel)]="scientificWork.abstractDTO.design" rows="1" cols="50" placeholder="Enter design"></textarea></span> 
+          <span><b>Findings: </b><textarea id="findings" class="form-control" name="findings" [(ngModel)]="scientificWork.abstractDTO.findings" rows="1" cols="50" placeholder="Enter findings"></textarea></span> 
+          <span><b>Limitations: </b><textarea id="limitations" class="form-control" name="limitations" [(ngModel)]="scientificWork.abstractDTO.limitations" rows="1" cols="50" placeholder="Enter limitations"></textarea></span> 
+          <span><b>Originality: </b><textarea id="purpose" class="form-control" name="purpose" [(ngModel)]="scientificWork.abstractDTO.originality" rows="1" cols="50" placeholder="Enter originality"></textarea></span> 
+          <span><b>Type: </b><textarea id="type" class="form-control" name="type" [(ngModel)]="scientificWork.abstractDTO.type" rows="1" cols="50" placeholder="Enter type"></textarea></span> 
+          <br>
+          <p *ngFor="let parag of scientificWork.paragraphs; let i = index" [attr.data-index]="i">
+              <textarea class="form-control" name="paragraph"  rows="4" cols="50" placeholder="Paragraph">{{parag}}</textarea>
+            <textarea readonly class="form-control" name="comment"  rows="4" cols="50" placeholder="Comment">{{comments[i].value}}</textarea>
+        </p>
+
+        <textarea readonly [(ngModel)]="theReview.summaryComment" class="form-control" name="summaryContent"  rows="4" cols="50" placeholder="Summary content"></textarea>
+
+
+        <p><b>General grades</b></p>
+        <p>uniqueness: {{theReview.grades.uniqueness}}</p>
+        <p>keywords: {{theReview.grades.keywords}}</p>
+        <p>conclusions: {{theReview.grades.conclusions}}</p>
+        <p>experiments: {{theReview.grades.experiments}}</p>
+        <p>layout: {{theReview.grades.layout}}</p>
+        <p>formality: {{theReview.grades.formality}}</p>
+        <p>generalGrade: {{theReview.grades.generalGrade}}</p>
+        <p>references: {{theReview.grades.references}}</p>
+        <p>references: {{theReview.grades.references}}</p>
+        <button (click)="submitWork()" class="btn btn-primary btn-block">Submit</button>
+        
+      <!--     <p *ngFor="let comment of scientificWork.comments; let i = index" [attr.data-index]="i"></p>
+            
+        </p> -->      
+        </form>
+  
+         <div *ngIf="message!==''">
+            <ngb-alert [type]="type" >{{message}}</ngb-alert>  
+          
+        </div>
+      </div>
+     
+      <div class="col-md-3"></div>
+    </div>
+  </div>
+
+

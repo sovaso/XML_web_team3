@@ -224,7 +224,7 @@ public class ScientificWorkRepository {
 	}
 
 	public List<ScientificWork> findAllForRevision(String username) {
-		String xQuery = "//scientificWork[status=\"" + "REVISION" + "\"" + " and ./authors/author[@username=\""
+		String xQuery = "//scientificWork[status=\"" + "REVISING" + "\"" + " and ./authors/author[@username=\""
 				+ username + "\"]]";
 		List<ScientificWork> retVal = new ArrayList<>();
 		try {
@@ -339,9 +339,12 @@ public class ScientificWorkRepository {
 					Workflow w = new Workflow();
 					w = unmarshallerUtil.unmarshallWorkflow(((XMLResource) res).getContent().toString());
 					ScientificWork sw = this.findById(w.getScientificWorkId());
-					if (sw.getStatus() == StatusType.REVIEWING) {
-						retVal.add(sw);
+					if (sw!=null) {
+						if (sw.getStatus() == StatusType.REVIEWING) {
+							retVal.add(sw);
+						}
 					}
+					
 					// break;
 				} finally {
 					try {

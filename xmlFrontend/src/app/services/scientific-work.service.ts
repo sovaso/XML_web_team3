@@ -109,14 +109,27 @@ export class ScientificWorkService {
     return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/getAllForEditor`);
   }
 
+  
+  updateScientificWork(scientificWork : ScientificWorkDto): Observable<ScientificWorkDto[]> {
+    return this.http.put<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/revisingScientificWork`, scientificWork);
+  }
+
   getAllReviewers(): Observable<UserModelRegister[]> {
     return this.http.get<UserModelRegister[]>(`http://localhost:8000/user/getAllReviewers`);
+  }
+
+  findAllForRevision(): Observable<ScientificWorkDto[]> {
+    return this.http.get<ScientificWorkDto[]>(`http://localhost:8000/scientificWork/findAllForRevision`);
   }
 
   sendReview(reviewDto : ReviewDTO): Observable<Boolean> {
     return this.http.post<Boolean>(`http://localhost:8000/review/sendReview`, reviewDto);
   }
 
+  getReviewsByScientificWorkId(scientificWorkId : string): Observable<ReviewDTO[]> {
+    console.log('get reviews from scientific work id called');
+    return this.http.get<ReviewDTO[]>(`http://localhost:8000/review/getAllByScientificWorkId/${scientificWorkId}`);
+  }
   pickedReviewer(pickedReviewerDTO: PickedReviewerDTO): Observable<Boolean> {
     console.log('picking reviewer in service called');
     return this.http.post<CoverLetterDto>(`http://localhost:8000/scientificWork/pickedReviewer`, pickedReviewerDTO).pipe(

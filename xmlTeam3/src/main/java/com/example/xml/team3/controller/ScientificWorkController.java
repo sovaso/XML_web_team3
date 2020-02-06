@@ -166,9 +166,10 @@ public class ScientificWorkController {
 	}
 
 	@PutMapping(value = "/revisingScientificWork")
-	public ResponseEntity<IdDTO> revisingScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO)
+	public ResponseEntity<Boolean> revisingScientificWork(@RequestBody ScientificWorkDTO scientificWorkDTO)
 			throws Exception {
-
+		System.out.println("*******");
+		System.out.println("Update scientific work called");
 		ScientificWork retVal = null;
 		try {
 			retVal = scientificWorkService.findById(scientificWorkDTO.getScientificWorkId());
@@ -178,7 +179,7 @@ public class ScientificWorkController {
 		}
 		// title
 		if (retVal == null) {
-			return new ResponseEntity<IdDTO>(new IdDTO("-1"), HttpStatus.OK);
+			return new ResponseEntity<Boolean>(false, HttpStatus.OK);
 		}
 		retVal.setTitle(scientificWorkDTO.getTitle());
 		// paragraf
@@ -231,9 +232,23 @@ public class ScientificWorkController {
 		// retVal.setStatus(StatusType.ACCEPTED);
 		// header
 		retVal.setHeader(new ScientificWork.Header());
-		retVal.getHeader().setAccepted(null);
-		retVal.getHeader().setRevised(null);
-		retVal.getHeader().setReceived(null);
+		
+		
+		
+		GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		DatatypeFactory datatypeFactory = null;
+		try {
+			datatypeFactory = DatatypeFactory.newInstance();
+		} catch (DatatypeConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		retVal.getHeader().setAccepted(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		retVal.getHeader().setReceived(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		retVal.getHeader().setRevised(datatypeFactory.newXMLGregorianCalendar(gregorianCalendar));
+		
+		
+		
 		IdDTO idDto = new IdDTO();
 		idDto.setResponse("");
 		String id = "";
@@ -241,21 +256,28 @@ public class ScientificWorkController {
 		String workflowId = reviewService.getWorkflowIdByScientificWorkId(retVal.getId());
 		Workflow w = workflowService.findById(workflowId);
 		String swXML = marshallerUtil.marshallScientificWork(retVal);
-		String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
-		String senderMail = userService.getEmailByUsername(w.getAuthorUsername());
+		//String receiverMail = userService.getEmailByUsername(w.getReviewerUsername());
+		//String senderMail = userService.getEmailByUsername(w.getAuthorUsername());
 		String subject = "Scientific work has been revised";
 		String text = "My scientific work \"" + retVal.getTitle() + "\" has just been revised!";
-		mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, senderMail, receiverMail,
-				subject, text);
+		
+		try {
+			
+			mailService.sendMailNotification(scientificWorkXsdPath, scientificWorkXslPath, swXML, "marina.vojnovic1997@gmail.com", "vpantic10@gmail.com",
+					subject, text);
+		}catch(Exception e) {
+			System.out.println("Neki sasvim validan izuzetak");
+		}
+	
 		try {
 			id = scientificWorkService.updateScientificWork(scientificWorkDTO.getScientificWorkId(), retVal);
 			idDto.setResponse(id);
 			// System.out.println("ID ============= "+id);
-			return new ResponseEntity<IdDTO>(idDto, HttpStatus.OK);
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println("Uhvacen exception, treba da se vrati false");
 
-			return new ResponseEntity<IdDTO>(idDto, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -592,12 +614,13 @@ public class ScientificWorkController {
 			// komentari
 			List<String> commentsDTO = new ArrayList<String>();
 			commentsDTO.addAll(scientificWork.getComment());
+			
 			// ubacivanje u listu
 
 			retVal.add(new ScientificWorkDTO(scientificWork.getId(), headerDTO, titleDTO, authorsDTO, abstractDTO,
 					paragraphsDTO, referenceDTO, commentsDTO, scientificWork.getStatus().toString().toLowerCase()));
 		}
-		System.out.println("Find my works - dto size: " + retVal.size());
+		System.out.println("FIND MY WORKS FOR REVISION SIZE: " + retVal.size());
 
 		return new ResponseEntity<List<ScientificWorkDTO>>(retVal, HttpStatus.OK);
 	}

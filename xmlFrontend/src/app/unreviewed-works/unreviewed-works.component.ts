@@ -192,6 +192,7 @@ export class UnreviewedWorksComponent implements OnInit {
   }
 
   download(work){
+    console.log('uslo u download works');
     this.workForDownload={
       response: work.scientificWorkId
     };

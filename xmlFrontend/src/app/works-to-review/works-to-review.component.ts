@@ -7,12 +7,40 @@ import {ScientificWorkService} from '../services/scientific-work.service';
 import { ReviewFormComponent } from '../review-form/review-form.component';
 import { AbstractDto } from '../dto/Abstract.dto';
 import {AuthorDto} from 'src/app/dto/Author.dto';
+import * as jsPDF from 'jspdf';
+
+import { IdDTO } from '../dto/IdDTO.dto';
 @Component({
   selector: 'app-works-to-review.',
   templateUrl: './works-to-review.component.html',
   styleUrls: ['./works-to-review.component.css']
 })
 export class WorksToReviewComponent implements OnInit {
+
+
+  public getPdf(){
+    let doc=new jsPDF();
+    let specialEventHandlers={
+      '#editor': function(element,renderer){
+        return true;
+      }
+    };
+
+    //let content=this.content.nativeElement;
+    doc.fromHTML(this.htmlEl.replace("text-align: center; font-weight: bold;","text-align: left; font-weight: bold;"),15,15,{
+      'width':190,
+      'elementHandlers': specialEventHandlers
+    });
+    doc.save('test.pdf');
+
+
+  }
+
+
+  htmlEl: string='';
+  workForDownload: IdDTO;
+
+
 
   worksToReview: ScientificWorkDto[]=[];
 
@@ -139,6 +167,21 @@ export class WorksToReviewComponent implements OnInit {
     console.log(work.scientificWorkId);
     const modalRef = this.modalService.open(ReviewFormComponent);
     modalRef.componentInstance.scientificWork = work;
+  }
+
+  download(work){
+    console.log('uslo u download works');
+    this.workForDownload={
+      response: work.scientificWorkId
+    };
+    
+    this.scientificWorkService.getById(this.workForDownload).subscribe(
+      created => {
+        this.htmlEl=created.response;
+        alert(this.htmlEl);
+        this.getPdf();
+    });
+
   }
 
 }

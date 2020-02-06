@@ -29,6 +29,7 @@ import { AllScientificWorksComponent } from './all-scientific-works/all-scientif
 import { OpenScientificWorkComponent } from './open-scientific-work/open-scientific-work.component';
 import { ForRevisionComponent } from './for-revision/for-revision.component';
 import { ReviewFormComponent } from './review-form/review-form.component';
+import { EditWorkComponent } from './edit-work/edit-work.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ReviewFormComponent } from './review-form/review-form.component';
     AllScientificWorksComponent,
     OpenScientificWorkComponent,
     ForRevisionComponent,
-    ReviewFormComponent
+    ReviewFormComponent,
+    EditWorkComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +76,8 @@ import { ReviewFormComponent } from './review-form/review-form.component';
   bootstrap: [AppComponent],
   entryComponents: [
     AlertBoxComponent,
-    ReviewFormComponent
+    ReviewFormComponent,
+    EditWorkComponent
   ]
 })
 export class AppModule { }
