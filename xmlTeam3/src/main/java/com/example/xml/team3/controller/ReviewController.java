@@ -56,7 +56,7 @@ public class ReviewController {
 	private final String reviewXslPath = "src/main/resources/xsl/review.xsl";
 
 	@PostMapping(value = "/sendReview")
-	public ResponseEntity<String> createReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
+	public ResponseEntity<Boolean> createReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
 		System.out.println("*****************************************************************");
 		System.out.println("Uslo u create review");
 		Review review = new Review();
@@ -107,13 +107,18 @@ public class ReviewController {
 		System.out.println(scientificWorkId);
 		System.out.println("Scientific work title from scientific work");
 		System.out.println("********************************************************");
-		scientificWorkService.updateScientificWork(scientificWorkId, sw);
+		try {
+			scientificWorkService.updateScientificWork(scientificWorkId, sw);
+		}catch(Exception e) {
+			System.out.println("Uslo u catch - SKROZ VALIDAN IZUZETAK");
+		}
+		
 		try {
 			id = reviewService.createNewReview(review);
-			return new ResponseEntity<String>(id, HttpStatus.CREATED);
+			return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 		} catch (Exception e) {
 			System.out.println("Uhvacen exception, treba da se vrati false");
-			return new ResponseEntity<String>(id, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Boolean>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

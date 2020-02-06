@@ -59,13 +59,6 @@ export class ReviewFormComponent implements OnInit {
       refId: i 
     }
     this.comments.push(comment);
-/*
-    comments : Array<CommentDTO>;
-    grades : GradeDTO;
-    workflowId : string;
-    summaryComment : string;
-    reviewedId : string;
-    */
   }
   submitReview(){
     
@@ -92,9 +85,15 @@ export class ReviewFormComponent implements OnInit {
       reviewedId: ''
     }
 
-    this.scientificWorkService.sendReview(reviewDto).subscribe(res => {
-      console.log(res);
-    });
+ 
+      this.scientificWorkService.sendReview(reviewDto).subscribe(res => {
+        console.log(res);
+   
+      
+      });
+   
+  
     
-  }
+  
+}
 }

@@ -78,17 +78,16 @@ public class ScientificWorkRepository {
 		System.out.println("Id in scientific work repository: " + id);
 		System.out.println("Title in scentific work: " + scientificWork.getTitle());
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		/*
-		 * ScientificWork oldScientificWork = this.findById(id); if (oldScientificWork
-		 * == null) { System.out.println("Scientific work je null"); throw new
-		 * Exception("There is no scientific work with this id"); }
-		 */
+		
+		  ScientificWork oldScientificWork = this.findById(id); if (oldScientificWork
+		  == null) { System.out.println("Scientific work je null"); throw new
+		  Exception("There is no scientific work with this id"); }
+		 
 		System.out.println("Pre delete in repository");
-		// this.delete(id);
+		this.delete(id);
 		System.out.println("Posle delete in repository");
 		String scientificWorkXML = marshallerUtil.marshallScientificWork(scientificWork);
-		ExistUpdate.update(scientificWorkCollectionId, id, "/scientificWork", scientificWorkXML,
-				xUpdateTemplate.getUpdateTemplate("scientificWork"));
+		ExistStore.store(scientificWorkCollectionId,id,scientificWorkXML);
 		return id;
 	}
 

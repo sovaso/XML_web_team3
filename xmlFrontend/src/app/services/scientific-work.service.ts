@@ -113,8 +113,8 @@ export class ScientificWorkService {
     return this.http.get<UserModelRegister[]>(`http://localhost:8000/user/getAllReviewers`);
   }
 
-  sendReview(reviewDto : ReviewDTO): Observable<String> {
-    return this.http.post<String>(`http://localhost:8000/review/sendReview`, reviewDto);
+  sendReview(reviewDto : ReviewDTO): Observable<Boolean> {
+    return this.http.post<Boolean>(`http://localhost:8000/review/sendReview`, reviewDto);
   }
 
   pickedReviewer(pickedReviewerDTO: PickedReviewerDTO): Observable<Boolean> {
